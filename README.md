@@ -1,10 +1,12 @@
 cordova-plugin-badge
 ====================
 
-A bunch of badge plugins for cordova 3.x
+A bunch of badge plugins for Cordova 3.x.x
 
+## Platforms
+- iOS
 
-##  Code: 
+##  Code
 To set the badge number:
 
 ```javascript
@@ -17,7 +19,7 @@ window.plugin.badge.set(0);
 window.plugin.badge.clear();
 ```
 
-##  Example: 
+##  Example
 To set the badge number to **1**:
 
 ```javascript
