@@ -6,6 +6,12 @@
 
     <name>Badge</name>
 
+    <description>A bunch of badge plugins for Cordova 3.x.x</description>
+    <keywords>badge, ios</keywords>
+    <license>GPL v2 License</license>
+
+    <author>Sebastián Katzer (github.com/katzer)</author>
+
     <engines>
         <engine name="cordova" version=">=3.0.0" />
     </engines>
