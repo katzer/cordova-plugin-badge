@@ -15,7 +15,7 @@ cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
 ```
 
 ## Release Notes ##
-#### Version 0.0.1 (10.08.2013) ####
+#### Version 0.1.0 (10.08.2013) ####
 - Added iOS support
 
 ## Using the plugin ##
