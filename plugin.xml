@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="de.appplant.maintcall.cordova.plugin.badge"
-        version="0.0.1">
+        id="de.appplant.cordova.plugin.badge"
+        version="0.1.0">
 
     <name>Badge</name>
 
@@ -21,16 +21,16 @@
 
         <config-file target="config.xml" parent="/*">
 		<feature name="Badge">
-			<param name="ios-package" value="CDVBadge"/>
+			<param name="ios-package" value="APPBadge"/>
 		</feature>
         </config-file>
 
-        <js-module src="www/badge.js" name="badge">
+        <js-module src="www/badge.js" name="Badge">
             <clobbers target="plugin.badge" />
         </js-module>
 
-	<header-file src="src/ios/CDVBadge.h" />
-	<source-file src="src/ios/CDVBadge.m" />
+	<header-file src="src/ios/APPBadge.h" />
+	<source-file src="src/ios/APPBadge.m" />
 
     </platform>
 

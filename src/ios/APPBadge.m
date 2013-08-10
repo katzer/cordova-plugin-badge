@@ -1,5 +1,5 @@
 /**
- *  CDVBadge.m
+ *  APPBadge.m
  *  Cordova Badge Plugin
  *
  *  Created by Sebastian Katzer (github.com/katzer) on 10/08/2013.
@@ -7,9 +7,9 @@
  *  GPL v2 licensed
  */
 
-#import "CDVBadge.h"
+#import "APPBadge.h"
 
-@implementation CDVBadge
+@implementation APPBadge
 
 - (void) setBadge:(CDVInvokedUrlCommand*)command {
 	NSArray *arguments   = [command arguments];

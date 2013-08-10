@@ -1,5 +1,5 @@
 /**
- *  CDVBadge.h
+ *  APPBadge.h
  *  Cordova Badge Plugin
  *
  *  Created by Sebastian Katzer (github.com/katzer) on 10/08/2013.
@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-@interface CDVBadge : CDVPlugin {
+@interface APPBadge : CDVPlugin {
 
 }
 
