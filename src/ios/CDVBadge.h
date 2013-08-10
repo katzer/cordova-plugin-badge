@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-@interface Badge : CDVPlugin {
+@interface CDVBadge : CDVPlugin {
 
 }
 

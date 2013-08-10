@@ -9,7 +9,7 @@
 
 #import "CDVBadge.h"
 
-@implementation Badge
+@implementation CDVBadge
 
 - (void) setBadge:(CDVInvokedUrlCommand*)command {
 	NSArray *arguments   = [command arguments];
