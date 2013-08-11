@@ -11,7 +11,8 @@
 
 @implementation APPBadge
 
-- (void) setBadge:(CDVInvokedUrlCommand*)command {
+- (void) setBadge:(CDVInvokedUrlCommand*)command
+{
 	NSArray *arguments   = [command arguments];
 	int      badgeNumber = [[arguments objectAtIndex:0] intValue];
 
