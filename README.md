@@ -16,7 +16,8 @@ cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
 
 ## Release Notes ##
 #### Version 0.2.0 (11.08.2013) ####
-- Added iOS support
+- Added iOS support<br>
+  *Based on the Badge iOS plugin made by* ***Joseph Stuhr***
 
 ## Using the plugin ##
 The plugin creates the object ```window.plugin.badge``` with two methods:
