@@ -29,6 +29,6 @@ Badge.prototype = {
     }
 };
 
-var badge = new Badge();
+var plugin = new Badge();
 
-module.exports = badge;
+module.exports = plugin;

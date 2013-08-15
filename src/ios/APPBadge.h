@@ -10,11 +10,9 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-@interface APPBadge : CDVPlugin {
-
-}
+@interface APPBadge : CDVPlugin
 
 // Fügt dem App Icon einen Badge hinzu
-- (void)setBadge:(CDVInvokedUrlCommand*)command;
+- (void) setBadge:(CDVInvokedUrlCommand *)command;
 
 @end

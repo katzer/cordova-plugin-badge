@@ -11,12 +11,12 @@
 
 @implementation APPBadge
 
-- (void) setBadge:(CDVInvokedUrlCommand*)command
+- (void) setBadge:(CDVInvokedUrlCommand *)command
 {
-	NSArray *arguments   = [command arguments];
-	int      badgeNumber = [[arguments objectAtIndex:0] intValue];
+	NSArray* arguments = [command arguments];
+	int      badge     = [[arguments objectAtIndex:0] intValue];
 
-	[[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
+	[[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
 }
 
 @end
