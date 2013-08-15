@@ -6,8 +6,8 @@
 
     <name>Badge</name>
 
-    <description>A bunch of badge plugins for Cordova 3.x.x</description>
-    <keywords>badge, ios</keywords>
+    <description>A bunch of badge notification plugins for Cordova 3.x.x</description>
+    <keywords>badge, notification, ios</keywords>
     <license>GPL v2 License</license>
 
     <author>Sebastián Katzer (github.com/katzer)</author>
