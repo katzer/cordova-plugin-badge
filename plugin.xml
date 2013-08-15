@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="de.appplant.cordova.plugin.badge"
-        version="0.2.0">
+        version="0.2.1">
 
     <name>Badge</name>
 
