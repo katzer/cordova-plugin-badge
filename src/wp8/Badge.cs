@@ -8,21 +8,15 @@
  */
 
 using System;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Devices;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Windows.Resources;
-using Microsoft.Phone.Controls;
-using System.Diagnostics;
+using System.Linq;
+
+using Microsoft.Phone.Shell;
 
 using WPCordovaClassLib.Cordova;
 using WPCordovaClassLib.Cordova.Commands;
 using WPCordovaClassLib.Cordova.JSON;
 
-
-namespace APPPlant.Cordova.Plugin
+namespace Cordova.Extension.Commands
 {
     public class Badge : BaseCommand
     {
@@ -34,7 +28,7 @@ namespace APPPlant.Cordova.Plugin
             // Application should always be found
             if (TileToFind != null)
             {
-                string[] args = JSON.JsonHelper.Deserialize<string[]>(badgeNumber);
+                string[] args = JsonHelper.Deserialize<string[]>(badgeNumber);
                 int count     = 0;
 
                 try
@@ -45,13 +39,15 @@ namespace APPPlant.Cordova.Plugin
 
                 // Set the properties to update for the Application Tile
                 // Empty strings for the text values and URIs will result in the property being cleared.
-                StandardTileData NewTileData = new StandardTileData
+                StandardTileData TileData = new StandardTileData
                 {
                     Count = count
                 };
 
                 // Update the Application Tile
-                TileToFind.Update(NewTileData);
+                TileToFind.Update(TileData);
+
+                DispatchCommandResult();
             }
         }
     }
