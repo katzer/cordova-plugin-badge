@@ -54,4 +54,6 @@ window.plugin.notification.badge.set(0);  // alternative
 To set the badge number to **1**:
 ```javascript
 window.plugin.notification.badge.set(1);
+// or
+window.plugin.notification.badge.set('1');
 ```
