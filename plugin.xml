@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="de.appplant.cordova.plugin.badge"
-        version="0.2.1">
+        version="0.4.0dev">
 
     <name>Badge</name>
 
@@ -23,7 +23,6 @@
 
     <!-- ios -->
     <platform name="ios">
-
         <config-file target="config.xml" parent="/*">
     		<feature name="Badge">
     			<param name="ios-package" value="APPBadge"/>
@@ -32,7 +31,16 @@
 
     	<header-file src="src/ios/APPBadge.h" />
     	<source-file src="src/ios/APPBadge.m" />
-
     </platform>
 
+    <!-- wp8 -->
+    <platform name="wp8">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Badge">
+                <param name="wp-package" value="Badge"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/wp8/Badge.cs" />
+    </platform>
 </plugin>
