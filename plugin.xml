@@ -7,7 +7,7 @@
     <name>Badge</name>
 
     <description>A bunch of badge notification plugins for Cordova 3.x.x</description>
-    <keywords>badge, notification, ios</keywords>
+    <keywords>badge, notification, live tiles, ios, windows phone 8, wp8</keywords>
     <license>GPL v2 License</license>
 
     <author>Sebastián Katzer (github.com/katzer)</author>
