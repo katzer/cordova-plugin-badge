@@ -16,22 +16,22 @@
         <engine name="cordova" version=">=3.0.0" />
     </engines>
 
+    <js-module src="www/badge.js" name="Badge">
+        <clobbers target="plugin.notification.badge" />
+        <clobbers target="plugin.badge" />
+    </js-module>
+
     <!-- ios -->
     <platform name="ios">
 
         <config-file target="config.xml" parent="/*">
-		<feature name="Badge">
-			<param name="ios-package" value="APPBadge"/>
-		</feature>
+    		<feature name="Badge">
+    			<param name="ios-package" value="APPBadge"/>
+    		</feature>
         </config-file>
 
-        <js-module src="www/badge.js" name="Badge">
-            <clobbers target="plugin.notification.badge" />
-            <clobbers target="plugin.badge" />
-        </js-module>
-
-	<header-file src="src/ios/APPBadge.h" />
-	<source-file src="src/ios/APPBadge.m" />
+    	<header-file src="src/ios/APPBadge.h" />
+    	<source-file src="src/ios/APPBadge.m" />
 
     </platform>
 
