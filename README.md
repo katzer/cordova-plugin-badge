@@ -57,3 +57,16 @@ window.plugin.notification.badge.set(1);
 // or
 window.plugin.notification.badge.set('1');
 ```
+
+## Quirks
+### TypeError: Cannot read property 'currentVersion' of null
+Along with Cordova 3.2 and Windows Phone 8 the `version.bat` script has to be renamed to `version`.
+
+On Mac or Linux
+```
+mv platforms/wp8/cordova/version.bat platforms/wp8/cordova/version
+```
+On Windows
+```
+ren platforms\wp8\cordova\version.bat platforms\wp8\cordova\version
+```
