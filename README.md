@@ -23,7 +23,7 @@ cordova plugin rm de.appplant.cordova.plugin.badge
 
 ## Release Notes
 #### Version 0.4.1 (not yet released)
-- Release under the LGPL 2.1 lisence.
+- Release under the LGPL 2.1 license.
 
 #### Version 0.4.0 (07.10.2013)
 - Added WP8 support
