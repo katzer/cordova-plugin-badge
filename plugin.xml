@@ -6,7 +6,7 @@
 
     <name>Badge</name>
 
-    <description>A bunch of badge notification plugins for Cordova 3.x.x</description>
+    <description>A bunch of badge number plugins for Cordova 3.x.x</description>
     <repo>https://github.com/katzer/cordova-plugin-badge.git</repo>
     <keywords>badge, notification, live tiles, ios, windows phone 8, wp8</keywords>
     <license>Apache 2.0</license>
