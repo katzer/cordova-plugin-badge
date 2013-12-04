@@ -41,20 +41,21 @@ cordova plugin rm de.appplant.cordova.plugin.badge
 The plugin creates the object ```window.plugin.notification.badge``` with two methods:
 
 ### set()
-To set the badge number:
+The method takes the badge number as an argument. The argument needs to be a number or a string which can be parsed to a number.
 ```javascript
-window.plugin.notification.badge.set(_number_);
+window.plugin.notification.badge.set(Number);
 ```
 
 ### clear()
-To clear the badge:
+Clearing the badge number is equivalent to set a zero number.
 ```javascript
 window.plugin.notification.badge.clear();
-window.plugin.notification.badge.set(0);  // alternative
+// or
+window.plugin.notification.badge.set(0);
 ```
 
-####  Example
-To set the badge number to **1**:
+##  Example
+Sets the badge number to **1**:
 ```javascript
 window.plugin.notification.badge.set(1);
 // or
