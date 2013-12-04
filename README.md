@@ -1,7 +1,7 @@
 Cordova Badge-Plugin
 ====================
 
-A bunch of badge notification plugins for Cordova 3.x.x
+A bunch of badge number plugins for Cordova 3.x.x
 
 by Sebastián Katzer ([github.com/katzer](https://github.com/katzer))
 
@@ -22,7 +22,7 @@ cordova plugin rm de.appplant.cordova.plugin.badge
 ```
 
 ## Release Notes
-#### Version 0.4.1 (not yet released)
+#### Version 0.4.1 (04.12.2013)
 - Release under the Apache 2.0 license.
 
 #### Version 0.4.0 (07.10.2013)
