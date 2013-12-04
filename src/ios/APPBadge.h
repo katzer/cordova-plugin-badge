@@ -24,7 +24,7 @@
 
 @interface APPBadge : CDVPlugin
 
-// Fügt dem App Icon einen Badge hinzu
+// Fügt dem App Icon eine Badge Nummer hinzu
 - (void) setBadge:(CDVInvokedUrlCommand *)command;
 
 @end

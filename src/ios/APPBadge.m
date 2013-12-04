@@ -23,6 +23,7 @@
 
 @implementation APPBadge
 
+// Fügt dem App Icon eine Badge Nummer hinzu
 - (void) setBadge:(CDVInvokedUrlCommand *)command
 {
 	NSArray* arguments = [command arguments];

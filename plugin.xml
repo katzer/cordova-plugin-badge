@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="de.appplant.cordova.plugin.badge"
         version="0.4.1dev">
 
     <name>Badge</name>
 
     <description>A bunch of badge notification plugins for Cordova 3.x.x</description>
+    <repo>https://github.com/katzer/cordova-plugin-badge.git</repo>
     <keywords>badge, notification, live tiles, ios, windows phone 8, wp8</keywords>
     <license>Apache 2.0</license>
 
-    <author>Sebastián Katzer (github.com/katzer)</author>
+    <author>Sebastián Katzer</author>
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />

@@ -32,6 +32,9 @@ namespace Cordova.Extension.Commands
 {
     public class Badge : BaseCommand
     {
+        /// <summary>
+        /// Fügt dem Live Tile eine Badge Nummer hinzu
+        /// </summary>
         public void setBadge (string badgeNumber)
         {
             // Application Tile is always the first Tile, even if it is not pinned to Start.
@@ -49,14 +52,11 @@ namespace Cordova.Extension.Commands
                 }
                 catch (FormatException) {};
 
-                // Set the properties to update for the Application Tile
-                // Empty strings for the text values and URIs will result in the property being cleared.
                 StandardTileData TileData = new StandardTileData
                 {
                     Count = count
                 };
 
-                // Update the Application Tile
                 TileToFind.Update(TileData);
 
                 DispatchCommandResult();
