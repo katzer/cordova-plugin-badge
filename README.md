@@ -21,6 +21,17 @@ Through the [Command-line Interface](http://cordova.apache.org/docs/en/3.0.0/gui
 cordova plugin rm de.appplant.cordova.plugin.badge
 ```
 
+## PhoneGap Build
+Add the following xml to your config.xml to always use the latest version of this plugin:
+```
+<gap:plugin name="de.appplant.cordova.plugin.badge" />
+```
+or to use this exact version: 
+```
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.4.1" />
+```
+More informations can be found [here](https://build.phonegap.com/plugins/330).
+
 ## Release Notes
 #### Version 0.4.1 (04.12.2013)
 - Release under the Apache 2.0 license.
