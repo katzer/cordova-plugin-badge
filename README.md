@@ -8,6 +8,8 @@ by Sebastián Katzer ([github.com/katzer](https://github.com/katzer))
 ## Supported Platforms
 - **iOS**
 - **WP8**
+- **Android** *(SDK >=11)*<br>
+See [Notification Guide](http://developer.android.com/guide/topics/ui/notifiers/notifications.html) for detailed informations and screenshots.
 
 ## Adding the Plugin to your project
 Through the [Command-line Interface](http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface):
@@ -26,13 +28,16 @@ Add the following xml to your config.xml to always use the latest version of thi
 ```
 <gap:plugin name="de.appplant.cordova.plugin.badge" />
 ```
-or to use this exact version: 
+or to use this exact version:
 ```
 <gap:plugin name="de.appplant.cordova.plugin.badge" version="0.4.1" />
 ```
 More informations can be found [here](https://build.phonegap.com/plugins/330).
 
 ## Release Notes
+#### Version 0.5.0 (not yet released)
+- Added Android support
+
 #### Version 0.4.1 (04.12.2013)
 - Release under the Apache 2.0 license.
 
