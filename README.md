@@ -78,6 +78,19 @@ window.plugin.notification.badge.set(1);
 window.plugin.notification.badge.set('1');
 ```
 
+## Platform specifics
+### Specify custom notification title on Android
+The default format for the title is `%d new messages`. But it can be customized/localized through the string ressource `notification_badge_title`.
+```xml
+<!-- res/values/string.xml -->
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+	...
+    <string name="notification_badge_title">%d new messages</string>
+    ...
+</resources>
+```
+
 ## Quirks
 ### TypeError: Cannot read property 'currentVersion' of null
 Along with Cordova 3.2 and Windows Phone 8 the `version.bat` script has to be renamed to `version`.
