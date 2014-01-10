@@ -86,7 +86,7 @@ public class Badge extends CordovaPlugin {
         .setTicker(title)
         .setAutoCancel(true)
         .setSmallIcon(android.R.drawable.ic_dialog_email)
-        .setLargeIcon(BitmapFactory.decodeResource( context.getResources(), getDrawableIcon()))
+        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), getDrawableIcon()))
         .setContentIntent(contentIntent);
 
 
