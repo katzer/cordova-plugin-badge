@@ -48,12 +48,13 @@ public class Badge extends CordovaPlugin {
     @Override
     public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equalsIgnoreCase("setBadge")) {
-            int number = args.optInt(0);
+            int number   = args.optInt(0);
+            String title = args.optString(1, "%d new messages");
 
             if (number == 0) {
                 clearBadge();
             } else {
-                setBadge(number);
+                setBadge(number, title);
             }
 
             return true;
@@ -67,18 +68,20 @@ public class Badge extends CordovaPlugin {
      * Erstellt eine Notification mit der Badgezahl.
      *
      * @param badge Die anzuzeigende Zahl
+     * @param title Der Text, welcher als Titel in der Notification angezeigt wird
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (int badge) {
+    private void setBadge (int badge, String title) {
         Context context             = cordova.getActivity().getApplicationContext();
-        String title                = getTitle(badge);
 
         NotificationManager mgr     = getNotificationManager();
 
         String packageName          = context.getPackageName();
         Intent launchIntent         = context.getPackageManager().getLaunchIntentForPackage(packageName);
         PendingIntent contentIntent = PendingIntent.getActivity(context, ID, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        title = String.format(title, badge);
 
         Builder notification = new Notification.Builder(context)
         .setContentTitle(title)
@@ -104,40 +107,6 @@ public class Badge extends CordovaPlugin {
      */
     private void clearBadge () {
         getNotificationManager().cancel(ID);
-    }
-
-    /**
-     * @param badge
-     * @return Der Text, welcher als Titel in der Notification angezeigt wird
-     */
-    private String getTitle (int badge) {
-        String title   = "%d new messages";
-        int titleResId = getTitleResId();
-
-        if (titleResId > 0) {
-            Context context  = cordova.getActivity().getApplicationContext();
-
-            title = context.getString(titleResId);
-        }
-
-        return String.format(title, badge);
-    }
-
-    /**
-     * @return Die ID der lokalisierten Title-Ressource
-     */
-    private int getTitleResId () {
-        Context context  = cordova.getActivity().getApplicationContext();
-        String className = context.getPackageName();
-        int resId        = 0;
-
-        try {
-            Class<?> klass  = Class.forName(className + ".R$string");
-
-            resId = (Integer) klass.getDeclaredField("notification_badge_title").get(Integer.class);
-        } catch (Exception e) {}
-
-        return resId;
     }
 
     /**

@@ -35,6 +35,9 @@ or to use this exact version:
 More informations can be found [here](https://build.phonegap.com/plugins/330).
 
 ## Release Notes
+#### Version 0.5.1 (not yet released)
+- Specify custom notification title on Android can be set through JS interface.
+
 #### Version 0.5.0 (04.01.2014)
 - Added Android support
 
@@ -80,16 +83,9 @@ window.plugin.notification.badge.set('1');
 
 ## Platform specifics
 ### Specify custom notification title on Android
-The default format for the title is `%d new messages`. But it can be customized/localized through the string ressource `notification_badge_title`.
-```xml
-<!-- res/values/string.xml -->
-
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-	...
-    <string name="notification_badge_title">%d new messages</string>
-    ...
-</resources>
+The default format for the title is `%d new messages`. But it can be customized through `setTitle`.
+```javascript
+window.plugin.notification.badge.setTitle('%d neue Meldungen');
 ```
 
 ## Quirks

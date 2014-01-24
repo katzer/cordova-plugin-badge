@@ -20,7 +20,7 @@
 */
 
 var Badge = function () {
-
+    this._title = '%d new messages';
 };
 
 Badge.prototype = {
@@ -28,7 +28,7 @@ Badge.prototype = {
      * Entfernt den Badge vom App Icon.
      */
     clear: function () {
-        cordova.exec(null, null, 'Badge', 'setBadge', [0]);
+        cordova.exec(null, null, 'Badge', 'setBadge', [0, null]);
     },
 
     /**
@@ -37,7 +37,16 @@ Badge.prototype = {
      * @param {Number} badge
      */
     set: function (badge) {
-        cordova.exec(null, null, 'Badge', 'setBadge', [parseInt(badge) || 0]);
+        cordova.exec(null, null, 'Badge', 'setBadge', [parseInt(badge) || 0, this._title]);
+    },
+
+    /**
+     * Setzt den Wert des Notification Titels (Android).
+     *
+     * @param {String} title
+     */
+    setTitle: function (title) {
+        this._title = title;
     }
 };
 
