@@ -35,7 +35,7 @@ or to use this exact version:
 More informations can be found [here](https://build.phonegap.com/plugins/384).
 
 ## Release Notes
-#### Version 0.5.1 (not yet released)
+#### Version 0.5.1 (25.01.2014)
 - [enhancement:] Specify custom notification title on Android can be set through JS interface.
 - [enhancement:] Setting launchMode to *singleInstance* isn't necessary anymore. App does not restart on click anymore.
 
