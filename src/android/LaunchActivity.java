@@ -19,37 +19,33 @@
     under the License.
 */
 
-var Badge = function () {
-    this._title = '%d new messages';
-};
+package de.appplant.cordova.plugin.badge;
 
-Badge.prototype = {
-    /**
-     * Entfernt den Badge vom App Icon.
-     */
-    clear: function () {
-        cordova.exec(null, null, 'Badge', 'setBadge', [0, null]);
-    },
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
-    /**
-     * Fügt dem App Icon einen Badge hinzu.
-     *
-     * @param {Number} badge
-     */
-    set: function (badge) {
-        cordova.exec(null, null, 'Badge', 'setBadge', [parseInt(badge) || 0, this._title]);
-    },
+public class LaunchActivity extends Activity {
 
-    /**
-     * Setzt den Wert des Notification Titels (Android).
-     *
-     * @param {String} title
-     */
-    setTitle: function (title) {
-        this._title = title;
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        launchMainIntent();
     }
-};
 
-var plugin = new Badge();
+    /**
+     * Launch main intent for package.
+     */
+    private void launchMainIntent () {
+        Context context     = getApplicationContext();
+        String packageName  = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
 
-module.exports = plugin;
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        context.startActivity(launchIntent);
+    }
+}

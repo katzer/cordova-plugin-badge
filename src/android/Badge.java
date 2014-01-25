@@ -1,5 +1,5 @@
 /*
-    Copyright 2013 appPlant UG
+    Copyright 2013-2014 appPlant UG
 
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -73,24 +73,25 @@ public class Badge extends CordovaPlugin {
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void setBadge (int badge, String title) {
-        Context context             = cordova.getActivity().getApplicationContext();
+        Context context = cordova.getActivity().getApplicationContext();
 
-        NotificationManager mgr     = getNotificationManager();
+        NotificationManager mgr = getNotificationManager();
 
-        String packageName          = context.getPackageName();
-        Intent launchIntent         = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, ID, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, LaunchActivity.class)
+            .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         title = String.format(title, badge);
 
         Builder notification = new Notification.Builder(context)
-        .setContentTitle(title)
-        .setNumber(badge)
-        .setTicker(title)
-        .setAutoCancel(true)
-        .setSmallIcon(android.R.drawable.ic_dialog_email)
-        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), getDrawableIcon()))
-        .setContentIntent(contentIntent);
+            .setContentTitle(title)
+            .setNumber(badge)
+            .setTicker(title)
+            .setAutoCancel(true)
+            .setSmallIcon(android.R.drawable.ic_dialog_email)
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), getDrawableIcon()))
+            .setContentIntent(contentIntent);
 
 
         if (Build.VERSION.SDK_INT<16) {

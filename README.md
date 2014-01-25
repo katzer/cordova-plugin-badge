@@ -30,13 +30,14 @@ Add the following xml to your config.xml to always use the latest version of thi
 ```
 or to use this exact version:
 ```
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.4.1" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.0" />
 ```
-More informations can be found [here](https://build.phonegap.com/plugins/330).
+More informations can be found [here](https://build.phonegap.com/plugins/384).
 
 ## Release Notes
 #### Version 0.5.1 (not yet released)
-- Specify custom notification title on Android can be set through JS interface.
+- [enhancement:] Specify custom notification title on Android can be set through JS interface.
+- [enhancement:] Setting launchMode to *singleInstance* isn't necessary anymore. App does not restart on click anymore.
 
 #### Version 0.5.0 (04.01.2014)
 - Added Android support
