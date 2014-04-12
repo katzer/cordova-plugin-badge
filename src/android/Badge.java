@@ -23,7 +23,7 @@ package de.appplant.cordova.plugin.badge;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
-
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -34,16 +34,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 
 
 public class Badge extends CordovaPlugin {
 
-    /**
-     * Feste ID der Notification, damit sie wiedergefunden und gelöscht werden kann
-     */
-    static final int ID = -450793490;
+    // Static ID for the badge notification
+    private final int ID = -450793490;
+    // Name for the shared preferences
+    private final String KEY = "badge";
 
     @Override
     public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -54,8 +58,15 @@ public class Badge extends CordovaPlugin {
             if (number == 0) {
                 clearBadge();
             } else {
+                saveBadge(number);
                 setBadge(number, title);
             }
+
+            return true;
+        }
+
+        if (action.equalsIgnoreCase("getBadge")) {
+            getBadge(callbackContext);
 
             return true;
         }
@@ -65,17 +76,20 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
-     * Erstellt eine Notification mit der Badgezahl.
+     * Sets the badge of the app icon.
      *
-     * @param badge Die anzuzeigende Zahl
-     * @param title Der Text, welcher als Titel in der Notification angezeigt wird
+     * @param badge
+     *      The new badge number
+     * @param title
+     *      The notifications title
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void setBadge (int badge, String title) {
         Context context = cordova.getActivity().getApplicationContext();
+        Resources res   = context.getResources();
 
-        NotificationManager mgr = getNotificationManager();
+        Bitmap appIcon  = BitmapFactory.decodeResource(res, getDrawableIcon());
 
         Intent intent = new Intent(context, LaunchActivity.class)
             .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -90,28 +104,67 @@ public class Badge extends CordovaPlugin {
             .setTicker(title)
             .setAutoCancel(true)
             .setSmallIcon(android.R.drawable.ic_dialog_email)
-            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), getDrawableIcon()))
+            .setLargeIcon(appIcon)
             .setContentIntent(contentIntent);
-
 
         if (Build.VERSION.SDK_INT<16) {
             // build notification for HoneyComb to ICS
-            mgr.notify(ID, notification.getNotification());
+            getNotificationManager().notify(ID, notification.getNotification());
         } else if (Build.VERSION.SDK_INT>15) {
             // Notification for Jellybean and above
-            mgr.notify(ID, notification.build());
+            getNotificationManager().notify(ID, notification.build());
         }
     }
 
     /**
-     * Löscht die Nachricht mit der Badge Zahl.
+     * Clears the badge of the app icon.
      */
     private void clearBadge () {
         getNotificationManager().cancel(ID);
     }
 
     /**
-     * @return Den NotificationManager der App
+     * Retrieves the badge of the app icon.
+     *
+     * @param callback
+     *      The function to be exec as the callback
+     */
+    private void getBadge (CallbackContext callbackContext) {
+        SharedPreferences settings = getSharedPreferences();
+        int badge = settings.getInt(KEY, 0);
+        PluginResult result;
+
+        result = new PluginResult(PluginResult.Status.OK, badge);
+
+        callbackContext.sendPluginResult(result);
+    }
+
+    /**
+     * Persist the badge of the app icon so that `getBadge` is able to return
+     * the badge number back to the client.
+     *
+     * @param badge
+     *      The badge of the app icon
+     */
+    private void saveBadge (int badge) {
+        Editor editor = getSharedPreferences().edit();
+
+        editor.putInt(KEY, badge);
+        editor.apply();
+    }
+
+    /**
+     * The Local storage for the application.
+     */
+    private SharedPreferences getSharedPreferences () {
+        Context context = cordova.getActivity().getApplicationContext();
+
+        return context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * @return
+     *      The NotificationManager for the app
      */
     private NotificationManager getNotificationManager () {
         Context context = cordova.getActivity().getApplicationContext();
@@ -120,18 +173,15 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
-     * @return Der Zahlencode des App Icons
+     * @return
+     *      The resource ID of the app icon
      */
     private int getDrawableIcon () {
-        Context context  = cordova.getActivity().getApplicationContext();
-        String className = context.getPackageName();
-        int resId        = android.R.drawable.ic_menu_info_details;
+        Context context = cordova.getActivity().getApplicationContext();
+        Resources res   = context.getResources();
+        String pkgName  = context.getPackageName();
 
-        try {
-            Class<?> klass  = Class.forName(className + ".R$drawable");
-
-            resId = (Integer) klass.getDeclaredField("icon").get(Integer.class);
-        } catch (Exception e) {}
+        int resId = res.getIdentifier("icon", "drawable", pkgName);
 
         return resId;
     }
