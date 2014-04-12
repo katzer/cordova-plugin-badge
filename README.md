@@ -46,19 +46,19 @@ More informations can be found [here][PGB_plugin].
 
 
 ## Using the plugin
-The plugin creates the object ```window.plugin.badge``` with the following interface:
+The plugin creates the object ```window.plugin.notification.badge``` with the following interface:
 
 ### Plugin initialization
 The plugin and its methods are not available before the *deviceready* event has been fired.
 
 ```javascript
 document.addEventListener('deviceready', function () {
-    // window.plugin.badge is now available
+    // window.plugin.notification.badge is now available
 }, false);
 ```
 
 ### Set the badge of the app icon
-The badge of the app can be set through the `badge.set` interface.<br>
+The badge of the app can be set through the `notification.badge.set` interface.<br>
 The method takes the badge as its argument. It needs to be a number or a string which can be parsed to a number.
 
 #### Further informations
@@ -72,7 +72,7 @@ window.plugin.notification.badge.set(Number);
 ```
 
 ### Clear the badge of the app icon
-The badge of the app can be removed through the `badge.clear` interface.
+The badge of the app can be removed through the `notification.badge.clear` interface.
 
 #### Further informations
 - Clearing the badge number is equivalent to set a zero number.
