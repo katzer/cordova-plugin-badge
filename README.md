@@ -1,97 +1,119 @@
 Cordova Badge-Plugin
 ====================
 
-A bunch of badge number plugins for Cordova 3.x.x
+[Cordova][cordova] plugin to access and modify the badge of the app icon.
 
-by Sebastián Katzer ([github.com/katzer](https://github.com/katzer))
 
 ## Supported Platforms
 - **iOS**
-- **WP8**
 - **Android** *(SDK >=11)*<br>
-See [Notification Guide](http://developer.android.com/guide/topics/ui/notifiers/notifications.html) for detailed informations and screenshots.
+See [Notification Guide][android_notification_guide] for detailed informations and screenshots.
+- **WP8**<br>
+See [WP8 Guide][wp8_notification_guide] for detailed informations and screenshots.
 
-## Adding the Plugin to your project
-Through the [Command-line Interface](http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface):
+
+## Installation
+The plugin can either be installed into the local development environment or cloud based through [PhoneGap Build][PGB].
+
+### Adding the Plugin to your project
+Through the [Command-line Interface][CLI]:
+```bash
+# ~~ from master ~~
+cordova plugin add https://github.com/katzer/cordova-plugin-badge.git && cordova prepare
 ```
-cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
+or to use the last stable version:
+```bash
+# ~~ stable version ~~
+cordova plugin add de.appplant.cordova.plugin.badge && cordova prepare
 ```
 
-## Removing the Plugin from your project
-Through the [Command-line Interface](http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface):
-```
+### Removing the Plugin from your project
+Through the [Command-line Interface][CLI]:
+```bash
 cordova plugin rm de.appplant.cordova.plugin.badge
 ```
 
-## PhoneGap Build
+### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
-```
+```xml
 <gap:plugin name="de.appplant.cordova.plugin.badge" />
 ```
-or to use this exact version:
+or to use an specific version:
+```xml
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.1" />
 ```
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.0" />
-```
-More informations can be found [here](https://build.phonegap.com/plugins/384).
+More informations can be found [here][PGB_plugin].
 
-## Release Notes
-#### Version 0.5.1 (25.01.2014)
-- [enhancement:] Specify custom notification title on Android can be set through JS interface.
-- [enhancement:] Setting launchMode to *singleInstance* isn't necessary anymore. App does not restart on click anymore.
-
-#### Version 0.5.0 (04.01.2014)
-- Added Android support
-
-#### Version 0.4.1 (04.12.2013)
-- Release under the Apache 2.0 license.
-
-#### Version 0.4.0 (07.10.2013)
-- Added WP8 support
-- **Note:** The former `plugin.badge` namespace is not longer available.
-
-#### Version 0.2.1 (15.08.2013)
-- Added new namespace `plugin.notification.badge`<br>
-  **Note:** The former `plugin.badge` namespace is deprecated now and will be removed in the next major release.
-
-#### Version 0.2.0 (11.08.2013)
-- Added iOS support<br>
-  *Based on the Badge iOS plugin made by* ***Joseph Stuhr***
 
 ## Using the plugin
-The plugin creates the object ```window.plugin.notification.badge``` with two methods:
+The plugin creates the object ```window.plugin.badge``` with the following interface:
 
-### set()
-The method takes the badge number as an argument. The argument needs to be a number or a string which can be parsed to a number.
+### Plugin initialization
+The plugin and its methods are not available before the *deviceready* event has been fired.
+
+```javascript
+document.addEventListener('deviceready', function () {
+    // window.plugin.badge is now available
+}, false);
+```
+
+### Set the badge of the app icon
+The badge of the app can be set through the `badge.set` interface.<br>
+The method takes the badge as its argument. It needs to be a number or a string which can be parsed to a number.
+
+#### Further informations
+- On Android the badge will be displayed through a notification. See [setTitle][set_title] how to specify a custom notification title.
+- On Windows Phone 8 the badge will be displayed through the app's live tile.
+- See [clear][clear] of how to clear the badge of the app icon.
+- See the [examples][examples] of how to use the plugin.
+
 ```javascript
 window.plugin.notification.badge.set(Number);
 ```
 
-### clear()
-Clearing the badge number is equivalent to set a zero number.
+### Clear the badge of the app icon
+The badge of the app can be removed through the `badge.clear` interface.
+
+#### Further informations
+- Clearing the badge number is equivalent to set a zero number.
+- See [set][set] of how to set the badge of the app icon.
+
 ```javascript
 window.plugin.notification.badge.clear();
-// or
-window.plugin.notification.badge.set(0);
 ```
 
-##  Example
-Sets the badge number to **1**:
+
+##  Examples
+### Set the badge of the app icon
+The following example shows how to set the badge of the app icon to **1**.
+
 ```javascript
 window.plugin.notification.badge.set(1);
 // or
 window.plugin.notification.badge.set('1');
 ```
 
+### Clear the badge of the app icon
+See below how to clear the badge of the app icon.
+
+```javascript
+window.plugin.notification.badge.clear();
+// or
+window.plugin.notification.badge.set(0);
+```
+
+
 ## Platform specifics
 ### Specify custom notification title on Android
-The default format for the title is `%d new messages`. But it can be customized through `setTitle`.
+The default format for the title is `%d new messages`, but is customizable through `setTitle`.
+
 ```javascript
 window.plugin.notification.badge.setTitle('%d neue Meldungen');
 ```
 
 ## Quirks
 ### TypeError: Cannot read property 'currentVersion' of null
-Along with Cordova 3.2 and Windows Phone 8 the `version.bat` script has to be renamed to `version`.
+The `version.bat` script can to be renamed to `version` as a workaround.
 
 On Mac or Linux
 ```
@@ -103,7 +125,7 @@ ren platforms\wp8\cordova\version.bat platforms\wp8\cordova\version
 ```
 
 ### App restarts on Android after notification was clicked
-The launch mode for the main activity has to be set to `singleInstance`
+Try setting the launch mode for the main activity to `singleInstance`
 ```xml
 <activity ... android:launchMode="singleInstance" ... />
 ```
@@ -117,6 +139,23 @@ The launch mode for the main activity has to be set to `singleInstance`
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+
 ## License
 
-This software is released under the [Apache 2.0 License](http://opensource.org/licenses/Apache-2.0).
+This software is released under the [Apache 2.0 License][apache2_license].
+
+© 2013-2014 appPlant UG, Inc. All rights reserved
+
+
+[cordova]: https://cordova.apache.org
+[android_notification_guide]: http://developer.android.com/guide/topics/ui/notifiers/notifications.html
+[wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
+[CLI]: http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface
+[PGB]: http://docs.build.phonegap.com/en_US/3.3.0/index.html
+[PGB_plugin]: https://build.phonegap.com/plugins/416
+[set]: #set_the_badge_of_the_app_icon
+[clear]: #clear_the_badge_of_the_app_icon
+[examples]: #examples
+[set_title]: specify_custom_notification_title_on_android
+
+[apache2_license]: http://opensource.org/licenses/Apache-2.0
