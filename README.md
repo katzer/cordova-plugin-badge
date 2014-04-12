@@ -123,6 +123,8 @@ window.plugin.notification.badge.set(0);
 ```
 
 ### Clear the badge automatically if the user taps the app icon
+The code below tells the plugin to clear the badge each time the user taps the app icon.
+
 ```javascript
 window.plugin.notification.badge.setClearOnTap(true);
 ```
