@@ -27,39 +27,91 @@ using Microsoft.Phone.Shell;
 using WPCordovaClassLib.Cordova;
 using WPCordovaClassLib.Cordova.Commands;
 using WPCordovaClassLib.Cordova.JSON;
+using System.IO.IsolatedStorage;
 
 namespace Cordova.Extension.Commands
 {
     public class Badge : BaseCommand
     {
         /// <summary>
-        /// Fügt dem Live Tile eine Badge Nummer hinzu
+        /// Name for the shared preferences
+        /// <summary>
+        private const string KEY = "badge";
+
+        /// <summary>
+        /// Sets the count property of the live tile
         /// </summary>
-        public void setBadge (string badgeNumber)
+        public void setBadge(string badgeNumber)
         {
             // Application Tile is always the first Tile, even if it is not pinned to Start.
-            ShellTile TileToFind = ShellTile.ActiveTiles.First();
+            ShellTile tile = ShellTile.ActiveTiles.First();
 
             // Application should always be found
-            if (TileToFind != null)
+            if (tile != null)
             {
                 string[] args = JsonHelper.Deserialize<string[]>(badgeNumber);
-                int count     = 0;
+                int count = 0;
 
                 try
                 {
                     count = int.Parse(args[0]);
                 }
-                catch (FormatException) {};
+                catch (FormatException) { };
 
                 StandardTileData TileData = new StandardTileData
                 {
                     Count = count
                 };
 
-                TileToFind.Update(TileData);
+                SaveBadge(count);
+
+                tile.Update(TileData);
 
                 DispatchCommandResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets the count property of the live tile
+        /// </summary>
+        public void getBadge(string args)
+        {
+            // Application Tile is always the first Tile, even if it is not pinned to Start.
+            ShellTile tile = ShellTile.ActiveTiles.First();
+
+            // Application should always be found
+            if (tile != null)
+            {
+                IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+                int badge = 0;
+                PluginResult result;
+
+                if (settings.Contains(KEY))
+                {
+                    badge = (int)settings[KEY];
+                }
+
+                result = new PluginResult(PluginResult.Status.OK, badge);
+
+                DispatchCommandResult(result, "");
+            }
+        }
+
+        /// <summary>
+        /// Persist the badge of the app icon so that `getBadge` is able to return
+        /// the badge number back to the client.
+        /// </summary>
+        private void SaveBadge(int badge)
+        {
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            if (settings.Contains(KEY))
+            {
+                settings[KEY] = badge;
+            }
+            else
+            {
+                settings.Add(KEY, badge);
             }
         }
     }
