@@ -45,6 +45,22 @@ Badge.prototype = {
     },
 
     /**
+     * Gets the badge of the app icon.
+     *
+     * @param {Function} callback
+     *      The function to be exec as the callback
+     * @param {Object?} scope
+     *      The callback function's scope
+     */
+    get: function (callback, scope) {
+        var fn = function (badge) {
+            callback.call(scope || this, badge);
+        }
+
+        cordova.exec(fn, null, 'Badge', 'getBadge', []);
+    },
+
+    /**
      * Sets the custom notification title for Android.
      *
      * @param {String} title

@@ -64,11 +64,22 @@ The method takes the badge as its argument. It needs to be a number or a string 
 #### Further informations
 - On Android the badge will be displayed through a notification. See [setTitle][set_title] how to specify a custom notification title.
 - On Windows Phone 8 the badge will be displayed through the app's live tile.
+- See [get][get] how to get back the current badge of the app icon.
 - See [clear][clear] of how to clear the badge of the app icon.
 - See the [examples][examples] of how to use the plugin.
 
 ```javascript
 window.plugin.notification.badge.set(Number);
+```
+
+### Get the badge of the app icon
+The badge of the app can be accessed through the `notification.badge.get` interface.<br>
+The method takes a callback function as its argument which will be called with the badge number. Optional the scope of the callback function ca be defined through a second argument.
+
+```javascript
+window.plugin.notification.badge.get( function (badge) {
+	// console.log('Badge of the app icon: ' + badge);
+}, scope);
 ```
 
 ### Clear the badge of the app icon
@@ -168,6 +179,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [PGB]: http://docs.build.phonegap.com/en_US/3.3.0/index.html
 [PGB_plugin]: https://build.phonegap.com/plugins/416
 [set]: #set_the_badge_of_the_app_icon
+[get]: #get_the_badge_of_the_app_icon
 [clear]: #clear_the_badge_of_the_app_icon
 [set_clear_on_tap]: #clear_the_badge_automatically_if_the_user_taps_the_app_icon
 [examples]: #examples
