@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.5.2 (not yet released)
+#### Version 0.5.2 (12.04.2014)
 - [enhancement:] Badge can be cleared automatically through `setClearOnTap`
 - [enhancement:] Badge can be retrieved through `get`
 
