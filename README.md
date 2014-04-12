@@ -76,10 +76,19 @@ The badge of the app can be removed through the `notification.badge.clear` inter
 
 #### Further informations
 - Clearing the badge number is equivalent to set a zero number.
+- See [setClearOnTap][set_clear_on_tap] how to clear the badge automatically after the user has taped the app icon.
 - See [set][set] of how to set the badge of the app icon.
 
 ```javascript
 window.plugin.notification.badge.clear();
+```
+
+### Clear the badge automatically if the user taps the app icon
+The badge of the app can be cleared automatically after the user has taped the app icon through the `notification.badge.setClearOnTap` interface.<br>
+The method takes an argument which tells to clear the badge or not. The default value is *false*.
+
+```javascript
+window.plugin.notification.badge.setClearOnTap(Boolean);
 ```
 
 
@@ -100,6 +109,11 @@ See below how to clear the badge of the app icon.
 window.plugin.notification.badge.clear();
 // or
 window.plugin.notification.badge.set(0);
+```
+
+### Clear the badge automatically if the user taps the app icon
+```javascript
+window.plugin.notification.badge.setClearOnTap(true);
 ```
 
 
@@ -155,6 +169,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [PGB_plugin]: https://build.phonegap.com/plugins/416
 [set]: #set_the_badge_of_the_app_icon
 [clear]: #clear_the_badge_of_the_app_icon
+[set_clear_on_tap]: #clear_the_badge_automatically_if_the_user_taps_the_app_icon
 [examples]: #examples
 [set_title]: specify_custom_notification_title_on_android
 

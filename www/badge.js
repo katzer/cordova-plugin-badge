@@ -20,36 +20,61 @@
 */
 
 var Badge = function () {
-    this._title = '%d new messages';
+    // Titel der Meldung für Android
+    this._title      = '%d new messages';
+    // Ob die Badge Zahl automatisch beim Öffnen der App gelöscht werden soll
+    this._clearOnTap = false;
 };
 
 Badge.prototype = {
     /**
-     * Entfernt den Badge vom App Icon.
+     * Clears the badge of the app icon.
      */
     clear: function () {
         cordova.exec(null, null, 'Badge', 'setBadge', [0, null]);
     },
 
     /**
-     * Fügt dem App Icon einen Badge hinzu.
+     * Sets the badge of the app icon.
      *
      * @param {Number} badge
+     *      The new badge number
      */
     set: function (badge) {
         cordova.exec(null, null, 'Badge', 'setBadge', [parseInt(badge) || 0, this._title]);
     },
 
     /**
-     * Setzt den Wert des Notification Titels (Android).
+     * Sets the custom notification title for Android.
      *
      * @param {String} title
+     *      The title of the notification
      */
     setTitle: function (title) {
         this._title = title;
+    },
+
+    /**
+     * Tells the plugin if the badge needs to be cleared when the user taps
+     * the icon.
+     *
+     * @param {Boolean} clearOnTap
+     *      Either true or false
+     */
+    setClearOnTap: function (clearOnTap) {
+        this._clearOnTap = clearOnTap;
     }
 };
 
-var plugin = new Badge();
+var plugin  = new Badge(),
+    channel = require('cordova/channel');
+
+channel.onCordovaReady.subscribe( function () {
+    if (plugin._clearOnTap) { plugin.clear() }
+});
+
+channel.onResume.subscribe( function () {
+    if (plugin._clearOnTap) { plugin.clear() }
+});
 
 module.exports = plugin;
