@@ -180,11 +180,11 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [CLI]: http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/3.3.0/index.html
 [PGB_plugin]: https://build.phonegap.com/plugins/416
-[set]: #set_the_badge_of_the_app_icon
-[get]: #get_the_badge_of_the_app_icon
-[clear]: #clear_the_badge_of_the_app_icon
-[set_clear_on_tap]: #clear_the_badge_automatically_if_the_user_taps_the_app_icon
+[set]: #set-the-badge-of-the-app-icon
+[get]: #get-the-badge-of-the-app-icon
+[clear]: #clear-the-badge-of-the-app-icon
+[set_clear_on_tap]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
 [examples]: #examples
-[set_title]: specify_custom_notification_title_on_android
+[set_title]: specify-custom-notification-title-on-android
 
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
