@@ -58,7 +58,6 @@ public class Badge extends CordovaPlugin {
             if (number == 0) {
                 clearBadge();
             } else {
-                saveBadge(number);
                 setBadge(number, title);
             }
 
@@ -107,8 +106,10 @@ public class Badge extends CordovaPlugin {
             .setLargeIcon(appIcon)
             .setContentIntent(contentIntent);
 
+        saveBadge(number);
+
         if (Build.VERSION.SDK_INT<16) {
-            // build notification for HoneyComb to ICS
+            // Build notification for HoneyComb to ICS
             getNotificationManager().notify(ID, notification.getNotification());
         } else if (Build.VERSION.SDK_INT>15) {
             // Notification for Jellybean and above
@@ -120,6 +121,7 @@ public class Badge extends CordovaPlugin {
      * Clears the badge of the app icon.
      */
     private void clearBadge () {
+        saveBadge(number);
         getNotificationManager().cancel(ID);
     }
 

@@ -1,5 +1,11 @@
 ## ChangeLog
 
+#### Version 0.5.3 (not yet released)
+- Added new namespace `cordova.plugins.notification.badge`<br>
+  **Note:** The former `plugin.notification.badge` namespace is deprecated now and will be removed in the next major release.
+
+- [bugfix:] `get` returned the old value even after `clear` was called on Android.
+
 #### Version 0.5.2 (12.04.2014)
 - [enhancement:] Badge can be cleared automatically through `setClearOnTap`
 - [enhancement:] Badge can be retrieved through `get`

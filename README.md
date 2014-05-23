@@ -186,5 +186,4 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [set_clear_on_tap]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
 [examples]: #examples
 [set_title]: specify-custom-notification-title-on-android
-
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
