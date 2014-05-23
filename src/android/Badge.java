@@ -106,7 +106,7 @@ public class Badge extends CordovaPlugin {
             .setLargeIcon(appIcon)
             .setContentIntent(contentIntent);
 
-        saveBadge(number);
+        saveBadge(badge);
 
         if (Build.VERSION.SDK_INT<16) {
             // Build notification for HoneyComb to ICS
@@ -121,7 +121,7 @@ public class Badge extends CordovaPlugin {
      * Clears the badge of the app icon.
      */
     private void clearBadge () {
-        saveBadge(number);
+        saveBadge(0);
         getNotificationManager().cancel(ID);
     }
 
