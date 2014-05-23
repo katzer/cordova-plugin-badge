@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.5.3 (not yet released)
+#### Version 0.5.3 (23.05.2014)
 - Added new namespace `cordova.plugins.notification.badge`<br>
   **Note:** The former `plugin.notification.badge` namespace is deprecated now and will be removed in the next major release.
 

@@ -1,7 +1,7 @@
 Cordova Badge-Plugin
 ====================
 
-[Cordova][cordova] plugin to access and modify the badge of the app icon.
+[Cordova][cordova] plugin to access and modify the badge number of the app icon.
 
 
 ## Supported Platforms
@@ -45,15 +45,26 @@ or to use an specific version:
 More informations can be found [here][PGB_plugin].
 
 
+## ChangeLog
+
+#### Version 0.5.3 (23.05.2014)
+- Added new namespace `cordova.plugins.notification.badge`<br>
+  **Note:** The former `plugin.notification.badge` namespace is deprecated now and will be removed in the next major release.
+
+- [bugfix:] `get` returned the old value even after `clear` was called on Android.
+
+
 ## Using the plugin
-The plugin creates the object ```window.plugin.notification.badge``` with the following interface:
+The plugin creates the object `cordova.plugins.notification.badge` with the following interface:
+
+Please note that the previous namespace `plugin.notification.badge` will be removed with v0.6.
 
 ### Plugin initialization
 The plugin and its methods are not available before the *deviceready* event has been fired.
 
 ```javascript
 document.addEventListener('deviceready', function () {
-    // window.plugin.notification.badge is now available
+    // cordova.plugins.notification.badge is now available
 }, false);
 ```
 
@@ -69,7 +80,7 @@ The method takes the badge as its argument. It needs to be a number or a string 
 - See the [examples][examples] of how to use the plugin.
 
 ```javascript
-window.plugin.notification.badge.set(Number);
+cordova.plugins.notification.badge.set(Number);
 ```
 
 ### Get the badge of the app icon
@@ -77,7 +88,7 @@ The badge of the app can be accessed through the `notification.badge.get` interf
 The method takes a callback function as its argument which will be called with the badge number. Optional the scope of the callback function ca be defined through a second argument.
 
 ```javascript
-window.plugin.notification.badge.get( function (badge) {
+cordova.plugins.notification.badge.get( function (badge) {
 	// console.log('Badge of the app icon: ' + badge);
 }, scope);
 ```
@@ -91,7 +102,7 @@ The badge of the app can be removed through the `notification.badge.clear` inter
 - See [set][set] of how to set the badge of the app icon.
 
 ```javascript
-window.plugin.notification.badge.clear();
+cordova.plugins.notification.badge.clear();
 ```
 
 ### Clear the badge automatically if the user taps the app icon
@@ -99,7 +110,7 @@ The badge of the app can be cleared automatically after the user has taped the a
 The method takes an argument which tells to clear the badge or not. The default value is *false*.
 
 ```javascript
-window.plugin.notification.badge.setClearOnTap(Boolean);
+cordova.plugins.notification.badge.setClearOnTap(Boolean);
 ```
 
 
@@ -108,25 +119,25 @@ window.plugin.notification.badge.setClearOnTap(Boolean);
 The following example shows how to set the badge of the app icon to **1**.
 
 ```javascript
-window.plugin.notification.badge.set(1);
+cordova.plugins.notification.badge.set(1);
 // or
-window.plugin.notification.badge.set('1');
+cordova.plugins.notification.badge.set('1');
 ```
 
 ### Clear the badge of the app icon
 See below how to clear the badge of the app icon.
 
 ```javascript
-window.plugin.notification.badge.clear();
+cordova.plugins.notification.badge.clear();
 // or
-window.plugin.notification.badge.set(0);
+cordova.plugins.notification.badge.set(0);
 ```
 
 ### Clear the badge automatically if the user taps the app icon
 The code below tells the plugin to clear the badge each time the user taps the app icon.
 
 ```javascript
-window.plugin.notification.badge.setClearOnTap(true);
+cordova.plugins.notification.badge.setClearOnTap(true);
 ```
 
 
@@ -135,7 +146,7 @@ window.plugin.notification.badge.setClearOnTap(true);
 The default format for the title is `%d new messages`, but is customizable through `setTitle`.
 
 ```javascript
-window.plugin.notification.badge.setTitle('%d neue Meldungen');
+cordova.plugins.notification.badge.setTitle('%d neue Meldungen');
 ```
 
 ## Quirks
