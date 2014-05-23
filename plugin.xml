@@ -26,13 +26,13 @@
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-    		<feature name="Badge">
-    			<param name="ios-package" value="APPBadge"/>
-    		</feature>
+            <feature name="Badge">
+                <param name="ios-package" value="APPBadge"/>
+            </feature>
         </config-file>
 
-    	<header-file src="src/ios/APPBadge.h" />
-    	<source-file src="src/ios/APPBadge.m" />
+        <header-file src="src/ios/APPBadge.h" />
+        <source-file src="src/ios/APPBadge.m" />
     </platform>
 
     <!-- wp8 -->
