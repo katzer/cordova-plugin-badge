@@ -20,10 +20,14 @@
 */
 
 var Badge = function () {
-    // Titel der Meldung für Android
-    this._title      = '%d new messages';
-    // Ob die Badge Zahl automatisch beim Öffnen der App gelöscht werden soll
-    this._clearOnTap = false;
+    this._config = {
+        // Titel der Meldung für Android
+        title: '%d new messages',
+        // Ob die Badge Zahl automatisch beim Öffnen der App gelöscht werden soll
+        autoClear: false,
+        // Ob und welches Icon für Android verwendet werden soll
+        smallIcon: 'ic_dialog_email'
+    };
 };
 
 Badge.prototype = {
@@ -31,7 +35,7 @@ Badge.prototype = {
      * Clears the badge of the app icon.
      */
     clear: function () {
-        cordova.exec(null, null, 'Badge', 'setBadge', [0, null]);
+        cordova.exec(null, null, 'Badge', 'clearBadge', []);
     },
 
     /**
@@ -41,7 +45,11 @@ Badge.prototype = {
      *      The new badge number
      */
     set: function (badge) {
-        cordova.exec(null, null, 'Badge', 'setBadge', [parseInt(badge) || 0, this._title]);
+        var number = parseInt(badge) || 0,
+            title  = this._config.title,
+            smallIcon = this._config.smallIcon;
+
+        cordova.exec(null, null, 'Badge', 'setBadge', [number, title, smallIcon]);
     },
 
     /**
@@ -55,22 +63,47 @@ Badge.prototype = {
     get: function (callback, scope) {
         var fn = function (badge) {
             callback.call(scope || this, badge);
-        }
+        };
 
         cordova.exec(fn, null, 'Badge', 'getBadge', []);
     },
 
     /**
+     * Configures the plugin's platform options.
+     *
+     * @param {Hash?} object
+     *      The new configuration settings
+     *
+     * @return {Hash}
+     *      The current configuration settings
+     */
+    configure: function (config) {
+        for (var key in config) {
+            if (this._config.hasOwnProperty(key)) {
+                this._config[key] = config[key];
+            }
+        }
+
+        return this._config;
+    },
+
+    /**
+     * @deprecated
+     *
      * Sets the custom notification title for Android.
      *
      * @param {String} title
      *      The title of the notification
      */
     setTitle: function (title) {
-        this._title = title;
+        console.warn('badge.setTitle(title) is deprecated! Please use badge.configure({ title:title }) instead.');
+
+        this._config.title = title;
     },
 
     /**
+     * @deprecated
+     *
      * Tells the plugin if the badge needs to be cleared when the user taps
      * the icon.
      *
@@ -78,7 +111,9 @@ Badge.prototype = {
      *      Either true or false
      */
     setClearOnTap: function (clearOnTap) {
-        this._clearOnTap = clearOnTap;
+        console.warn('badge.clearOnTap(bool) is deprecated! Please use badge.configure({ autoClear:bool }) instead.');
+
+        this._config.autoClear = clearOnTap;
     }
 };
 
@@ -86,11 +121,11 @@ var plugin  = new Badge(),
     channel = require('cordova/channel');
 
 channel.onCordovaReady.subscribe( function () {
-    if (plugin._clearOnTap) { plugin.clear() }
+    if (plugin._config.autoClear) { plugin.clear(); }
 });
 
 channel.onResume.subscribe( function () {
-    if (plugin._clearOnTap) { plugin.clear() }
+    if (plugin._config.autoClear) { plugin.clear(); }
 });
 
 module.exports = plugin;

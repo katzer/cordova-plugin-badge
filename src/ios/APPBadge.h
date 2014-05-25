@@ -24,6 +24,8 @@
 
 @interface APPBadge : CDVPlugin
 
+// Clears the badge of the app icon
+- (void) clearBadge:(CDVInvokedUrlCommand *)command;
 // Sets the badge of the app icon
 - (void) setBadge:(CDVInvokedUrlCommand *)command;
 // Gets the badge of the app icon

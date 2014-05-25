@@ -24,6 +24,16 @@
 @implementation APPBadge
 
 /**
+ * Clears the badge of the app icon.
+ *
+ */
+- (void) clearBadge:(CDVInvokedUrlCommand *)command
+{
+    [[UIApplication sharedApplication]
+     setApplicationIconBadgeNumber:0];
+}
+
+/**
  * Sets the badge of the app icon.
  *
  * @param badge

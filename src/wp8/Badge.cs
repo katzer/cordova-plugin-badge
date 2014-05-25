@@ -39,6 +39,14 @@ namespace Cordova.Extension.Commands
         private const string KEY = "badge";
 
         /// <summary>
+        /// Clears the count property of the live tile
+        /// </summary>
+        public void clearBadge()
+        {
+            setBadge(0);
+        }
+
+        /// <summary>
         /// Sets the count property of the live tile
         /// </summary>
         public void setBadge(string badgeNumber)

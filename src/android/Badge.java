@@ -51,15 +51,19 @@ public class Badge extends CordovaPlugin {
 
     @Override
     public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("setBadge")) {
-            int number   = args.optInt(0);
-            String title = args.optString(1, "%d new messages");
 
-            if (number == 0) {
-                clearBadge();
-            } else {
-                setBadge(number, title);
-            }
+        if (action.equalsIgnoreCase("clearBadge")) {
+            clearBadge();
+
+            return true;
+        }
+
+        if (action.equalsIgnoreCase("setBadge")) {
+            int number       = args.optInt(0);
+            String title     = args.optString(1, "%d new messages");
+            String smallIcon = args.optString(2);
+
+            setBadge(number, title, smallIcon);
 
             return true;
         }
@@ -81,10 +85,12 @@ public class Badge extends CordovaPlugin {
      *      The new badge number
      * @param title
      *      The notifications title
+     * @param smallIcon
+     *      The notifications small icon
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (int badge, String title) {
+    private void setBadge (int badge, String title, String smallIcon) {
         Context context = cordova.getActivity().getApplicationContext();
         Resources res   = context.getResources();
 
@@ -93,7 +99,8 @@ public class Badge extends CordovaPlugin {
         Intent intent = new Intent(context, LaunchActivity.class)
             .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+            context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         title = String.format(title, badge);
 
@@ -102,7 +109,7 @@ public class Badge extends CordovaPlugin {
             .setNumber(badge)
             .setTicker(title)
             .setAutoCancel(true)
-            .setSmallIcon(android.R.drawable.ic_dialog_email)
+            .setSmallIcon(getResIdForSmallIcon(smallIcon))
             .setLargeIcon(appIcon)
             .setContentIntent(contentIntent);
 
@@ -186,5 +193,44 @@ public class Badge extends CordovaPlugin {
         int resId = res.getIdentifier("icon", "drawable", pkgName);
 
         return resId;
+    }
+
+    /**
+     * @return
+     *      The resource ID for the small icon
+     */
+    private int getResIdForSmallIcon (String smallIcon) {
+        int resId      = 0;
+        String pkgName = cordova.getActivity().getPackageName();
+
+        resId = getResId(pkgName, smallIcon);
+
+        if (resId == 0) {
+            resId = getResId("android", smallIcon);
+        }
+
+        if (resId == 0) {
+            resId = getResId("android", "ic_dialog_email");
+        }
+
+        return resId;
+    }
+
+    /**
+     * Returns numerical icon Value
+     *
+     * @param {String} className
+     * @param {String} iconName
+     */
+    private int getResId (String className, String iconName) {
+        int icon = 0;
+
+        try {
+            Class<?> klass  = Class.forName(className + ".R$drawable");
+
+            icon = (Integer) klass.getDeclaredField(iconName).get(Integer.class);
+        } catch (Exception e) {}
+
+        return icon;
     }
 }

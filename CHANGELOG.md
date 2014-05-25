@@ -1,5 +1,12 @@
 ## ChangeLog
 
+#### Version 0.6.0 (not yet released)
+- [feature:] New method `configure` to configure badge properties.
+- [feature:] The small icon on Android can be changed through `configure`.
+- [**change**:] The namespace `plugin.notification.badge` will be removed with v0.6.1
+- [**change**:] `setTitle` is deprecated, please use `configure({ title: 'title' })`.
+- [**change**:] `clearOnTap` is deprecated, please use `configure({ autoClear: true })`.
+
 #### Version 0.5.3 (23.05.2014)
 - Added new namespace `cordova.plugins.notification.badge`<br>
   **Note:** The former `plugin.notification.badge` namespace is deprecated now and will be removed in the next major release.

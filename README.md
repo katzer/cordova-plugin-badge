@@ -40,24 +40,25 @@ Add the following xml to your config.xml to always use the latest version of thi
 ```
 or to use an specific version:
 ```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.1" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.2" />
 ```
 More informations can be found [here][PGB_plugin].
 
 
 ## ChangeLog
 
-#### Version 0.5.3 (23.05.2014)
-- Added new namespace `cordova.plugins.notification.badge`<br>
-  **Note:** The former `plugin.notification.badge` namespace is deprecated now and will be removed in the next major release.
-
-- [bugfix:] `get` returned the old value even after `clear` was called on Android.
+#### Version 0.6.0 (not yet released)
+- [feature:] New method `configure` to configure badge properties.
+- [feature:] The small icon on Android can be changed through `configure`.
+- [**change**:] The namespace `plugin.notification.badge` will be removed with v0.6.1
+- [**change**:] `setTitle` is deprecated, please use `configure({ title: 'title' })`.
+- [**change**:] `clearOnTap` is deprecated, please use `configure({ autoClear: true })`.
 
 
 ## Using the plugin
 The plugin creates the object `cordova.plugins.notification.badge` with the following interface:
 
-Please note that the previous namespace `plugin.notification.badge` will be removed with v0.6.
+**Note:** The previous namespace `plugin.notification.badge` will be removed with v0.6.1
 
 ### Plugin initialization
 The plugin and its methods are not available before the *deviceready* event has been fired.
@@ -106,11 +107,10 @@ cordova.plugins.notification.badge.clear();
 ```
 
 ### Clear the badge automatically if the user taps the app icon
-The badge of the app can be cleared automatically after the user has taped the app icon through the `notification.badge.setClearOnTap` interface.<br>
-The method takes an argument which tells to clear the badge or not. The default value is *false*.
+The badge of the app can be cleared automatically after the user has taped the app icon. The default value is *false*.
 
 ```javascript
-cordova.plugins.notification.badge.setClearOnTap(Boolean);
+cordova.plugins.notification.badge.configure({ autoClear: Boolean });
 ```
 
 
@@ -137,17 +137,27 @@ cordova.plugins.notification.badge.set(0);
 The code below tells the plugin to clear the badge each time the user taps the app icon.
 
 ```javascript
-cordova.plugins.notification.badge.setClearOnTap(true);
+cordova.plugins.notification.badge.configure({ autoClear: true });
 ```
 
 
 ## Platform specifics
 ### Specify custom notification title on Android
-The default format for the title is `%d new messages`, but is customizable through `setTitle`.
+The default format for the title is `%d new messages`, but is customizable through `configure`.
 
 ```javascript
-cordova.plugins.notification.badge.setTitle('%d neue Meldungen');
+cordova.plugins.notification.badge.configure({ title: '%d neue Meldungen' });
 ```
+
+### Specify small icon on Android
+As default the email icon is used, but is customizable through `configure`.
+
+```javascript
+cordova.plugins.notification.badge.configure({ smallIcon: 'icon' });
+```
+
+**Note:** A small icon is required.
+
 
 ## Quirks
 ### TypeError: Cannot read property 'currentVersion' of null
@@ -190,7 +200,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
 [CLI]: http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/3.3.0/index.html
-[PGB_plugin]: https://build.phonegap.com/plugins/416
+[PGB_plugin]: https://build.phonegap.com/plugins/724
 [set]: #set-the-badge-of-the-app-icon
 [get]: #get-the-badge-of-the-app-icon
 [clear]: #clear-the-badge-of-the-app-icon
