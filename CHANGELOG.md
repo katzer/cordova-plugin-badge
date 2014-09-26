@@ -6,6 +6,7 @@
 - [**change**:] The namespace `plugin.notification.badge` will be removed with v0.6.1
 - [**change**:] `setTitle` is deprecated, please use `configure({ title: 'title' })`.
 - [**change**:] `clearOnTap` is deprecated, please use `configure({ autoClear: true })`.
+- [bugfix:] `getBadge` still returned the number when autoClear: was set and the notification was already cleared by the system (Android).
 
 #### Version 0.5.3 (23.05.2014)
 - Added new namespace `cordova.plugins.notification.badge`<br>
