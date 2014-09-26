@@ -63,6 +63,7 @@ public class Badge extends CordovaPlugin {
             String title     = args.optString(1, "%d new messages");
             String smallIcon = args.optString(2);
 
+            clearBadge();
             setBadge(number, title, smallIcon);
 
             return true;
