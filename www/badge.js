@@ -45,11 +45,14 @@ Badge.prototype = {
      *      The new badge number
      */
     set: function (badge) {
-        var number = parseInt(badge) || 0,
-            title  = this._config.title,
-            smallIcon = this._config.smallIcon;
+        var args = [
+            parseInt(badge) || 0,
+            this._config.title,
+            this._config.smallIcon,
+            this._config.autoClear
+        ];
 
-        cordova.exec(null, null, 'Badge', 'setBadge', [number, title, smallIcon]);
+        cordova.exec(null, null, 'Badge', 'setBadge', args);
     },
 
     /**

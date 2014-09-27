@@ -44,13 +44,32 @@ import android.os.Build;
 
 public class Badge extends CordovaPlugin {
 
-    // Static ID for the badge notification
+    /**
+     * The ID for the notification
+     */
     private final int ID = -450793490;
-    // Name for the shared preferences
+
+    /**
+     * The name for the shared preferences key
+     */
     static final String KEY = "badge";
 
+    /**
+     * Executes the request.
+     *
+     * @param action   The action to execute.
+     * @param args     The exec() arguments.
+     * @param callback The callback context used when
+     *                 calling back into JavaScript.
+     *
+     * @return
+     *      Returning false results in a "MethodNotFound" error.
+     *
+     * @throws JSONException
+     */
     @Override
-    public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute (String action, JSONArray args, CallbackContext callback)
+            throws JSONException {
 
         if (action.equalsIgnoreCase("clearBadge")) {
             clearBadge();
@@ -59,23 +78,23 @@ public class Badge extends CordovaPlugin {
         }
 
         if (action.equalsIgnoreCase("setBadge")) {
-            int number       = args.optInt(0);
-            String title     = args.optString(1, "%d new messages");
-            String smallIcon = args.optString(2);
+            int number        = args.optInt(0);
+            String title      = args.optString(1, "%d new messages");
+            String smallIcon  = args.optString(2);
+            boolean autoClear = args.optBoolean(3, false);
 
             clearBadge();
-            setBadge(number, title, smallIcon);
+            setBadge(number, title, smallIcon, autoClear);
 
             return true;
         }
 
         if (action.equalsIgnoreCase("getBadge")) {
-            getBadge(callbackContext);
+            getBadge(callback);
 
             return true;
         }
 
-        // Returning false results in a "MethodNotFound" error.
         return false;
     }
 
@@ -86,12 +105,14 @@ public class Badge extends CordovaPlugin {
      *      The new badge number
      * @param title
      *      The notifications title
-     * @param smallIcon
+     * @param icon
      *      The notifications small icon
+     * @param autoCancel
+     *      The autoCancel value
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (int badge, String title, String smallIcon) {
+    private void setBadge (int badge, String title, String icon, boolean autoCancel) {
         Context context = cordova.getActivity().getApplicationContext();
         Resources res   = context.getResources();
 
@@ -109,8 +130,8 @@ public class Badge extends CordovaPlugin {
             .setContentTitle(title)
             .setNumber(badge)
             .setTicker(title)
-            .setAutoCancel(true)
-            .setSmallIcon(getResIdForSmallIcon(smallIcon))
+            .setAutoCancel(autoCancel)
+            .setSmallIcon(getResIdForSmallIcon(icon))
             .setLargeIcon(appIcon)
             .setContentIntent(contentIntent);
 
