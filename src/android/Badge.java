@@ -55,6 +55,11 @@ public class Badge extends CordovaPlugin {
     static final String KEY = "badge";
 
     /**
+     * Bundle identifier for the autoCancel value
+     */
+    static final String EXTRA_AUTO_CANCEL = "EXTRA_AUTO_CANCEL";
+
+    /**
      * Executes the request.
      *
      * @param action   The action to execute.
@@ -120,6 +125,8 @@ public class Badge extends CordovaPlugin {
 
         Intent intent = new Intent(context, LaunchActivity.class)
             .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        intent.putExtra(EXTRA_AUTO_CANCEL, autoCancel);
 
         PendingIntent contentIntent = PendingIntent.getActivity(
             context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);

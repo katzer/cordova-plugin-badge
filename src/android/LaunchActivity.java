@@ -37,7 +37,12 @@ public class LaunchActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        clearBagde();
+        Intent intent  = getIntent();
+        boolean cancel = intent.getBooleanExtra(Badge.EXTRA_AUTO_CANCEL, false);
+
+        if (cancel)
+            clearBagde();
+
         launchMainIntent();
     }
 
