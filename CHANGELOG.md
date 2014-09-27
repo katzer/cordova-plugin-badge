@@ -2,6 +2,7 @@
 
 #### Version 0.6.0 (not yet released)
 - [enhancement:] iOS 8 support
+- [enhancement:] All methods are asynchron now and do not block the main thread anymore.
 - [feature:] New method `hasPermission` to ask if the user has granted to display badge notifications.
 - [feature:] New method `promptForPermission` to promt the user to grant permission to display badge notifications.
 - [feature:] New method `configure` to configure badge properties.
