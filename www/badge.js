@@ -72,6 +72,29 @@ Badge.prototype = {
     },
 
     /**
+     * Informs if the app has the permission to show badges.
+     *
+     * @param {Function} callback
+     *      The function to be exec as the callback
+     * @param {Object?} scope
+     *      The callback function's scope
+     */
+    hasPermission: function (callback, scope) {
+        var fn = function (badge) {
+            callback.call(scope || this, badge);
+        };
+
+        cordova.exec(fn, null, 'Badge', 'hasPermission', []);
+    },
+
+    /**
+     * Ask for permission to show badges if not already granted.
+     */
+    promptForPermission: function () {
+        cordova.exec(null, null, 'Badge', 'promptForPermission', []);
+    },
+
+    /**
      * Configures the plugin's platform options.
      *
      * @param {Hash?} object

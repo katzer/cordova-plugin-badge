@@ -1,6 +1,9 @@
 ## ChangeLog
 
 #### Version 0.6.0 (not yet released)
+- [enhancement:] iOS 8 support
+- [feature:] New method `hasPermission` to ask if the user has granted to display badge notifications.
+- [feature:] New method `promptForPermission` to promt the user to grant permission to display badge notifications.
 - [feature:] New method `configure` to configure badge properties.
 - [feature:] The small icon on Android can be changed through `configure`.
 - [**change**:] The namespace `plugin.notification.badge` will be removed with v0.6.1
