@@ -57,11 +57,11 @@
 - (void) getBadge:(CDVInvokedUrlCommand *)command
 {
     CDVPluginResult* result;
-    int badge = [[UIApplication sharedApplication]
+    long badge = [[UIApplication sharedApplication]
                  applicationIconBadgeNumber];
 
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                 messageAsInt:badge];
+                                 messageAsDouble:badge];
 
     [self.commandDelegate sendPluginResult:result
                                 callbackId:command.callbackId];
