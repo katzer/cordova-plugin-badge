@@ -47,7 +47,7 @@ public class Badge extends CordovaPlugin {
     // Static ID for the badge notification
     private final int ID = -450793490;
     // Name for the shared preferences
-    private final String KEY = "badge";
+    static final String KEY = "badge";
 
     @Override
     public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -139,14 +139,14 @@ public class Badge extends CordovaPlugin {
      * @param callback
      *      The function to be exec as the callback
      */
-    private void getBadge (CallbackContext callbackContext) {
+    private void getBadge (CallbackContext callback) {
         SharedPreferences settings = getSharedPreferences();
         int badge = settings.getInt(KEY, 0);
         PluginResult result;
 
         result = new PluginResult(PluginResult.Status.OK, badge);
 
-        callbackContext.sendPluginResult(result);
+        callback.sendPluginResult(result);
     }
 
     /**
@@ -191,7 +191,8 @@ public class Badge extends CordovaPlugin {
         Resources res   = context.getResources();
         String pkgName  = context.getPackageName();
 
-        int resId = res.getIdentifier("icon", "drawable", pkgName);
+        int resId;
+        resId = res.getIdentifier("icon", "drawable", pkgName);
 
         return resId;
     }
@@ -201,7 +202,8 @@ public class Badge extends CordovaPlugin {
      *      The resource ID for the small icon
      */
     private int getResIdForSmallIcon (String smallIcon) {
-        int resId      = 0;
+        int resId;
+
         String pkgName = cordova.getActivity().getPackageName();
 
         resId = getResId(pkgName, smallIcon);
@@ -220,8 +222,10 @@ public class Badge extends CordovaPlugin {
     /**
      * Returns numerical icon Value
      *
-     * @param {String} className
-     * @param {String} iconName
+     * @param className
+     *      The class name prefix either from Android or the app
+     * @param iconName
+     *      The resource name
      */
     private int getResId (String className, String iconName) {
         int icon = 0;
@@ -230,7 +234,7 @@ public class Badge extends CordovaPlugin {
             Class<?> klass  = Class.forName(className + ".R$drawable");
 
             icon = (Integer) klass.getDeclaredField(iconName).get(Integer.class);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
         return icon;
     }
