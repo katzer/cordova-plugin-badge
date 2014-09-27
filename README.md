@@ -100,7 +100,7 @@ The badge of the app can be removed through the `notification.badge.clear` inter
 
 #### Further informations
 - Clearing the badge number is equivalent to set a zero number.
-- See [setClearOnTap][set_clear_on_tap] how to clear the badge automatically after the user has taped the app icon.
+- See [configure][autoclear] how to clear the badge automatically after the user has taped the app icon.
 - See [set][set] of how to set the badge of the app icon.
 
 ```javascript
@@ -205,7 +205,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [set]: #set-the-badge-of-the-app-icon
 [get]: #get-the-badge-of-the-app-icon
 [clear]: #clear-the-badge-of-the-app-icon
-[set_clear_on_tap]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
+[autoclear]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
 [examples]: #examples
 [set_title]: specify-custom-notification-title-on-android
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
