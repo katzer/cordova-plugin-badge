@@ -25,7 +25,7 @@ cordova.plugins.notification.badge.set(10);
 
 Please read the plugin's [README][readme] for further requirements and informations.
 
-### iOS8 Permissions
+### iOS8 Permission
 Since iOS8 to use of badge noficiations the user has to grant the permission before trying to set a badge number. Use the _"Prompt for permission"_ to prompt the use to grant the permission. Note that the OS will only prompt the user only once! Later the user needs to configure the settings manually.
 
 <p align="center">
