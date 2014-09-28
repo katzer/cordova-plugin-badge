@@ -9,7 +9,6 @@ Cordova Badge Plugin
 [Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows Phone.
 
 <table>
-    &nbsp;&nbsp;&nbsp;
     <tr>
         <img height="150px" src="http://www.maximizeurmac.com/wp-content/uploads/2013/09/1.jpg" />
     </tr>
