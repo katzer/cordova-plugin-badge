@@ -58,7 +58,8 @@ namespace Cordova.Extension.Commands
             if (tile != null)
             {
                 string[] ary = JsonHelper.Deserialize<string[]>(args);
-                int count = 0;
+                int count    = 0;
+                string title = ary[1].Replace("%d", "{0}");
 
                 try
                 {
@@ -66,9 +67,12 @@ namespace Cordova.Extension.Commands
                 }
                 catch (FormatException) { };
 
+                title = String.Format(title, count);
+
                 StandardTileData TileData = new StandardTileData
                 {
-                    Count = count
+                    Count = count,
+                    BackTitle = title
                 };
 
                 SaveBadge(count);
