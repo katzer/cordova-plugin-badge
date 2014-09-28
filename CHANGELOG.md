@@ -11,6 +11,7 @@
 - [**change**:] `setTitle` is deprecated, please use `configure({ title: 'title' })`.
 - [**change**:] `clearOnTap` is deprecated, please use `configure({ autoClear: true })`.
 - [bugfix:] `getBadge` still returned the number when autoClear: was set and the notification was already cleared by the system (Android).
+- [bugfix:] `clean` was not working on Windows Phone.
 
 #### Version 0.5.3 (23.05.2014)
 - Added new namespace `cordova.plugins.notification.badge`<br>
