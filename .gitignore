@@ -1,0 +1,13 @@
+/platforms/wp8/obj
+/out
+/platforms/android/gen
+/platforms/android/CordovaLib/gen
+/platforms/android/CordovaLib/bin
+/platforms/wp8/Bin
+/platforms/android/bin
+npm-debug.log
+/platforms/android/CordovaLib/ant-gen
+/platforms/android/ant-gen
+/platforms/android/CordovaLib/ant-build
+/platforms/android/ant-build
+/platforms/ios/build
