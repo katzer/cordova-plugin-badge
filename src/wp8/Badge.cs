@@ -101,8 +101,28 @@ namespace Cordova.Extension.Commands
 
                 result = new PluginResult(PluginResult.Status.OK, badge);
 
-                DispatchCommandResult(result, "");
+                DispatchCommandResult(result);
             }
+        }
+
+        /// <summery>
+        /// Informs if the app has the permission to show badges.
+        /// </summery>
+        public void hasPermission(string args)
+        {
+            PluginResult result;
+
+            result = new PluginResult(PluginResult.Status.OK, true);
+
+            DispatchCommandResult(result);
+        }
+
+        /// <summery>
+        /// Ask for permission to show badges.
+        /// </summery>
+        public void promptForPermission(string args)
+        {
+            DispatchCommandResult();
         }
 
         /// <summary>
