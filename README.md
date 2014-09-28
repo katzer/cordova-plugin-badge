@@ -134,7 +134,7 @@ The badge number can be set through the `notification.badge.set` interface.<br>
 The method takes the badge as its argument. It needs to be a number or a string which can be parsed to a number.
 
 #### Further informations
-- The badge number can only be set if the user has previously grant the [required permission][prompt_permission].
+- The badge number can only be set if the user has previously granted the [required permission][prompt_permission].
 - On Android the badge will be displayed through a notification. See [configure][set_title] how to specify a custom notification title.
 - On Windows Phone 8 the badge will be displayed through the app's live tile.
 - See [get][get] how to get back the current badge number.
@@ -183,9 +183,9 @@ The following example shows how to set the badge number to **1**.
 
 ```javascript
 cordova.plugins.notification.badge.set(1);
-// or
-cordova.plugins.notification.badge.set('1');
 ```
+
+__Note:__ The badge number can only be set if the user has granted the [required permission][prompt_permission].
 
 ### Clear the badge number
 See below how to clear the badge number.
