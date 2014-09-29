@@ -63,7 +63,7 @@ cordova plugin add de.appplant.cordova.plugin.badge@0.5.3
 ### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
 ```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.3" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.0" />
 ```
 More informations can be found [here][PGB_plugin].
 
@@ -246,7 +246,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/index.html
-[PGB_plugin]: https://build.phonegap.com/plugins/810
+[PGB_plugin]: https://build.phonegap.com/plugins/1123
 [has_permission]: #determine-if-the-app-does-have-the-permission-to-show-badge-notifications
 [prompt_permission]: #prompt-the-user-to-grant-permission-for-badge-notifications
 [set]: #set-the-badge-of-the-app-icon
