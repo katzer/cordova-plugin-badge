@@ -57,7 +57,7 @@ cordova plugin add de.appplant.cordova.plugin.badge --searchpath path/to/plugin
 or to use the last stable version:
 ```bash
 # ~~ stable version ~~
-cordova plugin add de.appplant.cordova.plugin.badge@0.5.3
+cordova plugin add de.appplant.cordova.plugin.badge@0.6.0
 ```
 
 ### PhoneGap Build
