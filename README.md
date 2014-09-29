@@ -83,6 +83,9 @@ More informations can be found [here][PGB_plugin].
 - [bugfix:] `getBadge` still returned the number when autoClear: was set and the notification was already cleared by the system (Android).
 - [bugfix:] `clean` was not working on Windows Phone.
 
+#### Further informations
+- See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
+
 
 ## Using the plugin
 The plugin creates the object `cordova.plugins.notification.badge` with the following methods:
@@ -247,6 +250,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/index.html
 [PGB_plugin]: https://build.phonegap.com/plugins/1123
+[changelog]: CHANGELOG.md
 [has_permission]: #determine-if-the-app-does-have-the-permission-to-show-badge-notifications
 [prompt_permission]: #prompt-the-user-to-grant-permission-for-badge-notifications
 [set]: #set-the-badge-of-the-app-icon
