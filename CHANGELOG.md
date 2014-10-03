@@ -1,4 +1,6 @@
 ## ChangeLog
+#### Version 0.6.1 (03.10.2014)
+- [bugfix:] `hasPermission` and `promptForPermission` let the app crash on iOS7 and older.
 
 #### Version 0.6.0 (29.09.2014)
 - [enhancement:] iOS 8 support
