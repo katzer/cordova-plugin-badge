@@ -5,13 +5,13 @@ Cordova Badge Plugin - Example
 [Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows Phone.
 
 ## Instructions
-[Download][zip] the _example_ branch and run the following command:
+[Download][zip] the _example_ branch or clone the [repository][repo] and run the following command:
 
 ```bash
 cordova run [ios|android|wp8]
 ```
 
-These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Android Studio][studio] or [Eclipse][eclipse].
+These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][studio] or [Eclipse][eclipse].
 
 <p align="center">
     <img src="images/overview.tiff"></img>
@@ -55,6 +55,8 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [cordova]: https://cordova.apache.org
 [readme]: https://github.com/katzer/cordova-plugin-badge/blob/master/README.md
 [zip]: https://github.com/katzer/cordova-plugin-badge/archive/master.zip
+[repo]: https://github.com/katzer/cordova-plugin-badge
+[xcode]: https://developer.apple.com/xcode/
 [studio]: https://developer.android.com/sdk/installing/studio.html
 [eclipse]: https://developer.android.com/sdk/index.html
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
