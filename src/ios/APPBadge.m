@@ -20,6 +20,7 @@
  */
 
 #import "APPBadge.h"
+#import <Cordova/CDVAvailability.h>
 
 @implementation APPBadge
 
@@ -104,15 +105,17 @@
  */
 - (void) promptForPermission:(CDVInvokedUrlCommand *)command
 {
-#ifdef __IPHONE_8_0
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge
-                                                                             categories:nil];
+    if (IsAtLeastiOSVersion(@"8.0")) {
+        UIUserNotificationSettings *settings;
 
-    [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         registerUserNotificationSettings:settings];
-    }];
-#endif
+        settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge
+                                                     categories:nil];
+
+        [self.commandDelegate runInBackground:^{
+            [[UIApplication sharedApplication]
+             registerUserNotificationSettings:settings];
+        }];
+    }
 }
 
 #pragma mark -
@@ -123,14 +126,16 @@
  */
 - (BOOL) hasPermissionToSetBadges
 {
-#ifdef __IPHONE_8_0
-    UIUserNotificationSettings *settings = [[UIApplication sharedApplication]
-                                                currentUserNotificationSettings];
+    if (IsAtLeastiOSVersion(@"8.0")) {
+        UIUserNotificationSettings *settings;
 
-    return (settings.types & UIUserNotificationTypeBadge);
-#else
-    return YES;
-#endif
+        settings = [[UIApplication sharedApplication]
+                    currentUserNotificationSettings];
+
+        return (settings.types & UIUserNotificationTypeBadge);
+    } else {
+        return YES;
+    }
 }
 
 @end
