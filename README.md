@@ -46,7 +46,7 @@ The plugin can either be installed from git repository, from local file system t
 ### Local development environment
 From master:
 ```bash
-# ~~ from google-cloud-print branch ~~
+# ~~ from master branch ~~
 cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
 ```
 from a local folder:
