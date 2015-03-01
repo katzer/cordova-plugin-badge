@@ -20,7 +20,6 @@
  */
 
 #import "APPBadge.h"
-#import <Cordova/CDVAvailability.h>
 
 @implementation APPBadge
 
@@ -98,24 +97,27 @@
 }
 
 /**
- * Ask for permission to show badges.
+ * Register permission to show badges.
  *
  * @param callback
  *      The function to be exec as the callback
  */
-- (void) promptForPermission:(CDVInvokedUrlCommand *)command
+- (void) registerPermission:(CDVInvokedUrlCommand *)command
 {
-    if (IsAtLeastiOSVersion(@"8.0")) {
-        UIUserNotificationSettings *settings;
+    if (![self respondsToRegisterUserNotificationSettings])
+        return;
 
-        settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge
-                                                     categories:nil];
+    UIUserNotificationType types;
+    UIUserNotificationSettings *settings;
 
-        [self.commandDelegate runInBackground:^{
-            [[UIApplication sharedApplication]
-             registerUserNotificationSettings:settings];
-        }];
-    }
+    types    = UIUserNotificationTypeBadge;
+    settings = [UIUserNotificationSettings settingsForTypes:types
+                                                 categories:nil];
+
+    [self.commandDelegate runInBackground:^{
+        [[UIApplication sharedApplication]
+         registerUserNotificationSettings:settings];
+    }];
 }
 
 #pragma mark -
@@ -126,16 +128,27 @@
  */
 - (BOOL) hasPermissionToSetBadges
 {
-    if (IsAtLeastiOSVersion(@"8.0")) {
-        UIUserNotificationSettings *settings;
-
-        settings = [[UIApplication sharedApplication]
-                    currentUserNotificationSettings];
-
-        return (settings.types & UIUserNotificationTypeBadge);
-    } else {
+    if (![self respondsToRegisterUserNotificationSettings])
         return YES;
-    }
+
+    UIUserNotificationSettings *settings;
+
+    settings = [[UIApplication sharedApplication]
+                currentUserNotificationSettings];
+
+    return (settings.types & UIUserNotificationTypeBadge);
+}
+
+/**
+ * If UIApplication responds to seelctor registerUserNotificationSettings:
+ *
+ * @return
+ *      true for iOS8 and above
+ */
+- (BOOL) respondsToRegisterUserNotificationSettings
+{
+    return [[UIApplication sharedApplication]
+            respondsToSelector:@selector(registerUserNotificationSettings:)];
 }
 
 @end
