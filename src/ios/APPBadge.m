@@ -20,11 +20,20 @@
  */
 
 #import "APPBadge.h"
+#import "AppDelegate+APPBadge.h"
+#import "UIApplication+APPBadge.h"
+
+@interface APPBadge ()
+
+// Needed when calling `registerPermission`
+@property (nonatomic, retain) CDVInvokedUrlCommand* command;
+
+@end
 
 @implementation APPBadge
 
 #pragma mark -
-#pragma mark Plugin interface methods
+#pragma mark Interface
 
 /**
  * Clears the badge of the app icon.
@@ -33,8 +42,7 @@
 - (void) clearBadge:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         setApplicationIconBadgeNumber:0];
+        [self.app setApplicationIconBadgeNumber:0];
     }];
 }
 
@@ -50,8 +58,7 @@
     int number    = [[args objectAtIndex:0] intValue];
 
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         setApplicationIconBadgeNumber:number];
+        [self.app setApplicationIconBadgeNumber:number];
     }];
 }
 
@@ -65,8 +72,7 @@
 {
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* result;
-        long badge = [[UIApplication sharedApplication]
-                      applicationIconBadgeNumber];
+        long badge = [self.app applicationIconBadgeNumber];
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                    messageAsDouble:badge];
@@ -86,7 +92,9 @@
 {
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* result;
-        BOOL hasPermission = [self hasPermissionToSetBadges];
+        BOOL hasPermission;
+
+        hasPermission = [self.app hasPermissionToDisplayBadges];
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                      messageAsBool:hasPermission];
@@ -104,51 +112,60 @@
  */
 - (void) registerPermission:(CDVInvokedUrlCommand *)command
 {
-    if (![self respondsToRegisterUserNotificationSettings])
-        return;
+    if (![[UIApplication sharedApplication]
+         respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        return [self hasPermission:command];
+    }
 
-    UIUserNotificationType types;
-    UIUserNotificationSettings *settings;
-
-    types    = UIUserNotificationTypeBadge;
-    settings = [UIUserNotificationSettings settingsForTypes:types
-                                                 categories:nil];
+    _command = command;
 
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         registerUserNotificationSettings:settings];
+        [self.app registerPermissionToDisplayBadges];
     }];
 }
 
 #pragma mark -
-#pragma mark Plugin helper methods
+#pragma mark Delegates
 
 /**
- * If the app has the permission to show badges.
+ * Called on otification settings registration is completed.
  */
-- (BOOL) hasPermissionToSetBadges
+- (void) didRegisterUserNotificationSettings:(UIUserNotificationSettings*)settings
 {
-    if (![self respondsToRegisterUserNotificationSettings])
-        return YES;
-
-    UIUserNotificationSettings *settings;
-
-    settings = [[UIApplication sharedApplication]
-                currentUserNotificationSettings];
-
-    return (settings.types & UIUserNotificationTypeBadge);
+    if (_command)
+    {
+        [self hasPermission:_command];
+        _command = NULL;
+    }
 }
 
+#pragma mark -
+#pragma mark Life Cycle
+
 /**
- * If UIApplication responds to seelctor registerUserNotificationSettings:
- *
- * @return
- *      true for iOS8 and above
+ * Registers obervers after plugin was initialized.
  */
-- (BOOL) respondsToRegisterUserNotificationSettings
+- (void) pluginInitialize
 {
-    return [[UIApplication sharedApplication]
-            respondsToSelector:@selector(registerUserNotificationSettings:)];
+    NSNotificationCenter* center = [NSNotificationCenter
+                                    defaultCenter];
+
+    [center addObserver:self
+               selector:@selector(didRegisterUserNotificationSettings:)
+                   name:UIApplicationRegisterUserNotificationSettings
+                 object:nil];
+}
+
+#pragma mark -
+#pragma mark Helper
+
+/**
+ * Short hand for shared application instance.
+ */
+- (UIApplication*) app
+{
+    return [UIApplication sharedApplication];
 }
 
 @end

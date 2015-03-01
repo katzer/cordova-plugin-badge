@@ -33,6 +33,12 @@
 
         <header-file src="src/ios/APPBadge.h" />
         <source-file src="src/ios/APPBadge.m" />
+
+        <header-file src="src/ios/AppDelegate+APPBadge.h" />
+        <source-file src="src/ios/AppDelegate+APPBadge.m" />
+
+        <header-file src="src/ios/UIApplication+APPBadge.h" />
+        <source-file src="src/ios/UIApplication+APPBadge.m" />
     </platform>
 
     <!-- wp8 -->

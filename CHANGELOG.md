@@ -2,6 +2,7 @@
 #### Version 0.6.2 (not yet released)
 - [change:] Renamed `promptForPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.
+- [enhancement:] `registerPermission` returns result of registration.
 
 #### Version 0.6.1 (03.10.2014)
 - [bugfix:] `hasPermission` and `promptForPermission` let the app crash on iOS7 and older.
