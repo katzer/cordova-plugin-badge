@@ -219,11 +219,6 @@ cordova.plugins.notification.badge.configure({ smallIcon: 'icon' });
 __Note:__ A small icon is required.
 
 
-## Quirks
-### App crashes on iOS
-Please note that the plugin as well as cordova need to be compiled for each iOS version. The compiled iOS8 code will crash for example under iOS7.
-
-
 ## Contributing
 
 1. Fork it
