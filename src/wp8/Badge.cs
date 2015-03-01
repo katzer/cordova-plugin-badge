@@ -130,7 +130,7 @@ namespace Cordova.Extension.Commands
         /// <summery>
         /// Ask for permission to show badges.
         /// </summery>
-        public void promptForPermission(string args)
+        public void registerPermission(string args)
         {
             hasPermission(args);
         }
