@@ -74,6 +74,7 @@ More informations can be found [here][PGB_plugin].
 - [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.
 - [enhancement:] `registerPermission` returns result of registration.
+- [enhancement:] No need anymore to call `registerPermission` explicit before trying to set the badge number.
 
 #### Further informations
 - See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
