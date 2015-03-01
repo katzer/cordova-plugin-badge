@@ -1,5 +1,5 @@
 ## ChangeLog
-#### Version 0.6.2 (not yet released)
+#### Version 0.6.2 (01.03.2015)
 - [change:] Renamed `promptForPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.
 - [enhancement:] `registerPermission` returns result of registration.
