@@ -88,10 +88,10 @@ Badge.prototype = {
     },
 
     /**
-     * Ask for permission to show badges if not already granted.
+     * Register permission to show badges if not already granted.
      */
-    promptForPermission: function () {
-        cordova.exec(null, null, 'Badge', 'promptForPermission', []);
+    registerPermission: function () {
+        cordova.exec(null, null, 'Badge', 'registerPermission', []);
     },
 
     /**
@@ -140,6 +140,16 @@ Badge.prototype = {
         console.warn('badge.clearOnTap(bool) is deprecated! Please use badge.configure({ autoClear:bool }) instead.');
 
         this._config.autoClear = clearOnTap;
+    },
+
+    /**
+     * Register permission to show notifications
+     * if not already granted.
+     */
+    promptForPermission: function () {
+        console.warn('Depreated: Please use `notification.badge.registerPermission` instead.');
+
+        this.registerPermission.apply(this, arguments);
     }
 };
 
