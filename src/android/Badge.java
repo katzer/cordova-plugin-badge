@@ -106,6 +106,7 @@ public class Badge extends CordovaPlugin {
         }
 
         if (action.equalsIgnoreCase("promptForPermission")) {
+            hasPermission(callback);
             return true;
         }
 

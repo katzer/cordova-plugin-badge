@@ -130,7 +130,7 @@ namespace Cordova.Extension.Commands
         /// </summery>
         public void promptForPermission(string args)
         {
-            DispatchCommandResult();
+            hasPermission(args);
         }
 
         /// <summary>

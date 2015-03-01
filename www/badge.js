@@ -52,7 +52,11 @@ Badge.prototype = {
             this._config.autoClear
         ];
 
-        cordova.exec(null, null, 'Badge', 'setBadge', args);
+        this.registerPermission(function (granted) {
+            if (granted) {
+                cordova.exec(null, null, 'Badge', 'setBadge', args);
+            }
+        });
     },
 
     /**
@@ -89,9 +93,18 @@ Badge.prototype = {
 
     /**
      * Register permission to show badges if not already granted.
+     *
+     * @param {Function} callback
+     *      The function to be exec as the callback
+     * @param {Object?} scope
+     *      The callback function's scope
      */
-    registerPermission: function () {
-        cordova.exec(null, null, 'Badge', 'registerPermission', []);
+    registerPermission: function (callback, scope) {
+        var fn = function (badge) {
+            callback.call(scope || this, badge);
+        };
+
+        cordova.exec(fn, null, 'Badge', 'registerPermission', []);
     },
 
     /**
