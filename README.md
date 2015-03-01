@@ -57,20 +57,20 @@ cordova plugin add de.appplant.cordova.plugin.badge --searchpath path/to/plugin
 or to use the last stable version:
 ```bash
 # ~~ stable version ~~
-cordova plugin add de.appplant.cordova.plugin.badge@0.6.1
+cordova plugin add de.appplant.cordova.plugin.badge@0.6.2
 ```
 
 ### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
 ```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.1" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.2" />
 ```
 More informations can be found [here][PGB_plugin].
 
 
 ## ChangeLog
 
-#### Version 0.6.2 (not yet released)
+#### Version 0.6.2 (01.03.2015)
 - [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.
 - [enhancement:] `registerPermission` returns result of registration.
@@ -237,7 +237,7 @@ Please note that the plugin as well as cordova need to be compiled for each iOS 
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2014 appPlant UG, Inc. All rights reserved
+© 2013-2015 appPlant UG, Inc. All rights reserved
 
 
 [cordova]: https://cordova.apache.org

@@ -3,13 +3,13 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge"
-        version="0.6.2dev">
+        version="0.6.2">
 
     <name>Badge</name>
 
     <description>Cordova plugin to access and modify the badge number of the app icon</description>
     <repo>https://github.com/katzer/cordova-plugin-badge.git</repo>
-    <keywords>badge, notification, live tiles, ios, windows phone 8, wp8, android</keywords>
+    <keywords>appplant, badge</keywords>
     <license>Apache 2.0</license>
 
     <author>Sebastián Katzer</author>
