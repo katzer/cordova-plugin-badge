@@ -1,30 +1,41 @@
 /*
- Copyright 2013-2014 appPlant UG
-
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
+ * Copyright (c) 2013-2015 by appPlant UG. All rights reserved.
+ *
+ * @APPPLANT_LICENSE_HEADER_START@
+ *
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apache License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://opensource.org/licenses/Apache-2.0/ and read it before using this
+ * file.
+ *
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+ * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
+ *
+ * @APPPLANT_LICENSE_HEADER_END@
  */
 
 #import "APPBadge.h"
+#import "AppDelegate+APPBadge.h"
+#import "UIApplication+APPBadge.h"
+
+@interface APPBadge ()
+
+// Needed when calling `registerPermission`
+@property (nonatomic, retain) CDVInvokedUrlCommand* command;
+
+@end
 
 @implementation APPBadge
 
 #pragma mark -
-#pragma mark Plugin interface methods
+#pragma mark Interface
 
 /**
  * Clears the badge of the app icon.
@@ -33,8 +44,7 @@
 - (void) clearBadge:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         setApplicationIconBadgeNumber:0];
+        [self.app setApplicationIconBadgeNumber:0];
     }];
 }
 
@@ -50,8 +60,7 @@
     int number    = [[args objectAtIndex:0] intValue];
 
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         setApplicationIconBadgeNumber:number];
+        [self.app setApplicationIconBadgeNumber:number];
     }];
 }
 
@@ -65,8 +74,7 @@
 {
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* result;
-        long badge = [[UIApplication sharedApplication]
-                      applicationIconBadgeNumber];
+        long badge = [self.app applicationIconBadgeNumber];
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                    messageAsDouble:badge];
@@ -86,7 +94,9 @@
 {
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* result;
-        BOOL hasPermission = [self hasPermissionToSetBadges];
+        BOOL hasPermission;
+
+        hasPermission = [self.app hasPermissionToDisplayBadges];
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                      messageAsBool:hasPermission];
@@ -97,40 +107,67 @@
 }
 
 /**
- * Ask for permission to show badges.
+ * Register permission to show badges.
  *
  * @param callback
  *      The function to be exec as the callback
  */
-- (void) promptForPermission:(CDVInvokedUrlCommand *)command
+- (void) registerPermission:(CDVInvokedUrlCommand *)command
 {
-#ifdef __IPHONE_8_0
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge
-                                                                             categories:nil];
+    if (![[UIApplication sharedApplication]
+         respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        return [self hasPermission:command];
+    }
+
+    _command = command;
 
     [self.commandDelegate runInBackground:^{
-        [[UIApplication sharedApplication]
-         registerUserNotificationSettings:settings];
+        [self.app registerPermissionToDisplayBadges];
     }];
-#endif
 }
 
 #pragma mark -
-#pragma mark Plugin helper methods
+#pragma mark Delegates
 
 /**
- * If the app has the permission to show badges.
+ * Called on otification settings registration is completed.
  */
-- (BOOL) hasPermissionToSetBadges
+- (void) didRegisterUserNotificationSettings:(UIUserNotificationSettings*)settings
 {
-#ifdef __IPHONE_8_0
-    UIUserNotificationSettings *settings = [[UIApplication sharedApplication]
-                                                currentUserNotificationSettings];
+    if (_command)
+    {
+        [self hasPermission:_command];
+        _command = NULL;
+    }
+}
 
-    return (settings.types & UIUserNotificationTypeBadge);
-#else
-    return YES;
-#endif
+#pragma mark -
+#pragma mark Life Cycle
+
+/**
+ * Registers obervers after plugin was initialized.
+ */
+- (void) pluginInitialize
+{
+    NSNotificationCenter* center = [NSNotificationCenter
+                                    defaultCenter];
+
+    [center addObserver:self
+               selector:@selector(didRegisterUserNotificationSettings:)
+                   name:UIApplicationRegisterUserNotificationSettings
+                 object:nil];
+}
+
+#pragma mark -
+#pragma mark Helper
+
+/**
+ * Short hand for shared application instance.
+ */
+- (UIApplication*) app
+{
+    return [UIApplication sharedApplication];
 }
 
 @end

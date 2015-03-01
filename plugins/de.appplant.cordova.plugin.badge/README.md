@@ -46,7 +46,7 @@ The plugin can either be installed from git repository, from local file system t
 ### Local development environment
 From master:
 ```bash
-# ~~ from google-cloud-print branch ~~
+# ~~ from master branch ~~
 cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
 ```
 from a local folder:
@@ -57,38 +57,34 @@ cordova plugin add de.appplant.cordova.plugin.badge --searchpath path/to/plugin
 or to use the last stable version:
 ```bash
 # ~~ stable version ~~
-cordova plugin add de.appplant.cordova.plugin.badge@0.5.3
+cordova plugin add de.appplant.cordova.plugin.badge@0.6.2
 ```
 
 ### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
 ```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.5.3" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.2" />
 ```
 More informations can be found [here][PGB_plugin].
 
 
 ## ChangeLog
 
-#### Version 0.6.0 (not yet released)
-- [enhancement:] __iOS 8 support__
-- [enhancement:] All methods are now asynchron and do not block the main thread anymore.
-- [feature:] New method `hasPermission` to ask if the user has granted to display badge notifications.
-- [feature:] New method `promptForPermission` to promt the user to grant permission to display badge notifications.
-- [feature:] New method `configure` to configure badge properties.
-- [feature:] The small icon on Android can be changed through `configure`.
-- [**change**:] The namespace `plugin.notification.badge` will be removed with v0.6.1
-- [**change**:] `setTitle` is deprecated, please use `configure({ title: 'title' })`.
-- [**change**:] `clearOnTap` is deprecated, please use `configure({ autoClear: true })`.
-- [bugfix:] `getBadge` still returned the number when autoClear: was set and the notification was already cleared by the system (Android).
-- [bugfix:] `clean` was not working on Windows Phone.
+#### Version 0.6.2 (01.03.2015)
+- [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
+- [enhancement:] Support iOS8 and older SDK versions from a single binary.
+- [enhancement:] `registerPermission` returns result of registration.
+- [enhancement:] No need anymore to call `registerPermission` explicit before trying to set the badge number.
+
+#### Further informations
+- See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
 
 
 ## Using the plugin
 The plugin creates the object `cordova.plugins.notification.badge` with the following methods:
 
 1. [notification.badge.hasPermission][has_permission]
-2. [notification.badge.promptForPermission][prompt_permission]
+2. [notification.badge.registerPermission][register_permission]
 3. [notification.badge.set][set]
 4. [notification.badge.get][get]
 5. [notification.badge.clear][clear]
@@ -118,15 +114,18 @@ cordova.plugins.notification.badge.hasPermission(function (granted) {
 });
 ```
 
-### Prompt the user to grant permission for badge notifications
-The user can be prompted to grant the required permission through the `notification.badge.promptForPermission` interface.
+### Register permission for badge notifications
+The user can be prompted to grant the required permission through the `notification.badge.registerPermission` interface.<br/>
+The method takes a callback function as its argument which will be called with a boolean value. Optional the scope of the callback function ca be defined through a second argument.
 
 #### Further informations
 - The method is supported on each platform, however its only relevant for iOS8 and above.
 - The user will only get a prompt dialog for the first time. Later its only possible to change the setting via the notification center.
 
 ```javascript
-cordova.plugins.notification.badge.promptForPermission();
+cordova.plugins.notification.badge.registerPermission(function (granted) {
+    // console.log('Permission has been granted: ' + granted);
+});
 ```
 
 ### Set the badge number
@@ -134,7 +133,7 @@ The badge number can be set through the `notification.badge.set` interface.<br>
 The method takes the badge as its argument. It needs to be a number or a string which can be parsed to a number.
 
 #### Further informations
-- The badge number can only be set if the user has previously granted the [required permission][prompt_permission].
+- The badge number can only be set if the user has previously granted the [required permission][register_permission].
 - On Android the badge will be displayed through a notification. See [configure][set_title] how to specify a custom notification title.
 - On Windows Phone 8 the badge will be displayed through the app's live tile.
 - See [get][get] how to get back the current badge number.
@@ -185,7 +184,7 @@ The following example shows how to set the badge number to **1**.
 cordova.plugins.notification.badge.set(1);
 ```
 
-__Note:__ The badge number can only be set if the user has granted the [required permission][prompt_permission].
+__Note:__ The badge number can only be set if the user has granted the [required permission][register_permission].
 
 ### Clear the badge number
 See below how to clear the badge number.
@@ -238,7 +237,7 @@ Please note that the plugin as well as cordova need to be compiled for each iOS 
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2014 appPlant UG, Inc. All rights reserved
+© 2013-2015 appPlant UG, Inc. All rights reserved
 
 
 [cordova]: https://cordova.apache.org
@@ -246,9 +245,10 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/index.html
-[PGB_plugin]: https://build.phonegap.com/plugins/810
+[PGB_plugin]: https://build.phonegap.com/plugins/1195
+[changelog]: CHANGELOG.md
 [has_permission]: #determine-if-the-app-does-have-the-permission-to-show-badge-notifications
-[prompt_permission]: #prompt-the-user-to-grant-permission-for-badge-notifications
+[register_permission]: #register-permission-for-badge-notifications
 [set]: #set-the-badge-of-the-app-icon
 [get]: #get-the-badge-of-the-app-icon
 [clear]: #clear-the-badge-of-the-app-icon

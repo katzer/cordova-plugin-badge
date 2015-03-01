@@ -12,7 +12,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "de.appplant.cordova.plugin.badge": "0.6.0dev"
+    "de.appplant.cordova.plugin.badge": "0.6.2"
 }
 // BOTTOM OF METADATA
 });

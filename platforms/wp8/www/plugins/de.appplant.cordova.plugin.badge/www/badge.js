@@ -52,7 +52,11 @@ Badge.prototype = {
             this._config.autoClear
         ];
 
-        cordova.exec(null, null, 'Badge', 'setBadge', args);
+        this.registerPermission(function (granted) {
+            if (granted) {
+                cordova.exec(null, null, 'Badge', 'setBadge', args);
+            }
+        });
     },
 
     /**
@@ -88,10 +92,19 @@ Badge.prototype = {
     },
 
     /**
-     * Ask for permission to show badges if not already granted.
+     * Register permission to show badges if not already granted.
+     *
+     * @param {Function} callback
+     *      The function to be exec as the callback
+     * @param {Object?} scope
+     *      The callback function's scope
      */
-    promptForPermission: function () {
-        cordova.exec(null, null, 'Badge', 'promptForPermission', []);
+    registerPermission: function (callback, scope) {
+        var fn = function (badge) {
+            callback.call(scope || this, badge);
+        };
+
+        cordova.exec(fn, null, 'Badge', 'registerPermission', []);
     },
 
     /**
@@ -140,6 +153,16 @@ Badge.prototype = {
         console.warn('badge.clearOnTap(bool) is deprecated! Please use badge.configure({ autoClear:bool }) instead.');
 
         this._config.autoClear = clearOnTap;
+    },
+
+    /**
+     * Register permission to show notifications
+     * if not already granted.
+     */
+    promptForPermission: function () {
+        console.warn('Depreated: Please use `notification.badge.registerPermission` instead.');
+
+        this.registerPermission.apply(this, arguments);
     }
 };
 

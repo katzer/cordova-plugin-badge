@@ -88,7 +88,7 @@
             </div>
 
             <a href="#" class="button" onclick="hasPermission()">Has permission granted<br/><span class="hint">notification.badge.hasPermission()</span></a>
-            <a href="#" class="button" onclick="promptForPermission()">Prompt for permission<br/><span class="hint">notification.badge.promptForPermission()</span></a>
+            <a href="#" class="button" onclick="registerPermission()">Prompt for permission<br/><span class="hint">notification.badge.registerPermission()</span></a>
             <a href="#" class="button" onclick="setBadge(false)">Set 10 as badge number<br/><span class="hint">notification.badge.set()</span></a>
             <a href="#" class="button" onclick="setBadge(true)">Set a random badge number<br/><span class="hint">notification.badge.set()</span></a>
             <a href="#" class="button" onclick="getBadge()">Get the badge number<br/><span class="hint">notification.badge.get()</span></a>
@@ -123,8 +123,10 @@
                 });
             };
 
-            promptForPermission = function () {
-                cordova.plugins.notification.badge.promptForPermission();
+            registerPermission = function () {
+                cordova.plugins.notification.badge.registerPermission(function (granted) {
+                    alert(granted);
+                });
             };
 
             switchAutoClear = function () {

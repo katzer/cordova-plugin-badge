@@ -15,20 +15,37 @@
        KIND, either express or implied.  See the License for the
        specific language governing permissions and limitations
        under the License.
+*/
+package org.apache.cordova;
+
+import android.webkit.HttpAuthHandler;
+
+/**
+ * Specifies interface for HTTP auth handler object which is used to handle auth requests and
+ * specifying user credentials.
  */
+public class CordovaHttpAuthHandler implements ICordovaHttpAuthHandler {
 
-package de.appplant.cordova.plugin.badge.example;
+    private final HttpAuthHandler handler;
 
-import android.os.Bundle;
-import org.apache.cordova.*;
-
-public class BadgeExample extends CordovaActivity
-{
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // Set by <content src="index.html" /> in config.xml
-        loadUrl(launchUrl);
+    public CordovaHttpAuthHandler(HttpAuthHandler handler) {
+        this.handler = handler;
+    }
+    
+    /**
+     * Instructs the WebView to cancel the authentication request.
+     */
+    public void cancel () {
+        this.handler.cancel();
+    }
+    
+    /**
+     * Instructs the WebView to proceed with the authentication with the given credentials.
+     * 
+     * @param username
+     * @param password
+     */
+    public void proceed (String username, String password) {
+        this.handler.proceed(username, password);
     }
 }

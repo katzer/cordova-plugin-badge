@@ -1,6 +1,14 @@
 ## ChangeLog
+#### Version 0.6.2 (01.03.2015)
+- [change:] Renamed `promptForPermission` to `registerPermission`. Older one is still supported.
+- [enhancement:] Support iOS8 and older SDK versions from a single binary.
+- [enhancement:] `registerPermission` returns result of registration.
+- [enhancement:] No need anymore to call `registerPermission` explicit before trying to set the badge number.
 
-#### Version 0.6.0 (not yet released)
+#### Version 0.6.1 (03.10.2014)
+- [bugfix:] `hasPermission` and `promptForPermission` let the app crash on iOS7 and older.
+
+#### Version 0.6.0 (29.09.2014)
 - [enhancement:] iOS 8 support
 - [enhancement:] All methods are asynchron now and do not block the main thread anymore.
 - [feature:] New method `hasPermission` to ask if the user has granted to display badge notifications.

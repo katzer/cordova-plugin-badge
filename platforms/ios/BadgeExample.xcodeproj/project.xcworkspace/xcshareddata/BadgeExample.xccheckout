@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>2AFABC69-5A7C-4E7D-93DE-BFC4326B2E10</string>
+	<string>3D85B214-ED2E-43C5-A7AE-90AAB51D97CB</string>
 	<key>IDESourceControlProjectName</key>
 	<string>BadgeExample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>89A36320CDD99D3402C92A6568D363BD8B98C798</string>
 			<key>IDESourceControlWCCName</key>
-			<string>cordova-plugin-badge</string>
+			<string>cordova-example-badge</string>
 		</dict>
 	</array>
 </dict>
