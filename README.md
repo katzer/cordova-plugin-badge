@@ -70,6 +70,9 @@ More informations can be found [here][PGB_plugin].
 
 ## ChangeLog
 
+#### Version 0.6.3 (not yet released)
+- New interfaces `increase()` to increase and `decrease()` to decrease the badge number.
+
 #### Version 0.6.2 (01.03.2015)
 - [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.
@@ -88,7 +91,9 @@ The plugin creates the object `cordova.plugins.notification.badge` with the foll
 3. [notification.badge.set][set]
 4. [notification.badge.get][get]
 5. [notification.badge.clear][clear]
-6. [notification.badge.configure][set_title]
+7. [notification.badge.increase][increase]
+8. [notification.badge.decrease][decrease]
+9. [notification.badge.configure][set_title]
 
 __Note:__ The previous namespace `plugin.notification.badge` will be removed with v0.6.1
 
@@ -154,6 +159,28 @@ cordova.plugins.notification.badge.get(function (badge) {
 }, scope);
 ```
 
+### Increase the badge number
+The badge number can be increased through the `notification.badge.increase` interface.<br>
+The method takes a number as an argument which will be added to the current badge number. The default count is _1_.
+
+```javascript
+cordova.plugins.notification.badge.increase(count);
+```
+
+#### Further informations
+- See [set][set] of how to set the badge number.
+
+### Decrease the badge number
+The badge number can be decreased through the `notification.badge.decrease` interface.<br>
+The method takes a number as an argument which will be subtracted to the current badge number. The default count is _1_.
+
+```javascript
+cordova.plugins.notification.badge.decrease(count);
+```
+
+#### Further informations
+- See [set][set] of how to set the badge number.
+
 ### Clear the badge number
 The badge number can be removed through the `notification.badge.clear` interface.
 
@@ -184,8 +211,6 @@ The following example shows how to set the badge number to **1**.
 cordova.plugins.notification.badge.set(1);
 ```
 
-__Note:__ The badge number can only be set if the user has granted the [required permission][register_permission].
-
 ### Clear the badge number
 See below how to clear the badge number.
 
@@ -198,6 +223,13 @@ The code below tells the plugin to clear the badge each time the user taps the a
 
 ```javascript
 cordova.plugins.notification.badge.configure({ autoClear: true });
+```
+
+### Increase the badge number
+The badge number can be increased by one or any other value as follows.
+
+```javascript
+cordova.plugins.notification.badge.increase();
 ```
 
 
@@ -247,6 +279,8 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [set]: #set-the-badge-of-the-app-icon
 [get]: #get-the-badge-of-the-app-icon
 [clear]: #clear-the-badge-of-the-app-icon
+[increase]: #increase-the-badge-number
+[decrease]: #decrease-the-badge-number
 [autoclear]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
 [examples]: #examples
 [set_title]: specify-custom-notification-title-on-android
