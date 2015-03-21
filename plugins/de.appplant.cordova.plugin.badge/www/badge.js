@@ -76,6 +76,30 @@ Badge.prototype = {
     },
 
     /**
+     * Increases the badge number.
+     *
+     * @param {Number} count
+     *      Count to add to the current badge number
+     */
+    increase: function (count) {
+        this.get(function (badge) {
+            this.set(badge + (count || 1));
+        }, this);
+    },
+
+    /**
+     * Decreases the badge number.
+     *
+     * @param {Number} count
+     *      Count to subtract from the current badge number
+     */
+    decrease: function (count) {
+        this.get(function (badge) {
+            this.set(Math.max(0, (count || 1) - badge));
+        }, this);
+    },
+
+    /**
      * Informs if the app has the permission to show badges.
      *
      * @param {Function} callback

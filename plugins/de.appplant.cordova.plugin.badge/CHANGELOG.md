@@ -1,4 +1,7 @@
 ## ChangeLog
+#### Version 0.6.3 (not yet released)
+- New interfaces to increase or decrease the badge number.
+
 #### Version 0.6.2 (01.03.2015)
 - [change:] Renamed `promptForPermission` to `registerPermission`. Older one is still supported.
 - [enhancement:] Support iOS8 and older SDK versions from a single binary.

@@ -1,0 +1,8 @@
+{
+    "de.appplant.cordova.plugin.badge": {
+        "source": {
+            "type": "local",
+            "path": "/Users/sebastian/Documents/github/cordova-plugin-badge"
+        }
+    }
+}

@@ -79,23 +79,59 @@
         }
         </style>
     </head>
-    <body ontouchstart="">
-        <div class="app">
-            <h1>Badge Plugin</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+    <body>
+        <div>
+            <div class="app">
+                <h1>Badge Example</h1>
+                <div id="deviceready" class="blink">
+                    <p class="event listening">Connecting to Device</p>
+                    <p class="event received">Device is Ready</p>
+                </div>
             </div>
 
-            <a href="#" class="button" onclick="hasPermission()">Has permission granted<br/><span class="hint">notification.badge.hasPermission()</span></a>
-            <a href="#" class="button" onclick="registerPermission()">Prompt for permission<br/><span class="hint">notification.badge.registerPermission()</span></a>
-            <a href="#" class="button" onclick="setBadge(false)">Set 10 as badge number<br/><span class="hint">notification.badge.set()</span></a>
-            <a href="#" class="button" onclick="setBadge(true)">Set a random badge number<br/><span class="hint">notification.badge.set()</span></a>
-            <a href="#" class="button" onclick="getBadge()">Get the badge number<br/><span class="hint">notification.badge.get()</span></a>
-            <a href="#" class="button" onclick="clearBadge()">Clear the badge number<br/><span class="hint">notification.badge.clear()</span></a>
-            <a href="#" class="button" onclick="switchAutoClear()">Switch <i>autoClear</i> value<br/><span class="hint">notification.badge.configure()</span></a>
-            <a href="#" class="button" onclick="changeTitle()">Change <i>title</i> value<br/><span class="hint">notification.badge.configure()</span></a>
+            <!-- permission -->
+            <h2 class="section" style="padding-top:115px;">Permission (iOS8)</h2>
+            <div class="container">
+                <div onclick="hasPermission()">Granted?<br/><span>hasPermission()</span></div>
+                <div onclick="registerPermission()">Register<br/><span>registerPermission()</span></div>
+            </div>
+
+            <!-- set -->
+            <h2 class="section">Set</h2>
+            <div class="container">
+                <div onclick="setBadge(false)">Set 10<br/><span>set()</span></div>
+                <div onclick="setBadge(true)">Set random<br/><span>set()</span></div>
+            </div>
+            <div class="container">
+                <div onclick="increaseBadge()">Increase<br/><span>increase()</span></div>
+                <div onclick="decreaseBadge()">Decrease<br/><span>decrease()</span></div>
+            </div>
+
+            <!-- get -->
+            <h2 class="section">Get</h2>
+            <div class="container">
+                <div onclick="getBadge()">Get<br/><span>get()</span></div>
+            </div>
+
+            <!-- clear -->
+            <h2 class="section">Clear</h2>
+            <div class="container">
+                <div onclick="clearBadge()">Clear<br/><span>clear()</span></div>
+            </div>
+
+            <!-- configure -->
+            <h2 class="section">Configuration</h2>
+            <div class="container">
+                <div onclick="switchAutoClear()">Toggle <i>autoClear</i><br/><span>configure()</span></div>
+                <div onclick="changeTitle()">Change <i>title</i><br/><span>configure()</span></div>
+            </div>
+
+            <!-- copyright -->
+            <div class="copyright">
+                © 2013-2015 appPlant
+            </div>
         </div>
+
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
 
@@ -115,6 +151,14 @@
                 cordova.plugins.notification.badge.get(function (number) {
                     alert(number);
                 });
+            };
+
+            increaseBadge = function () {
+                cordova.plugins.notification.badge.increase();
+            };
+
+            decreaseBadge = function () {
+                cordova.plugins.notification.badge.decrease();
             };
 
             hasPermission = function () {
