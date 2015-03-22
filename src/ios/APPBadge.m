@@ -22,7 +22,7 @@
  */
 
 #import "APPBadge.h"
-#import "AppDelegate+APPBadge.h"
+#import "AppDelegate.h"
 #import "UIApplication+APPBadge.h"
 
 @interface APPBadge ()

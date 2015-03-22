@@ -71,13 +71,9 @@ More informations can be found [here][PGB_plugin].
 ## ChangeLog
 
 #### Version 0.6.3 (not yet released)
-- New interfaces `increase()` to increase and `decrease()` to decrease the badge number.
-
-#### Version 0.6.2 (01.03.2015)
-- [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
-- [enhancement:] Support iOS8 and older SDK versions from a single binary.
-- [enhancement:] `registerPermission` returns result of registration.
-- [enhancement:] No need anymore to call `registerPermission` explicit before trying to set the badge number.
+- New interfaces to increase or decrease the badge number.
+- Fix incompatibility with local-notification plugin.
+- Refreshed layout of the example app.
 
 #### Further informations
 - See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
