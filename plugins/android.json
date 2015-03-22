@@ -22,7 +22,8 @@
                             "xml": "<activity android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.badge.LaunchActivity\" android:theme=\"@android:style/Theme.Black.NoTitleBar\" />",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "/manifest": []
                 }
             }
         }

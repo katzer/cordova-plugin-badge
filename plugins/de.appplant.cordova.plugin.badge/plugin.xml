@@ -34,11 +34,15 @@
         <header-file src="src/ios/APPBadge.h" />
         <source-file src="src/ios/APPBadge.m" />
 
-        <header-file src="src/ios/AppDelegate+APPBadge.h" />
-        <source-file src="src/ios/AppDelegate+APPBadge.m" />
+        <!-- <header-file src="src/ios/AppDelegate+APPBadge.h" /> -->
+        <!-- <source-file src="src/ios/AppDelegate+APPBadge.m" /> -->
 
         <header-file src="src/ios/UIApplication+APPBadge.h" />
         <source-file src="src/ios/UIApplication+APPBadge.m" />
+
+        <!-- Platform Hooks -->
+        <hook type="after_platform_add" src="scripts/ios/didRegisterUserNotificationSettings.js" />
+        <hook type="after_plugin_install" src="scripts/ios/didRegisterUserNotificationSettings.js" />
     </platform>
 
     <!-- wp8 -->

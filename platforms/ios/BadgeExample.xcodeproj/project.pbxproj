@@ -39,9 +39,8 @@
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
-		865F793330FF4019901DE0D3 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5163A143EA664CDB83B1574B /* APPBadge.m */; };
-		76BCA2509E314C098FAF9DC3 /* AppDelegate+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 80C2A56901074C2897642E3B /* AppDelegate+APPBadge.m */; };
-		ED4B83D3679A44EA98FF3397 /* UIApplication+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6EB79CABBF4F3CA51F307C /* UIApplication+APPBadge.m */; };
+		C7E1DB875E4D4234B15BB476 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 231B8BD164064EA4B61C1FCC /* APPBadge.m */; };
+		5202A63AD5414697BCA6C4E6 /* UIApplication+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = D5344020C69C4EAEAC6FF8FB /* UIApplication+APPBadge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,12 +106,10 @@
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "BadgeExample/config.xml"; sourceTree = "<group>"; };
-		5163A143EA664CDB83B1574B /* APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "APPBadge.m"; path = "de.appplant.cordova.plugin.badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		80C2A56901074C2897642E3B /* AppDelegate+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/AppDelegate+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		8E6EB79CABBF4F3CA51F307C /* UIApplication+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		1E0A001D1B8E4F908F72AC00 /* APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "APPBadge.h"; path = "de.appplant.cordova.plugin.badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		295AA39DF42F45D296547AD7 /* AppDelegate+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/AppDelegate+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		41AAC5EC85FF475187914065 /* UIApplication+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIApplication+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		231B8BD164064EA4B61C1FCC /* APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "APPBadge.m"; path = "de.appplant.cordova.plugin.badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D5344020C69C4EAEAC6FF8FB /* UIApplication+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F7BF4337BBAE4B9887537530 /* APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "APPBadge.h"; path = "de.appplant.cordova.plugin.badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5DF833B0C53448D9A2A5CF01 /* UIApplication+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIApplication+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,12 +208,10 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				5163A143EA664CDB83B1574B /* APPBadge.m */,
-				80C2A56901074C2897642E3B /* AppDelegate+APPBadge.m */,
-				8E6EB79CABBF4F3CA51F307C /* UIApplication+APPBadge.m */,
-				1E0A001D1B8E4F908F72AC00 /* APPBadge.h */,
-				295AA39DF42F45D296547AD7 /* AppDelegate+APPBadge.h */,
-				41AAC5EC85FF475187914065 /* UIApplication+APPBadge.h */,
+				231B8BD164064EA4B61C1FCC /* APPBadge.m */,
+				D5344020C69C4EAEAC6FF8FB /* UIApplication+APPBadge.m */,
+				F7BF4337BBAE4B9887537530 /* APPBadge.h */,
+				5DF833B0C53448D9A2A5CF01 /* UIApplication+APPBadge.h */,
 			);
 			name = Plugins;
 			path = "BadgeExample/Plugins";
@@ -401,9 +396,8 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				865F793330FF4019901DE0D3 /* APPBadge.m in Sources */,
-				76BCA2509E314C098FAF9DC3 /* AppDelegate+APPBadge.m in Sources */,
-				ED4B83D3679A44EA98FF3397 /* UIApplication+APPBadge.m in Sources */,
+				C7E1DB875E4D4234B15BB476 /* APPBadge.m in Sources */,
+				5202A63AD5414697BCA6C4E6 /* UIApplication+APPBadge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,6 +14,11 @@
                         }
                     ]
                 }
+            },
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": []
+                }
             }
         }
     },
