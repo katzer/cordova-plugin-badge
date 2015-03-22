@@ -109,11 +109,11 @@ module.exports = function (context) {
         "}\n" +
         "#endif\n";
 
-    // Inserts the external constant decleration
+    // Inserts the constant decleration
     replace(h_path, '@interface AppDelegate', h_UIApplicationRegisterUserNotificationSettings + "\n@interface AppDelegate");
     // Inserts the constant implementation
     replace(m_path, '@implementation AppDelegate', m_UIApplicationRegisterUserNotificationSettings + "\n@implementation AppDelegate");
-    // Inserts the didRegisterUserNotificationSettings method
+    // Inserts the didRegisterUserNotificationSettings implementation
     replace(m_path, '@end', didRegisterUserNotificationSettings + "\n@end");
 
 };

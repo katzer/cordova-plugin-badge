@@ -57,27 +57,24 @@ cordova plugin add de.appplant.cordova.plugin.badge --searchpath path/to/plugin
 or to use the last stable version:
 ```bash
 # ~~ stable version ~~
-cordova plugin add de.appplant.cordova.plugin.badge@0.6.2
+cordova plugin add de.appplant.cordova.plugin.badge@0.6.3
 ```
 
 ### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
 ```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.2" />
+<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.3" />
 ```
 More informations can be found [here][PGB_plugin].
 
 
 ## ChangeLog
 
-#### Version 0.6.3 (not yet released)
-- New interfaces `increase()` to increase and `decrease()` to decrease the badge number.
-
-#### Version 0.6.2 (01.03.2015)
-- [change:] Renamed `registerPermission` to `registerPermission`. Older one is still supported.
-- [enhancement:] Support iOS8 and older SDK versions from a single binary.
-- [enhancement:] `registerPermission` returns result of registration.
-- [enhancement:] No need anymore to call `registerPermission` explicit before trying to set the badge number.
+#### Version 0.6.3 (22.03.2015)
+- New interfaces to increase or decrease the badge number.
+- Fix incompatibility with local-notification plugin.
+- Add instead of replace permissions on iOS
+- Refreshed layout of the example app.
 
 #### Further informations
 - See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
@@ -272,7 +269,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [PGB]: http://docs.build.phonegap.com/en_US/index.html
-[PGB_plugin]: https://build.phonegap.com/plugins/1195
+[PGB_plugin]: https://build.phonegap.com/plugins/2324
 [changelog]: CHANGELOG.md
 [has_permission]: #determine-if-the-app-does-have-the-permission-to-show-badge-notifications
 [register_permission]: #register-permission-for-badge-notifications

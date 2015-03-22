@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge"
-        version="0.6.3dev">
+        version="0.6.3">
 
     <name>Badge</name>
 
@@ -25,6 +25,7 @@
 
     <!-- ios -->
     <platform name="ios">
+
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="ios-package" value="APPBadge"/>
@@ -34,19 +35,22 @@
         <header-file src="src/ios/APPBadge.h" />
         <source-file src="src/ios/APPBadge.m" />
 
-        <!-- <header-file src="src/ios/AppDelegate+APPBadge.h" /> -->
-        <!-- <source-file src="src/ios/AppDelegate+APPBadge.m" /> -->
-
         <header-file src="src/ios/UIApplication+APPBadge.h" />
         <source-file src="src/ios/UIApplication+APPBadge.m" />
 
-        <!-- Platform Hooks -->
-        <hook type="after_platform_add" src="scripts/ios/didRegisterUserNotificationSettings.js" />
-        <hook type="after_plugin_install" src="scripts/ios/didRegisterUserNotificationSettings.js" />
+        <hook
+            type="after_platform_add"
+            src="scripts/ios/didRegisterUserNotificationSettings.js" />
+
+        <hook
+            type="after_plugin_install"
+            src="scripts/ios/didRegisterUserNotificationSettings.js" />
+
     </platform>
 
     <!-- wp8 -->
     <platform name="wp8">
+
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="wp-package" value="Badge"/>
@@ -54,10 +58,12 @@
         </config-file>
 
         <source-file src="src/wp8/Badge.cs" />
+
     </platform>
 
     <!-- android -->
     <platform name="android">
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
@@ -69,12 +75,20 @@
              * The launch activity is triggered when a notification is clicked by a user.
              * The activity launches the main activity.
             -->
-            <activity android:name="de.appplant.cordova.plugin.badge.LaunchActivity"
-                      android:theme="@android:style/Theme.Black.NoTitleBar"
-                      android:launchMode="singleInstance" />
+            <activity
+                android:name="de.appplant.cordova.plugin.badge.LaunchActivity"
+                android:theme="@android:style/Theme.Black.NoTitleBar"
+                android:launchMode="singleInstance"
+                android:exported="false" />
         </config-file>
 
-        <source-file src="src/android/Badge.java"          target-dir="src/de/appplant/cordova/plugin/badge" />
-        <source-file src="src/android/LaunchActivity.java" target-dir="src/de/appplant/cordova/plugin/badge" />
+        <source-file
+            src="src/android/Badge.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+        <source-file
+            src="src/android/LaunchActivity.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
     </platform>
 </plugin>

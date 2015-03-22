@@ -95,7 +95,7 @@ Badge.prototype = {
      */
     decrease: function (count) {
         this.get(function (badge) {
-            this.set(Math.max(0, (count || 1) - badge));
+            this.set(Math.max(0, badge - (count || 1)));
         }, this);
     },
 

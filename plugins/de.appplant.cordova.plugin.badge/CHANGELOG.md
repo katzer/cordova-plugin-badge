@@ -1,6 +1,9 @@
 ## ChangeLog
-#### Version 0.6.3 (not yet released)
+#### Version 0.6.3 (22.03.2015)
 - New interfaces to increase or decrease the badge number.
+- Fix incompatibility with local-notification plugin.
+- Add instead of replace permissions on iOS.
+- Refreshed layout of the example app.
 
 #### Version 0.6.2 (01.03.2015)
 - [change:] Renamed `promptForPermission` to `registerPermission`. Older one is still supported.
