@@ -55,7 +55,11 @@
     UIUserNotificationType types;
     UIUserNotificationSettings *settings;
 
-    types    = UIUserNotificationTypeBadge;
+    settings = [[UIApplication sharedApplication]
+                currentUserNotificationSettings];
+
+    types    = settings.types | UIUserNotificationTypeBadge;
+
     settings = [UIUserNotificationSettings settingsForTypes:types
                                                  categories:nil];
 
