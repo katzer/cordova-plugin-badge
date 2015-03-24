@@ -50,7 +50,7 @@ Find out more informations [here][wiki_kitchensink] in our wiki.
 
 
 ## What's new
-We are proud to announce our newest release version 0.8.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
+We are proud to announce our newest release version 0.6.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
 
 Find out more informations [here][wiki_changelog] in our wiki.
 
