@@ -39,7 +39,7 @@
     <!-- ios -->
     <platform name="ios">
 
-        <dependency id="de.appplant.cordova.common.RegisterUserNotificationSettings" />
+        <dependency id="de.appplant.cordova.common.registerusernotificationsettings" />
 
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
