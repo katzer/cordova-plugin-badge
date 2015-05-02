@@ -39,6 +39,8 @@
     <!-- ios -->
     <platform name="ios">
 
+        <dependency id="de.appplant.cordova.common.RegisterUserNotificationSettings" />
+
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="ios-package" value="APPBadge"/>
@@ -50,14 +52,6 @@
 
         <header-file src="src/ios/UIApplication+APPBadge.h" />
         <source-file src="src/ios/UIApplication+APPBadge.m" />
-
-        <hook
-            type="after_platform_add"
-            src="scripts/ios/didRegisterUserNotificationSettings.js" />
-
-        <hook
-            type="after_plugin_install"
-            src="scripts/ios/didRegisterUserNotificationSettings.js" />
 
     </platform>
 
