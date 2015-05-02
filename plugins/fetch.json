@@ -22,5 +22,17 @@
             "type": "local",
             "path": "/Users/sebastian/Documents/github/cordova-plugin-local-notifications"
         }
+    },
+    "de.appplant.cordova.common.RegisterUserNotificationSettings": {
+        "source": {
+            "type": "registry",
+            "id": "de.appplant.cordova.common.registerusernotificationsettinGS"
+        }
+    },
+    "de.appplant.cordova.common.registerusernotificationsettings": {
+        "source": {
+            "type": "registry",
+            "id": "de.appplant.cordova.common.registerusernotificationsettings"
+        }
     }
 }

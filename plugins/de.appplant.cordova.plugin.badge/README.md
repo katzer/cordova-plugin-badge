@@ -1,251 +1,85 @@
 
-<p align="right">
-    <a href="https://github.com/katzer/cordova-plugin-badge/tree/example">EXAMPLE :point_right:</a>
-</p>
+[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
+[![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
 
 Cordova Badge Plugin
 ====================
 
-[Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows Phone.
+The essential purpose of badge numbers is to enable an application to inform its users that it has something for them — for example, unread messages — when the application isn’t running in the foreground.
 
-<table>
-    <tr>
-        <img height="150px" src="http://www.maximizeurmac.com/wp-content/uploads/2013/09/1.jpg" />
-    </tr>
-    &nbsp;&nbsp;
-    <tr>
-        <img height="150px" src="http://4.bp.blogspot.com/-GBwBSN92DvU/UB8Kut7Oz0I/AAAAAAAAJKs/mJgBmj1RKqU/s1600/whatsapp+wp8+10.png" />
-    </tr>
-    &nbsp;&nbsp;
-    <tr>
-        <img height="409px" width="230px" src="http://www.developer.com/imagesvr_ce/5314/notify-fig2.png" />
-    </tr>
-</table>
+<img height="150px" align="right" hspace="19" vspace="12" src="http://4.bp.blogspot.com/-GBwBSN92DvU/UB8Kut7Oz0I/AAAAAAAAJKs/mJgBmj1RKqU/s1600/whatsapp+wp8+10.png"></img>
 
-
-## Overview
-1. [Supported Platforms](#supported-platforms)
-2. [Installation](#installation)
-3. [ChangeLog](#changelog)
-4. [Using the plugin](#using-the-plugin)
-5. [Examples](#examples)
-6. [Quirks](#quirks)
+### How they appear to the user
+Users see notifications in the following ways:
+- Badging the app’s icon
 
 
 ## Supported Platforms
-- __iOS__ *(including iOS8)*
-- __Android__ *(SDK >=11)*<br>
-See [Notification Guide][android_notification_guide] for detailed informations and screenshots.
-- __WP8__<br>
-See [WP8 Guide][wp8_notification_guide] for detailed informations and screenshots.
+The current 0.6 branch does support the following platforms*:
+- __iOS__ _(including iOS8)_<br>
+- __Android__ _(SDK >=11)_
+- __WP8__ and __WP8.1 Silverlight__
+
+Find out more informations [here][wiki_platforms] in our wiki.
 
 
 ## Installation
-The plugin can either be installed from git repository, from local file system through the [Command-line Interface][CLI]. Or cloud based through [PhoneGap Build][PGB].
+The plugin is installable from source and available on Cordova Plugin Registry and PhoneGap Build.
 
-### Local development environment
-From master:
-```bash
-# ~~ from master branch ~~
-cordova plugin add https://github.com/katzer/cordova-plugin-badge.git
-```
-from a local folder:
-```bash
-# ~~ local folder ~~
-cordova plugin add de.appplant.cordova.plugin.badge --searchpath path/to/plugin
-```
-or to use the last stable version:
-```bash
-# ~~ stable version ~~
-cordova plugin add de.appplant.cordova.plugin.badge@0.6.3
-```
-
-### PhoneGap Build
-Add the following xml to your config.xml to always use the latest version of this plugin:
-```xml
-<gap:plugin name="de.appplant.cordova.plugin.badge" version="0.6.3" />
-```
-More informations can be found [here][PGB_plugin].
+Find out more informations [here][wiki_installation] in our wiki.
 
 
-## ChangeLog
+## I want to get a quick overview
+All wiki pages contain samples, but for a quick overview the sample section may be the fastest way.
 
-#### Version 0.6.3 (22.03.2015)
-- New interfaces to increase or decrease the badge number.
-- Fix incompatibility with local-notification plugin.
-- Add instead of replace permissions on iOS
-- Refreshed layout of the example app.
-
-#### Further informations
-- See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
+Find out more informations [here][wiki_samples] in our wiki.
 
 
-## Using the plugin
-The plugin creates the object `cordova.plugins.notification.badge` with the following methods:
+## I want to get a deep overview
+The plugin allows you to set, get, clear, increase and decrease the badge number. For Android the plugin offers additional configuration flags.
 
-1. [notification.badge.hasPermission][has_permission]
-2. [notification.badge.registerPermission][register_permission]
-3. [notification.badge.set][set]
-4. [notification.badge.get][get]
-5. [notification.badge.clear][clear]
-7. [notification.badge.increase][increase]
-8. [notification.badge.decrease][decrease]
-9. [notification.badge.configure][set_title]
+Find out more about how to set, increase or decrease the badge [here][wiki_set].
 
-__Note:__ The previous namespace `plugin.notification.badge` will be removed with v0.6.1
+To get a deep overview we recommend to read about all the topics in this wiki and try out the [Kitchen Sink App][wiki_kitchensink]
 
-### Plugin initialization
-The plugin and its methods are not available before the *deviceready* event has been fired.
+
+## I want to see the plugin in action
+The plugin offers a kitchen sink sample app. Check out the cordova project and run the app directly from your command line or preferred IDE.
+
+Find out more informations [here][wiki_kitchensink] in our wiki.
+
+
+## What's new
+We are proud to announce our newest release version 0.6.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
+
+Find out more informations [here][wiki_changelog] in our wiki.
+
+
+## Sample
+The sample demonstrates how to set a fix badge number and how to increase the current badge number.
 
 ```javascript
+// Set 10 on device ready
 document.addEventListener('deviceready', function () {
-    // cordova.plugins.notification.badge is now available
+    cordova.plugins.notification.badge.set(10);
+}, false);
+```
+```javascript
+// Increase the badge each time on pause
+document.addEventListener('pause', function () {
+    cordova.plugins.notification.badge.increase();
 }, false);
 ```
 
-### Determine if the app does have the permission to show badge notifications
-If the permission has been granted through the user can be retrieved through the `notification.badge.hasPermission` interface.<br/>
-The method takes a callback function as its argument which will be called with a boolean value. Optional the scope of the callback function ca be defined through a second argument.
-
-#### Further informations
-- The method is supported on each platform, however its only relevant for iOS8 and above.
-
-```javascript
-cordova.plugins.notification.badge.hasPermission(function (granted) {
-    // console.log('Permission has been granted: ' + granted);
-});
-```
-
-### Register permission for badge notifications
-The user can be prompted to grant the required permission through the `notification.badge.registerPermission` interface.<br/>
-The method takes a callback function as its argument which will be called with a boolean value. Optional the scope of the callback function ca be defined through a second argument.
-
-#### Further informations
-- The method is supported on each platform, however its only relevant for iOS8 and above.
-- The user will only get a prompt dialog for the first time. Later its only possible to change the setting via the notification center.
-
-```javascript
-cordova.plugins.notification.badge.registerPermission(function (granted) {
-    // console.log('Permission has been granted: ' + granted);
-});
-```
-
-### Set the badge number
-The badge number can be set through the `notification.badge.set` interface.<br>
-The method takes the badge as its argument. It needs to be a number or a string which can be parsed to a number.
-
-#### Further informations
-- The badge number can only be set if the user has previously granted the [required permission][register_permission].
-- On Android the badge will be displayed through a notification. See [configure][set_title] how to specify a custom notification title.
-- On Windows Phone 8 the badge will be displayed through the app's live tile.
-- See [get][get] how to get back the current badge number.
-- See [clear][clear] of how to clear the badge number.
-- See the [examples][examples] of how to use the plugin.
-
-```javascript
-cordova.plugins.notification.badge.set(Number);
-```
-
-### Get the badge number
-The badge number can be accessed through the `notification.badge.get` interface.<br>
-The method takes a callback function as its argument which will be called with the badge number. Optional the scope of the callback function ca be defined through a second argument.
-
-```javascript
-cordova.plugins.notification.badge.get(function (badge) {
-	// console.log('badge number: ' + badge);
-}, scope);
-```
-
-### Increase the badge number
-The badge number can be increased through the `notification.badge.increase` interface.<br>
-The method takes a number as an argument which will be added to the current badge number. The default count is _1_.
-
-```javascript
-cordova.plugins.notification.badge.increase(count);
-```
-
-#### Further informations
-- See [set][set] of how to set the badge number.
-
-### Decrease the badge number
-The badge number can be decreased through the `notification.badge.decrease` interface.<br>
-The method takes a number as an argument which will be subtracted to the current badge number. The default count is _1_.
-
-```javascript
-cordova.plugins.notification.badge.decrease(count);
-```
-
-#### Further informations
-- See [set][set] of how to set the badge number.
-
-### Clear the badge number
-The badge number can be removed through the `notification.badge.clear` interface.
-
-#### Further informations
-- Clearing the badge number is equivalent to set a zero number.
-- See [configure][autoclear] how to clear the badge automatically after the user has taped the app icon.
-- See [set][set] of how to set the badge number.
-
-```javascript
-cordova.plugins.notification.badge.clear();
-```
-
-### Clear the badge number automatically if the user taps the app icon
-The badge number can be cleared automatically after the user has taped the app icon. The default value is *false*.
-
-```javascript
-cordova.plugins.notification.badge.configure({ autoClear: Boolean });
-```
+Find out more informations [here][wiki_samples] in our wiki.
 
 
-##  Examples
-Please see the [Example branch][example_branch] for more examples and a running example app.
+## Supporting
+Your support is needed. If you use the plugin please support us in order to ensure further development and send us a drop through the donation button.
 
-### Set the badge number
-The following example shows how to set the badge number to **1**.
+Thank you!
 
-```javascript
-cordova.plugins.notification.badge.set(1);
-```
-
-### Clear the badge number
-See below how to clear the badge number.
-
-```javascript
-cordova.plugins.notification.badge.clear();
-```
-
-### Clear the badge number automatically if the user taps the app icon
-The code below tells the plugin to clear the badge each time the user taps the app icon.
-
-```javascript
-cordova.plugins.notification.badge.configure({ autoClear: true });
-```
-
-### Increase the badge number
-The badge number can be increased by one or any other value as follows.
-
-```javascript
-cordova.plugins.notification.badge.increase();
-```
-
-
-## Platform specifics
-### Specify custom notification title on Android
-The default format for the title is `%d new messages`, but is customizable through `configure`.
-
-```javascript
-cordova.plugins.notification.badge.configure({ title: '%d neue Meldungen' });
-```
-
-### Specify small icon on Android
-As default the email icon is used, but is customizable through `configure`.
-
-```javascript
-cordova.plugins.notification.badge.configure({ smallIcon: 'icon' });
-```
-
-__Note:__ A small icon is required.
+[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
 
 
 ## Contributing
@@ -265,21 +99,11 @@ This software is released under the [Apache 2.0 License][apache2_license].
 
 
 [cordova]: https://cordova.apache.org
-[android_notification_guide]: http://developer.android.com/guide/topics/ui/notifiers/notifications.html
-[wp8_notification_guide]: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202948.aspx
-[CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
-[PGB]: http://docs.build.phonegap.com/en_US/index.html
-[PGB_plugin]: https://build.phonegap.com/plugins/2324
-[changelog]: CHANGELOG.md
-[has_permission]: #determine-if-the-app-does-have-the-permission-to-show-badge-notifications
-[register_permission]: #register-permission-for-badge-notifications
-[set]: #set-the-badge-of-the-app-icon
-[get]: #get-the-badge-of-the-app-icon
-[clear]: #clear-the-badge-of-the-app-icon
-[increase]: #increase-the-badge-number
-[decrease]: #decrease-the-badge-number
-[autoclear]: #clear-the-badge-automatically-if-the-user-taps-the-app-icon
-[examples]: #examples
-[set_title]: specify-custom-notification-title-on-android
-[example_branch]: https://github.com/katzer/cordova-plugin-badge/tree/example
+[wiki]: https://github.com/katzer/cordova-plugin-badge/wiki
+[wiki_platforms]: https://github.com/katzer/cordova-plugin-badge/wiki/01.-Platforms
+[wiki_installation]: https://github.com/katzer/cordova-plugin-badge/wiki/02.-Installation
+[wiki_kitchensink]: https://github.com/katzer/cordova-plugin-badge/tree/example
+[wiki_set]: https://github.com/katzer/cordova-plugin-badge/wiki/03.-Set-Badge
+[wiki_samples]: https://github.com/katzer/cordova-plugin-badge/wiki/07.-Samples
+[wiki_changelog]: https://github.com/katzer/cordova-plugin-badge/wiki/08.-Changelog
 [apache2_license]: http://opensource.org/licenses/Apache-2.0

@@ -22,5 +22,9 @@
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "de.appplant.cordova.common.registerusernotificationsettings": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        }
+    }
 }

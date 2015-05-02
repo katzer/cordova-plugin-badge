@@ -1,4 +1,8 @@
 ## ChangeLog
+#### Version 0.6.4 (02.05.2015)
+- Upgrade cordova dependency from 3.0 to 3.6
+- Fix incompatibility with local-notification plugin and PGB caused by the usage of hooks.
+
 #### Version 0.6.3 (22.03.2015)
 - New interfaces to increase or decrease the badge number.
 - Fix incompatibility with local-notification plugin.
