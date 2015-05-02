@@ -8,15 +8,18 @@
     <name>Badge</name>
 
     <description>Cordova plugin to access and modify the badge number of the app icon</description>
+
     <repo>https://github.com/katzer/cordova-plugin-badge.git</repo>
+
     <keywords>appplant, badge</keywords>
+
     <license>Apache 2.0</license>
 
     <author>Sebastián Katzer</author>
 
     <!-- cordova -->
     <engines>
-        <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova" version=">=3.6.0" />
     </engines>
 
     <!-- js -->
