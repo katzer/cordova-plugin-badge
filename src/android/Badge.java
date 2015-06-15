@@ -274,7 +274,7 @@ public class Badge extends CordovaPlugin {
      * @return
      *      The resource ID for the large icon
      */
-    private int getLargeIcon (Context context, String largeIcon) {
+    private Bitmap getLargeIcon (Context context, String largeIcon) {
 
         String pkgName = cordova.getActivity().getPackageName();
 
