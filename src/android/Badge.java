@@ -130,7 +130,7 @@ public class Badge extends CordovaPlugin {
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (final int badge, final String title, final String largeIcon
+    private void setBadge (final int badge, final String title, final String largeIcon,
                            final String smallIcon, final boolean autoCancel) {
 
         cordova.getThreadPool().execute(new Runnable() {
@@ -280,7 +280,7 @@ public class Badge extends CordovaPlugin {
 
         int resId = getResId(pkgName, largeIcon);
         if (resId == 0) {
-            resId = getDrawableIcon());
+            resId = getDrawableIcon();
         }
 
         Resources res   = context.getResources();
