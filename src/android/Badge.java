@@ -89,9 +89,10 @@ public class Badge extends CordovaPlugin {
             String title      = args.optString(1, "%d new messages");
             String smallIcon  = args.optString(2);
             boolean autoClear = args.optBoolean(3, false);
+            String largeIcon  = args.optString(4);
 
             clearBadge();
-            setBadge(number, title, smallIcon, autoClear);
+            setBadge(number, title, largeIcon, smallIcon, autoClear);
 
             return true;
         }
@@ -129,17 +130,13 @@ public class Badge extends CordovaPlugin {
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (final int badge, final String title,
-                           final String icon, final boolean autoCancel) {
+    private void setBadge (final int badge, final String title, final String largeIcon
+                           final String smallIcon, final boolean autoCancel) {
 
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 Context context = cordova.getActivity().getApplicationContext();
-                Resources res   = context.getResources();
-
-                Bitmap appIcon  = BitmapFactory.decodeResource(res, getDrawableIcon());
-
                 Intent intent = new Intent(context, LaunchActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
@@ -155,8 +152,8 @@ public class Badge extends CordovaPlugin {
                         .setNumber(badge)
                         .setTicker(title_)
                         .setAutoCancel(autoCancel)
-                        .setSmallIcon(getResIdForSmallIcon(icon))
-                        .setLargeIcon(appIcon)
+                        .setSmallIcon(getResIdForSmallIcon(smallIcon))
+                        .setLargeIcon(getLargeIcon(context, largeIcon))
                         .setContentIntent(contentIntent);
 
                 saveBadge(badge);
@@ -271,6 +268,25 @@ public class Badge extends CordovaPlugin {
         resId = res.getIdentifier("icon", "drawable", pkgName);
 
         return resId;
+    }
+
+  /**
+     * @return
+     *      The resource ID for the large icon
+     */
+    private int getLargeIcon (Context context, String largeIcon) {
+
+        String pkgName = cordova.getActivity().getPackageName();
+
+        int resId = getResId(pkgName, largeIcon);
+        if (resId == 0) {
+            resId = getDrawableIcon());
+        }
+
+        Resources res   = context.getResources();
+        Bitmap largeIcon = BitmapFactory.decodeResource(res, resId);
+
+        return largeIcon;
     }
 
     /**

@@ -47,7 +47,8 @@ exports.set = function (badge) {
         parseInt(badge) || 0,
         this._config.title,
         this._config.smallIcon,
-        this._config.autoClear
+        this._config.autoClear,
+        this._config.largeIcon
     ];
 
     this.registerPermission(function (granted) {
@@ -187,7 +188,9 @@ exports._config = {
     // Ob die Badge Zahl automatisch beim Öffnen der App gelöscht werden soll
     autoClear: false,
     // Ob und welches Icon für Android verwendet werden soll
-    smallIcon: 'ic_dialog_email'
+    smallIcon: 'ic_dialog_email',
+    // large icon for android notification
+    largeIcon: ''
 };
 
 
