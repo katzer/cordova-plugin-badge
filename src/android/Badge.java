@@ -284,9 +284,9 @@ public class Badge extends CordovaPlugin {
         }
 
         Resources res   = context.getResources();
-        Bitmap largeIcon = BitmapFactory.decodeResource(res, resId);
+        Bitmap icon = BitmapFactory.decodeResource(res, resId);
 
-        return largeIcon;
+        return icon;
     }
 
     /**
