@@ -256,6 +256,52 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
+     * Icon bitmap for the local notification.
+     */
+    public Bitmap getIconBitmap(String iconUri) {
+        Bitmap bmp;
+
+        try{
+            Uri uri = Uri.parse(iconUri);
+            bmp = getIconFromUri(uri);
+        } catch (Exception e){
+            bmp = getIconFromDrawable(icon);
+        }
+
+        return bmp;
+    }
+
+    /**
+     * Convert URI to Bitmap.
+     *
+     * @param uri
+     *      Internal image URI
+     */
+    private  Bitmap getIconFromUri (Context context,Uri uri) throws IOException {
+        InputStream input = context.getContentResolver().openInputStream(uri);
+        return BitmapFactory.decodeStream(input);
+    }
+
+    /**
+     * @return
+     *      The resource ID for the icon
+     */
+    private Bitmap getIconFromDrawable(Context context, String largeIcon) {
+
+        String pkgName = cordova.getActivity().getPackageName();
+
+        int resId = getResId(pkgName, largeIcon);
+        if (resId == 0) {
+            resId = getDrawableIcon();
+        }
+
+        Resources res   = context.getResources();
+        Bitmap icon = BitmapFactory.decodeResource(res, resId);
+
+        return icon;
+    }
+
+    /**
      * @return
      *      The resource ID of the app icon
      */
@@ -270,24 +316,6 @@ public class Badge extends CordovaPlugin {
         return resId;
     }
 
-  /**
-     * @return
-     *      The resource ID for the large icon
-     */
-    private Bitmap getLargeIcon (Context context, String largeIcon) {
-
-        String pkgName = cordova.getActivity().getPackageName();
-
-        int resId = getResId(pkgName, largeIcon);
-        if (resId == 0) {
-            resId = getDrawableIcon();
-        }
-
-        Resources res   = context.getResources();
-        Bitmap icon = BitmapFactory.decodeResource(res, resId);
-
-        return icon;
-    }
 
     /**
      * @return
