@@ -42,7 +42,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.net.Uri;
 
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Badge extends CordovaPlugin {
 
@@ -89,9 +92,10 @@ public class Badge extends CordovaPlugin {
             String title      = args.optString(1, "%d new messages");
             String smallIcon  = args.optString(2);
             boolean autoClear = args.optBoolean(3, false);
+            String largeIcon  = args.optString(4);
 
             clearBadge();
-            setBadge(number, title, smallIcon, autoClear);
+            setBadge(number, title, largeIcon, smallIcon, autoClear);
 
             return true;
         }
@@ -129,17 +133,13 @@ public class Badge extends CordovaPlugin {
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void setBadge (final int badge, final String title,
-                           final String icon, final boolean autoCancel) {
+    private void setBadge (final int badge, final String title, final String largeIcon,
+                           final String smallIcon, final boolean autoCancel) {
 
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 Context context = cordova.getActivity().getApplicationContext();
-                Resources res   = context.getResources();
-
-                Bitmap appIcon  = BitmapFactory.decodeResource(res, getDrawableIcon());
-
                 Intent intent = new Intent(context, LaunchActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
@@ -155,8 +155,8 @@ public class Badge extends CordovaPlugin {
                         .setNumber(badge)
                         .setTicker(title_)
                         .setAutoCancel(autoCancel)
-                        .setSmallIcon(getResIdForSmallIcon(icon))
-                        .setLargeIcon(appIcon)
+                        .setSmallIcon(getResIdForSmallIcon(smallIcon))
+                        .setLargeIcon(getIconBitmap(context, largeIcon))
                         .setContentIntent(contentIntent);
 
                 saveBadge(badge);
@@ -259,19 +259,66 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
+     * Icon bitmap for the local notification.
+     */
+    public Bitmap getIconBitmap(Context context, String iconUri) {
+        Bitmap bmp;
+
+        try{
+            Uri uri = Uri.parse(iconUri);
+            bmp = getIconFromUri(context, uri);
+        } catch (Exception e){
+            bmp = getIconFromDrawable(context, iconUri);
+        }
+
+        return bmp;
+    }
+
+    /**
+     * Convert URI to Bitmap.
+     *
+     * @param uri
+     *      Internal image URI
+     */
+    private Bitmap getIconFromUri (Context context, Uri uri) throws IOException {
+        InputStream input = context.getContentResolver().openInputStream(uri);
+        return BitmapFactory.decodeStream(input);
+    }
+
+    /**
+     * @return
+     *      The resource ID for the icon
+     */
+    private Bitmap getIconFromDrawable(Context context, String drawable) {
+
+        String pkgName = cordova.getActivity().getPackageName();
+
+        int resId = getResId(pkgName, drawable);
+        if (resId == 0) {
+            resId = getDrawableIcon(context);
+        }
+
+        Resources res = context.getResources();
+        Bitmap icon = BitmapFactory.decodeResource(res, resId);
+
+        return icon;
+    }
+
+    /**
      * @return
      *      The resource ID of the app icon
      */
-    private int getDrawableIcon () {
-        Context context = cordova.getActivity().getApplicationContext();
-        Resources res   = context.getResources();
-        String pkgName  = context.getPackageName();
+    private int getDrawableIcon (Context context) {
+
+        Resources res = context.getResources();
+        String pkgName = context.getPackageName();
 
         int resId;
         resId = res.getIdentifier("icon", "drawable", pkgName);
 
         return resId;
     }
+
 
     /**
      * @return

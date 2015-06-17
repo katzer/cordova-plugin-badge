@@ -23,7 +23,7 @@
 
 #import "APPBadge.h"
 #import "UIApplication+APPBadge.h"
-#import "AppDelegate+APPRegisterUserNotificationSettings.h"
+#import "AppDelegate.h"
 
 @interface APPBadge ()
 
