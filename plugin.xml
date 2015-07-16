@@ -94,6 +94,10 @@
             target-dir="src/de/appplant/cordova/plugin/badge" />
 
         <source-file
+            src="src/android/BadgeImpl.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+        <source-file
             src="src/android/LaunchActivity.java"
             target-dir="src/de/appplant/cordova/plugin/badge" />
 

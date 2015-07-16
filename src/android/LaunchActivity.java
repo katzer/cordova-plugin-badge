@@ -29,7 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-public class LaunchActivity extends Activity {
+class LaunchActivity extends Activity {
 
     /**
      * Clears the badge and moves the launch intent
@@ -40,10 +40,12 @@ public class LaunchActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Intent intent  = getIntent();
-        boolean cancel = intent.getBooleanExtra(Badge.EXTRA_AUTO_CANCEL, false);
+        boolean cancel = intent.getBooleanExtra(
+                BadgeImpl.EXTRA_AUTO_CANCEL, false);
 
-        if (cancel)
+        if (cancel) {
             clearBagde();
+        }
 
         launchMainIntent();
     }
@@ -70,7 +72,7 @@ public class LaunchActivity extends Activity {
     private void clearBagde () {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
 
-        editor.putInt(Badge.KEY, 0);
+        editor.putInt(BadgeImpl.KEY, 0);
         editor.apply();
     }
 
@@ -80,6 +82,7 @@ public class LaunchActivity extends Activity {
     private SharedPreferences getSharedPreferences () {
         Context context = getApplicationContext();
 
-        return context.getSharedPreferences(Badge.KEY, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(BadgeImpl.KEY, Context.MODE_PRIVATE);
     }
+
 }
