@@ -1,6 +1,7 @@
 ## ChangeLog
 #### Version 0.7.0 (not yet released)
-- Support for Amazon FireOS.
+- Support Amazon FireOS platform.
+- Support Browser platform.
 - `get`, `set` and `clear` supports callbacks.
 
 #### Version 0.6.4 (02.05.2015)

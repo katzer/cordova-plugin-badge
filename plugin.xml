@@ -19,7 +19,7 @@
 
     <!-- cordova -->
     <engines>
-        <engine name="cordova" version=">=3.6.0" />
+        <engine name="cordova" version=">=3.0.0" />
     </engines>
 
     <!-- js -->
@@ -135,6 +135,25 @@
         <source-file
             src="src/android/LaunchActivity.java"
             target-dir="src/de/appplant/cordova/plugin/badge" />
+
+    </platform>
+
+    <!-- browser -->
+    <platform name="browser">
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="Badge">
+                <param name="browser-package" value="Badge"/>
+            </feature>
+        </config-file>
+
+        <js-module src="src/browser/favico.min.js" name="Badge.Favico">
+            <clobbers target="cordova.plugins.notification.badge.Favico" />
+        </js-module>
+
+        <js-module src="src/browser/BadgeProxy.js" name="Badge.Proxy">
+            <runs />
+        </js-module>
 
     </platform>
 
