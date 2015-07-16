@@ -1,4 +1,9 @@
 ## ChangeLog
+#### Version 0.7.0 (not yet released)
+- Support Amazon FireOS platform.
+- Support Browser platform.
+- `get`, `set` and `clear` supports callbacks.
+
 #### Version 0.6.4 (02.05.2015)
 - Upgrade cordova dependency from 3.0 to 3.6
 - Fix incompatibility with local-notification plugin and PGB caused by the usage of hooks.

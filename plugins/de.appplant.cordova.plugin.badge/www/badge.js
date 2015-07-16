@@ -31,9 +31,14 @@ var exec    = require('cordova/exec'),
 
 /**
  * Clears the badge of the app icon.
+ *
+ * @param {Function} callback
+ *      The function to be exec as the callback
+ * @param {Object?} scope
+ *      The callback function's scope
  */
-exports.clear = function () {
-    this.exec('clearBadge');
+exports.clear = function (callback, scope) {
+    this.exec('clearBadge', null, callback, scope);
 };
 
 /**
@@ -41,8 +46,12 @@ exports.clear = function () {
  *
  * @param {Number} badge
  *      The new badge number
+ * @param {Function} callback
+ *      The function to be exec as the callback
+ * @param {Object?} scope
+ *      The callback function's scope
  */
-exports.set = function (badge) {
+exports.set = function (badge, callback, scope) {
     var args = [
         parseInt(badge) || 0,
         this._config.title,
@@ -52,7 +61,7 @@ exports.set = function (badge) {
 
     this.registerPermission(function (granted) {
         if (granted) {
-            this.exec('setBadge', args);
+            this.exec('setBadge', args, callback, scope);
         }
     }, this);
 };
@@ -74,10 +83,14 @@ exports.get = function (callback, scope) {
  *
  * @param {Number} count
  *      Count to add to the current badge number
+ * @param {Function} callback
+ *      The function to be exec as the callback
+ * @param {Object?} scope
+ *      The callback function's scope
  */
-exports.increase = function (count) {
+exports.increase = function (count, callback, scope) {
     this.get(function (badge) {
-        this.set(badge + (count || 1));
+        this.set(badge + (count || 1), callback, scope);
     }, this);
 };
 
@@ -86,10 +99,14 @@ exports.increase = function (count) {
  *
  * @param {Number} count
  *      Count to subtract from the current badge number
+ * @param {Function} callback
+ *      The function to be exec as the callback
+ * @param {Object?} scope
+ *      The callback function's scope
  */
-exports.decrease = function (count) {
+exports.decrease = function (count, callback, scope) {
     this.get(function (badge) {
-        this.set(Math.max(0, badge - (count || 1)));
+        this.set(Math.max(0, badge - (count || 1)), callback, scope);
     }, this);
 };
 

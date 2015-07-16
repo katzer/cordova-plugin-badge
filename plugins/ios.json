@@ -18,13 +18,12 @@
         }
     },
     "installed_plugins": {
+        "de.appplant.cordova.common.registerusernotificationsettings": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
         "de.appplant.cordova.plugin.badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
-    "dependent_plugins": {
-        "de.appplant.cordova.common.registerusernotificationsettings": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        }
-    }
+    "dependent_plugins": {}
 }

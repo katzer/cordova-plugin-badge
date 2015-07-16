@@ -29,7 +29,7 @@ buildscript {
     // and https://issues.apache.org/jira/browse/CB-8143
     if (gradle.gradleVersion >= "2.2") {
         dependencies {
-            classpath 'com.android.tools.build:gradle:1.0.0+'
+            classpath 'com.android.tools.build:gradle:1.2.3'
         }
     } else if (gradle.gradleVersion >= "2.1") {
         dependencies {

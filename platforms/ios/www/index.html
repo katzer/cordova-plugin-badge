@@ -138,27 +138,37 @@
         <script type="text/javascript">
             app.initialize();
 
+            // document.addEventListener('resume', function () {
+            //     cordova.plugins.notification.badge.set(100, function () {
+            //         cordova.plugins.notification.badge.get(function (num) {
+            //             alert(num);
+            //         });
+            //     });
+            // });
+
+            var fn = function (badgeNum) { alert(badgeNum); };
+
             clearBadge = function () {
-                cordova.plugins.notification.badge.clear();
+                cordova.plugins.notification.badge.clear(fn);
             };
 
             setBadge = function (rand) {
                 var number = rand ? Math.round(Math.random()*100) : 10;
-                cordova.plugins.notification.badge.set(number);
-            };
-
-            getBadge = function () {
-                cordova.plugins.notification.badge.get(function (number) {
-                    alert(number);
+                cordova.plugins.notification.badge.set(number, function (num) {
+                    alert(num);
                 });
             };
 
+            getBadge = function () {
+                cordova.plugins.notification.badge.get(fn);
+            };
+
             increaseBadge = function () {
-                cordova.plugins.notification.badge.increase();
+                cordova.plugins.notification.badge.increase(1, fn);
             };
 
             decreaseBadge = function () {
-                cordova.plugins.notification.badge.decrease();
+                cordova.plugins.notification.badge.decrease(1, fn);
             };
 
             hasPermission = function () {

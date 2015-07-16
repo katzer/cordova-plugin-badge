@@ -20,7 +20,8 @@
 package de.appplant.cordova.plugin.badge.example;
 
 import android.os.Bundle;
-import org.apache.cordova.*;
+
+import org.apache.cordova.CordovaActivity;
 
 public class MainActivity extends CordovaActivity
 {
@@ -28,7 +29,6 @@ public class MainActivity extends CordovaActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        super.init();
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
     }

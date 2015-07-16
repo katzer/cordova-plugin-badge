@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge"
-        version="0.6.4">
+        version="0.7.0dev">
 
     <name>Badge</name>
 
@@ -19,7 +19,7 @@
 
     <!-- cordova -->
     <engines>
-        <engine name="cordova" version=">=3.6.0" />
+        <engine name="cordova" version=">=3.0.0" />
     </engines>
 
     <!-- js -->
@@ -94,8 +94,67 @@
             target-dir="src/de/appplant/cordova/plugin/badge" />
 
         <source-file
+            src="src/android/BadgeImpl.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+        <source-file
             src="src/android/LaunchActivity.java"
             target-dir="src/de/appplant/cordova/plugin/badge" />
 
     </platform>
+
+    <!-- amazon-fireos -->
+    <platform name="amazon-fireos">
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Badge">
+                <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <!--
+             * The launch activity is triggered when a notification is clicked by a user.
+             * The activity launches the main activity.
+            -->
+            <activity
+                android:name="de.appplant.cordova.plugin.badge.LaunchActivity"
+                android:theme="@android:style/Theme.Black.NoTitleBar"
+                android:launchMode="singleInstance"
+                android:exported="false" />
+        </config-file>
+
+        <source-file
+            src="src/android/Badge.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+        <source-file
+            src="src/android/BadgeImpl.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+        <source-file
+            src="src/android/LaunchActivity.java"
+            target-dir="src/de/appplant/cordova/plugin/badge" />
+
+    </platform>
+
+    <!-- browser -->
+    <platform name="browser">
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="Badge">
+                <param name="browser-package" value="Badge"/>
+            </feature>
+        </config-file>
+
+        <js-module src="src/browser/favico.min.js" name="Badge.Favico">
+            <clobbers target="cordova.plugins.notification.badge.Favico" />
+        </js-module>
+
+        <js-module src="src/browser/BadgeProxy.js" name="Badge.Proxy">
+            <runs />
+        </js-module>
+
+    </platform>
+
 </plugin>

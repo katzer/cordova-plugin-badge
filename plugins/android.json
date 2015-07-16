@@ -22,13 +22,15 @@
                             "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.badge.LaunchActivity\" android:theme=\"@android:style/Theme.Black.NoTitleBar\" />",
                             "count": 1
                         }
-                    ],
-                    "/manifest": []
+                    ]
                 }
             }
         }
     },
     "installed_plugins": {
+        "de.appplant.cordova.common.registerusernotificationsettings": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
         "de.appplant.cordova.plugin.badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }

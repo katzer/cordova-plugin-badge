@@ -6,6 +6,7 @@
 	objectVersion = 46;
 	objects = {
 /* Begin PBXBuildFile section */
+		10D30B260FEE4A799853E0AE /* AppDelegate+APPRegisterUserNotificationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D7BE74DC4BE404096F3BBDC /* AppDelegate+APPRegisterUserNotificationSettings.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -39,9 +40,7 @@
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
-		7D055487733946ABA05180F0 /* AppDelegate+APPRegisterUserNotificationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 047D63CCF0AD49B6849F01B3 /* AppDelegate+APPRegisterUserNotificationSettings.m */; };
-		454A73F500AD4458B155BB95 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = CF89C9B2523A49C387FA4206 /* APPBadge.m */; };
-		E8DBFE841A0C409EB386F825 /* UIApplication+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5164986151EE4E93BB147435 /* UIApplication+APPBadge.m */; };
+		117A78C4E230409DA8366FD2 /* UIApplication+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,9 +63,8 @@
 /* Begin PBXFileReference section */
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* BadgeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BadgeExample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1F766FDD13BBADB100FB74C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
-		1F766FE013BBADB100FB74C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* BadgeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BadgeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D7BE74DC4BE404096F3BBDC /* AppDelegate+APPRegisterUserNotificationSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+APPRegisterUserNotificationSettings.m"; path = "de.appplant.cordova.common.registerusernotificationsettings/AppDelegate+APPRegisterUserNotificationSettings.m"; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
@@ -102,17 +100,15 @@
 		7E7966DC1810823500FA85AD /* icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small.png"; sourceTree = "<group>"; };
 		7E7966DD1810823500FA85AD /* icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BadgeExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "BadgeExample-Info.plist"; path = "../BadgeExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		AAB488AF8C2E4BD8B09F2250 /* APPBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APPBadge.m; path = de.appplant.cordova.plugin.badge/APPBadge.m; sourceTree = "<group>"; };
+		CAD460F4CA964979936507F7 /* APPBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APPBadge.h; path = de.appplant.cordova.plugin.badge/APPBadge.h; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
-		EB87FDF21871DA7A0020F90C /* merges */ = {isa = PBXFileReference; lastKnownFileType = folder; name = merges; path = ../../merges; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
-		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "BadgeExample/config.xml"; sourceTree = "<group>"; };
-		047D63CCF0AD49B6849F01B3 /* AppDelegate+APPRegisterUserNotificationSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+APPRegisterUserNotificationSettings.m"; path = "de.appplant.cordova.common.registerusernotificationsettings/AppDelegate+APPRegisterUserNotificationSettings.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		8C06E105382E43249626F56A /* AppDelegate+APPRegisterUserNotificationSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+APPRegisterUserNotificationSettings.h"; path = "de.appplant.cordova.common.registerusernotificationsettings/AppDelegate+APPRegisterUserNotificationSettings.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		CF89C9B2523A49C387FA4206 /* APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "APPBadge.m"; path = "de.appplant.cordova.plugin.badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		5164986151EE4E93BB147435 /* UIApplication+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		DEEEFA2A77B140D79DFF1872 /* APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "APPBadge.h"; path = "de.appplant.cordova.plugin.badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		5A7D6C0A00814DAB878AE675 /* UIApplication+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIApplication+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BadgeExample/config.xml; sourceTree = "<group>"; };
+		FAC35FBE23C242D585E23F26 /* AppDelegate+APPRegisterUserNotificationSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+APPRegisterUserNotificationSettings.h"; path = "de.appplant.cordova.common.registerusernotificationsettings/AppDelegate+APPRegisterUserNotificationSettings.h"; sourceTree = "<group>"; };
+		AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		FEE53D7484BE4D5DB61150D4 /* UIApplication+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIApplication+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +136,7 @@
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 			);
 			name = Classes;
-			path = "BadgeExample/Classes";
+			path = BadgeExample/Classes;
 			sourceTree = SOURCE_ROOT;
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -156,7 +152,6 @@
 			children = (
 				EB87FDF41871DAF40020F90C /* config.xml */,
 				EB87FDF31871DA8E0020F90C /* www */,
-				EB87FDF21871DA7A0020F90C /* merges */,
 				EB87FDF11871DA420020F90C /* Staging */,
 				301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -176,7 +171,7 @@
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
-			path = "BadgeExample";
+			path = BadgeExample;
 			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
@@ -187,7 +182,7 @@
 				8D1107310486CEB800E47090 /* BadgeExample-Info.plist */,
 			);
 			name = Resources;
-			path = "BadgeExample/Resources";
+			path = BadgeExample/Resources;
 			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
@@ -211,15 +206,15 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				047D63CCF0AD49B6849F01B3 /* AppDelegate+APPRegisterUserNotificationSettings.m */,
-				8C06E105382E43249626F56A /* AppDelegate+APPRegisterUserNotificationSettings.h */,
-				CF89C9B2523A49C387FA4206 /* APPBadge.m */,
-				5164986151EE4E93BB147435 /* UIApplication+APPBadge.m */,
-				DEEEFA2A77B140D79DFF1872 /* APPBadge.h */,
-				5A7D6C0A00814DAB878AE675 /* UIApplication+APPBadge.h */,
+				1D7BE74DC4BE404096F3BBDC /* AppDelegate+APPRegisterUserNotificationSettings.m */,
+				FAC35FBE23C242D585E23F26 /* AppDelegate+APPRegisterUserNotificationSettings.h */,
+				AAB488AF8C2E4BD8B09F2250 /* APPBadge.m */,
+				CAD460F4CA964979936507F7 /* APPBadge.h */,
+				AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */,
+				FEE53D7484BE4D5DB61150D4 /* UIApplication+APPBadge.h */,
 			);
 			name = Plugins;
-			path = "BadgeExample/Plugins";
+			path = BadgeExample/Plugins;
 			sourceTree = SOURCE_ROOT;
 		};
 		308D052D1370CCF300D202BF /* icons */ = {
@@ -287,8 +282,8 @@
 			dependencies = (
 				301BF551109A68C00062928A /* PBXTargetDependency */,
 			);
-			name = "BadgeExample";
-			productName = "BadgeExample";
+			name = BadgeExample;
+			productName = BadgeExample;
 			productReference = 1D6058910D05DD3D006BFB54 /* BadgeExample.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -300,7 +295,7 @@
 			attributes = {
 				LastUpgradeCheck = 510;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "__CLI__" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BadgeExample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -401,9 +396,8 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				7D055487733946ABA05180F0 /* AppDelegate+APPRegisterUserNotificationSettings.m in Sources */,
-				454A73F500AD4458B155BB95 /* APPBadge.m in Sources */,
-				E8DBFE841A0C409EB386F825 /* UIApplication+APPBadge.m in Sources */,
+				10D30B260FEE4A799853E0AE /* AppDelegate+APPRegisterUserNotificationSettings.m in Sources */,
+				117A78C4E230409DA8366FD2 /* UIApplication+APPBadge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +438,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "BadgeExample";
+				PRODUCT_NAME = BadgeExample;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -473,7 +467,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "BadgeExample";
+				PRODUCT_NAME = BadgeExample;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -577,7 +571,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "__CLI__" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BadgeExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

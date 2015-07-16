@@ -12,8 +12,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "de.appplant.cordova.plugin.badge": "0.6.4",
-    "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1"
+    "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
+    "de.appplant.cordova.plugin.badge": "0.7.0dev"
 }
 // BOTTOM OF METADATA
 });

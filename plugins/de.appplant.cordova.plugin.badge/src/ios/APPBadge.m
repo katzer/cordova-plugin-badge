@@ -45,6 +45,10 @@
 {
     [self.commandDelegate runInBackground:^{
         [self.app setApplicationIconBadgeNumber:0];
+
+        [self sendPluginResult:CDVCommandStatus_OK
+                 messageAsLong:0
+                    callbackId:command.callbackId];
     }];
 }
 
@@ -61,6 +65,10 @@
 
     [self.commandDelegate runInBackground:^{
         [self.app setApplicationIconBadgeNumber:number];
+
+        [self sendPluginResult:CDVCommandStatus_OK
+                 messageAsLong:number
+                    callbackId:command.callbackId];
     }];
 }
 
@@ -73,14 +81,11 @@
 - (void) getBadge:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        CDVPluginResult* result;
         long badge = [self.app applicationIconBadgeNumber];
 
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsDouble:badge];
-
-        [self.commandDelegate sendPluginResult:result
-                                    callbackId:command.callbackId];
+        [self sendPluginResult:CDVCommandStatus_OK
+                 messageAsLong:badge
+                    callbackId:command.callbackId];
     }];
 }
 
@@ -93,16 +98,11 @@
 - (void) hasPermission:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        CDVPluginResult* result;
-        BOOL hasPermission;
+        BOOL hasPermission = [self.app hasPermissionToDisplayBadges];
 
-        hasPermission = [self.app hasPermissionToDisplayBadges];
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                     messageAsBool:hasPermission];
-
-        [self.commandDelegate sendPluginResult:result
-                                    callbackId:command.callbackId];
+        [self sendPluginResult:CDVCommandStatus_OK
+                 messageAsBool:hasPermission
+                    callbackId:command.callbackId];
     }];
 }
 
@@ -168,6 +168,38 @@
 - (UIApplication*) app
 {
     return [UIApplication sharedApplication];
+}
+
+/**
+ * Sends a plugin result with the specified status and message.
+ */
+- (void) sendPluginResult:(CDVCommandStatus)status
+            messageAsBool:(BOOL)msg
+               callbackId:(NSString*)callbackId
+{
+    CDVPluginResult* result;
+
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                 messageAsBool:msg];
+
+    [self.commandDelegate sendPluginResult:result
+                                callbackId:callbackId];
+}
+
+/**
+ * Sends a plugin result with the specified status and message.
+ */
+- (void) sendPluginResult:(CDVCommandStatus)status
+            messageAsLong:(long)msg
+               callbackId:(NSString*)callbackId
+{
+    CDVPluginResult* result;
+
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                 messageAsDouble:msg];
+
+    [self.commandDelegate sendPluginResult:result
+                                callbackId:callbackId];
 }
 
 @end
