@@ -11,7 +11,7 @@ Cordova Badge Plugin - Example
 [Download][zip] or clone the _example_ branch and run the following command:
 
 ```bash
-cordova run [ios|android|wp8]
+cordova run [ios|android|wp8|browser]
 ```
 
 These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][studio] or [Eclipse][eclipse].
