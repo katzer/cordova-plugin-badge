@@ -29,14 +29,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-class LaunchActivity extends Activity {
+public class LaunchActivity extends Activity {
 
     /**
      * Clears the badge and moves the launch intent
      * (web view) back to front.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent  = getIntent();
