@@ -1,5 +1,5 @@
 ## ChangeLog
-#### Version 0.7.0 (not yet released)
+#### Version 0.7.0 (18.07.2015)
 - New platform support:
   - Amazon FireOS
   - Browser
