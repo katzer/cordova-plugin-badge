@@ -44,5 +44,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-test-framework": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-test-framework"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

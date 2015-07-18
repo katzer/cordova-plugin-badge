@@ -11,20 +11,28 @@
                         {
                             "xml": "<feature name=\"Badge\"><param name=\"wp-package\" value=\"Badge\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"wp-package\" value=\"Toast\" /></feature>",
+                            "count": 1
                         }
                     ]
-                }
-            },
-            "Properties/WMAppManifest.xml": {
-                "parents": {
-                    "/Deployment/App/Capabilities": []
                 }
             }
         }
     },
     "installed_plugins": {
+        "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
+        "de.appplant.cordova.common.registerusernotificationsettings": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
         "de.appplant.cordova.plugin.badge": {
-            "PACKAGE_NAME": "{f727c780-4707-11e4-b1ff-a39d04a9bbea}"
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
+        "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
         }
     },
     "dependent_plugins": {}

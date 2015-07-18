@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "BadgeExample"
+        },
         "de.appplant.cordova.common.registerusernotificationsettings": {
             "PACKAGE_NAME": "BadgeExample"
         },

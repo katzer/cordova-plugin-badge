@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Deployment AppPlatformVersion="8.1" xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment">
+<Deployment AppPlatformVersion="8.0" xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment">
     <DefaultLanguage code="en-US" xmlns="" />
     <Languages xmlns="">
         <Language code="en-US" />
     </Languages>
-    <App Author="BadgeExample author" BitsPerPixel="32" Description="Apache Cordova for Windows Phone" Genre="apps.normal" ProductID="{f727c780-4707-11e4-b1ff-a39d04a9bbea}" Publisher="BadgeExample" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="BadgeExample" Version="0.6.0" xmlns="">
+    <App Author="Sebastián Katzer" BitsPerPixel="32" Description="Cordova plugin to access and modify the badge number" Genre="apps.normal" ProductID="{f5c63fd0-2d42-11e5-aec1-ed616f5da995}" Publisher="Sebastián Katzer" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="BadgeExample" Version="0.6.0" xmlns="">
         <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
         <Capabilities>
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />

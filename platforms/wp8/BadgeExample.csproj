@@ -11,7 +11,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>de.appplant.cordova.plugin.badge.example</RootNamespace>
         <AssemblyName>de.appplant.cordova.plugin.badge.example</AssemblyName>
-        <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
         <SilverlightVersion>
         </SilverlightVersion>
         <TargetFrameworkProfile>
@@ -21,14 +21,13 @@
         <SupportedCultures>en-US</SupportedCultures>
         <XapOutputs>true</XapOutputs>
         <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-        <XapFilename>BadgeExample_$(Configuration)_$(Platform).xap</XapFilename>
+        <XapFilename>CordovaAppProj_$(Configuration)_$(Platform).xap</XapFilename>
         <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
         <SilverlightAppEntry>de.appplant.cordova.plugin.badge.example.App</SilverlightAppEntry>
         <ValidateXaml>true</ValidateXaml>
         <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-        <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-        <BackgroundAgentType>AgentLibrary</BackgroundAgentType>
-        <DefaultLanguage>de-DE</DefaultLanguage>
+        <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+        <BackgroundAgentType />
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
@@ -164,13 +163,6 @@
         </Page>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Assets\BadgeLogo.png" />
-        <Content Include="Assets\Logo.png" />
-        <Content Include="Assets\SplashScreen.png" />
-        <Content Include="Assets\SquareTile150x150.png" />
-        <Content Include="Assets\SquareTile71x71.png" />
-        <Content Include="Assets\StoreLogo.png" />
-        <Content Include="Assets\WideLogo.png" />
         <Content Include="config.xml" />
         <Content Include="www\**" />
         <Content Include="Images\appbar.back.rest.png" />
@@ -194,9 +186,6 @@
         <None Include="cordova\run.bat" />
         <None Include="cordova\version.bat" />
         <Content Include="VERSION" />
-        <AppxManifest Include="Package.appxmanifest">
-            <SubType>Designer</SubType>
-        </AppxManifest>
         <None Include="Properties\AppManifest.xml">
             <SubType>Designer</SubType>
         </None>
@@ -230,5 +219,8 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Plugins\de.appplant.cordova.plugin.badge\Badge.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\nl.x-services.plugins.toast\Toast.cs" />
     </ItemGroup>
 </Project>
