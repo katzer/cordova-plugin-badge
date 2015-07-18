@@ -144,10 +144,14 @@
 
             showToast = function (text) {
                 setTimeout(function () {
-                    if (window.Windows === undefined) {
-                        window.plugins.toast.showShortBottom(text);
-                    } else {
+                    if (window.Windows !== undefined) {
                         showWinDialog(text);
+                    } else
+                    if (window.plugins && window.plugins.toast) {
+                        window.plugins.toast.showShortBottom(String(text));
+                    }
+                    else {
+                        alert(text);
                     }
                 }, 100);
             };
@@ -164,36 +168,37 @@
                     dialog = null;
                 });
             };
+        </script>
 
-            var fn = function (badgeNum) { showToast(badgeNum); };
+        <script type="text/javascript">
 
             clearBadge = function () {
-                cordova.plugins.notification.badge.clear(fn);
+                cordova.plugins.notification.badge.clear(showToast);
             };
 
             setBadge = function (rand) {
                 var number = rand ? Math.round(Math.random()*100) : 10;
-                cordova.plugins.notification.badge.set(number, fn);
+                cordova.plugins.notification.badge.set(number, showToast);
             };
 
             getBadge = function () {
-                cordova.plugins.notification.badge.get(fn);
+                cordova.plugins.notification.badge.get(showToast);
             };
 
             increaseBadge = function () {
-                cordova.plugins.notification.badge.increase(1, fn);
+                cordova.plugins.notification.badge.increase(1, showToast);
             };
 
             decreaseBadge = function () {
-                cordova.plugins.notification.badge.decrease(1, fn);
+                cordova.plugins.notification.badge.decrease(1, showToast);
             };
 
             hasPermission = function () {
-                cordova.plugins.notification.badge.hasPermission(fn);
+                cordova.plugins.notification.badge.hasPermission(showToast);
             };
 
             registerPermission = function () {
-                cordova.plugins.notification.badge.registerPermission(fn);
+                cordova.plugins.notification.badge.registerPermission(showToast);
             };
 
             switchAutoClear = function () {
@@ -201,7 +206,7 @@
                     autoClear: !cordova.plugins.notification.badge._config.autoClear
                 });
 
-                fn('Set autoClear to \n' + cordova.plugins.notification.badge._config.autoClear);
+                showToast('Set autoClear to \n' + cordova.plugins.notification.badge._config.autoClear);
             };
 
             changeTitle = function () {
@@ -211,7 +216,7 @@
                     title: title
                 });
 
-                fn('Set title to \n"' + title + '"');
+                showToast('Set title to \n"' + title + '"');
             };
         </script>
     </body>

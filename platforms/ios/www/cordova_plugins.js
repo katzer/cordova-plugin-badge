@@ -1,17 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/nl.x-services.plugins.toast/www/Toast.js",
-        "id": "nl.x-services.plugins.toast.Toast",
-        "clobbers": [
-            "window.plugins.toast"
-        ]
-    },
-    {
-        "file": "plugins/nl.x-services.plugins.toast/test/tests.js",
-        "id": "nl.x-services.plugins.toast.tests"
-    },
-    {
         "file": "plugins/cordova-plugin-test-framework/www/tests.js",
         "id": "cordova-plugin-test-framework.cdvtests"
     },
@@ -34,15 +23,26 @@ module.exports = [
             "plugin.notification.badge",
             "cordova.plugins.notification.badge"
         ]
+    },
+    {
+        "file": "plugins/nl.x-services.plugins.toast/www/Toast.js",
+        "id": "nl.x-services.plugins.toast.Toast",
+        "clobbers": [
+            "window.plugins.toast"
+        ]
+    },
+    {
+        "file": "plugins/nl.x-services.plugins.toast/test/tests.js",
+        "id": "nl.x-services.plugins.toast.tests"
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
-    "nl.x-services.plugins.toast": "2.0.4",
     "cordova-plugin-test-framework": "1.0.1",
-    "de.appplant.cordova.plugin.badge": "0.7.0dev"
+    "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
+    "de.appplant.cordova.plugin.badge": "0.7.0dev",
+    "nl.x-services.plugins.toast": "2.0.4"
 }
 // BOTTOM OF METADATA
 });

@@ -147,12 +147,12 @@
                     if (window.Windows !== undefined) {
                         showWinDialog(text);
                     } else
-                        if (window.plugins && window.plugins.toast) {
-                            window.plugins.toast.showShortBottom(text);
-                        }
-                        else {
-                            alert(text);
-                        }
+                    if (window.plugins && window.plugins.toast) {
+                        window.plugins.toast.showShortBottom(String(text));
+                    }
+                    else {
+                        alert(text);
+                    }
                 }, 100);
             };
 
