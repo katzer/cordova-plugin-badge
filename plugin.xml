@@ -157,4 +157,13 @@
 
     </platform>
 
+    <!-- windows -->
+    <platform name="windows">
+
+        <js-module src="src/windows/BadgeProxy.js" name="Badge.Proxy" >
+            <runs />
+        </js-module>
+
+    </platform>
+
 </plugin>
