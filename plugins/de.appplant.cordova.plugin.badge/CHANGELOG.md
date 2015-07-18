@@ -6,6 +6,7 @@
   - Windows
 - `get`, `set` and `clear` support callbacks.
 - Support for [Glyphs](https://msdn.microsoft.com/de-de/library/windows/apps/hh779719#phone_badge) on _Windows_ platform.
+- Added tests
 
 #### Version 0.6.4 (02.05.2015)
 - Upgrade cordova dependency from 3.0 to 3.6

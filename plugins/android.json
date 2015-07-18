@@ -11,13 +11,22 @@
                         {
                             "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
             },
             "AndroidManifest.xml": {
                 "parents": {
-                    "/manifest/application": []
+                    "/manifest/application": [
+                        {
+                            "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.badge.LaunchActivity\" android:theme=\"@android:style/Theme.Black.NoTitleBar\" />",
+                            "count": 1
+                        }
+                    ]
                 }
             }
         }
@@ -30,6 +39,9 @@
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
         "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "de.appplant.cordova.plugin.badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },

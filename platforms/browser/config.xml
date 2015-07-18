@@ -9,4 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <feature name="Badge">
+        <param name="browser-package" value="Badge" />
+    </feature>
 </widget>

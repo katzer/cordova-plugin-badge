@@ -26,6 +26,14 @@ module.exports = [
     {
         "file": "plugins/cordova-plugin-test-framework/www/main.js",
         "id": "cordova-plugin-test-framework.main"
+    },
+    {
+        "file": "plugins/de.appplant.cordova.plugin.badge/www/badge.js",
+        "id": "de.appplant.cordova.plugin.badge.Badge",
+        "clobbers": [
+            "plugin.notification.badge",
+            "cordova.plugins.notification.badge"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -33,7 +41,8 @@ module.exports.metadata =
 {
     "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
     "nl.x-services.plugins.toast": "2.0.4",
-    "cordova-plugin-test-framework": "1.0.1"
+    "cordova-plugin-test-framework": "1.0.1",
+    "de.appplant.cordova.plugin.badge": "0.7.0dev"
 }
 // BOTTOM OF METADATA
 });
