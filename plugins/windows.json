@@ -1,0 +1,21 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "de.appplant.cordova.common.registerusernotificationsettings": {
+            "PACKAGE_NAME": "BadgeExample"
+        },
+        "de.appplant.cordova.plugin.badge": {
+            "PACKAGE_NAME": "BadgeExample"
+        },
+        "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "BadgeExample"
+        }
+    },
+    "dependent_plugins": {}
+}

@@ -40,7 +40,9 @@
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
-		117A78C4E230409DA8366FD2 /* UIApplication+APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */; };
+		295FB831715F431495A44528 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E5CBAA5AEF4F4DA9DA1D12 /* Toast+UIView.m */; };
+		DB62351D0C0C4AB4BF1CF583 /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = D630DD5FB12248DDB8054F35 /* Toast.m */; };
+		63614E2F95734675A953E528 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A14A88AD0241AA8A0880B8 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,8 +109,11 @@
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BadgeExample/config.xml; sourceTree = "<group>"; };
 		FAC35FBE23C242D585E23F26 /* AppDelegate+APPRegisterUserNotificationSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+APPRegisterUserNotificationSettings.h"; path = "de.appplant.cordova.common.registerusernotificationsettings/AppDelegate+APPRegisterUserNotificationSettings.h"; sourceTree = "<group>"; };
-		AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+APPBadge.m"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		FEE53D7484BE4D5DB61150D4 /* UIApplication+APPBadge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIApplication+APPBadge.h"; path = "de.appplant.cordova.plugin.badge/UIApplication+APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		36E5CBAA5AEF4F4DA9DA1D12 /* Toast+UIView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast+UIView.m"; path = "nl.x-services.plugins.toast/Toast+UIView.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D630DD5FB12248DDB8054F35 /* Toast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast.m"; path = "nl.x-services.plugins.toast/Toast.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		C507892B073E4EDAA6787064 /* Toast+UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast+UIView.h"; path = "nl.x-services.plugins.toast/Toast+UIView.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		48F8F22A99904BDD88FA53B2 /* Toast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast.h"; path = "nl.x-services.plugins.toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		07A14A88AD0241AA8A0880B8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "QuartzCore.framework"; path = "System/Library/Frameworks/QuartzCore.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +125,7 @@
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
+				63614E2F95734675A953E528 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +197,7 @@
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
+				07A14A88AD0241AA8A0880B8 /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -210,8 +217,10 @@
 				FAC35FBE23C242D585E23F26 /* AppDelegate+APPRegisterUserNotificationSettings.h */,
 				AAB488AF8C2E4BD8B09F2250 /* APPBadge.m */,
 				CAD460F4CA964979936507F7 /* APPBadge.h */,
-				AF9CD92936F7462E8EA5A9E9 /* UIApplication+APPBadge.m */,
-				FEE53D7484BE4D5DB61150D4 /* UIApplication+APPBadge.h */,
+				36E5CBAA5AEF4F4DA9DA1D12 /* Toast+UIView.m */,
+				D630DD5FB12248DDB8054F35 /* Toast.m */,
+				C507892B073E4EDAA6787064 /* Toast+UIView.h */,
+				48F8F22A99904BDD88FA53B2 /* Toast.h */,
 			);
 			name = Plugins;
 			path = BadgeExample/Plugins;
@@ -397,7 +406,8 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				10D30B260FEE4A799853E0AE /* AppDelegate+APPRegisterUserNotificationSettings.m in Sources */,
-				117A78C4E230409DA8366FD2 /* UIApplication+APPBadge.m in Sources */,
+				295FB831715F431495A44528 /* Toast+UIView.m in Sources */,
+				DB62351D0C0C4AB4BF1CF583 /* Toast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,17 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Badge\"><param name=\"ios-package\" value=\"APPBadge\" /></feature>",
+                            "xml": "<feature name=\"Toast\"><param name=\"ios-package\" value=\"Toast\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "framework": {
+                "parents": {
+                    "QuartzCore.framework": [
+                        {
+                            "xml": false,
                             "count": 1
                         }
                     ]
@@ -21,7 +31,7 @@
         "de.appplant.cordova.common.registerusernotificationsettings": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
-        "de.appplant.cordova.plugin.badge": {
+        "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },

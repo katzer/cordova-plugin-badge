@@ -137,16 +137,35 @@
 
         <script type="text/javascript">
             app.initialize();
+        </script>
 
-            // document.addEventListener('resume', function () {
-            //     cordova.plugins.notification.badge.set(100, function () {
-            //         cordova.plugins.notification.badge.get(function (num) {
-            //             alert(num);
-            //         });
-            //     });
-            // });
+        <script type="text/javascript">
+            var dialog;
 
-            var fn = function (badgeNum) { alert(badgeNum); };
+            showToast = function (text) {
+                setTimeout(function () {
+                    if (window.Windows === undefined) {
+                        window.plugins.toast.showShortBottom(text);
+                    } else {
+                        showWinDialog(text);
+                    }
+                }, 100);
+            };
+
+            showWinDialog = function (text) {
+                if (dialog) {
+                    dialog.content = text;
+                    return;
+                }
+
+                dialog = new Windows.UI.Popups.MessageDialog(text);
+
+                dialog.showAsync().done(function () {
+                    dialog = null;
+                });
+            };
+
+            var fn = function (badgeNum) { showToast(badgeNum); };
 
             clearBadge = function () {
                 cordova.plugins.notification.badge.clear(fn);
@@ -154,9 +173,7 @@
 
             setBadge = function (rand) {
                 var number = rand ? Math.round(Math.random()*100) : 10;
-                cordova.plugins.notification.badge.set(number, function (num) {
-                    alert(num);
-                });
+                cordova.plugins.notification.badge.set(number, fn);
             };
 
             getBadge = function () {
@@ -172,15 +189,11 @@
             };
 
             hasPermission = function () {
-                cordova.plugins.notification.badge.hasPermission(function (granted) {
-                    alert(granted);
-                });
+                cordova.plugins.notification.badge.hasPermission(fn);
             };
 
             registerPermission = function () {
-                cordova.plugins.notification.badge.registerPermission(function (granted) {
-                    alert(granted);
-                });
+                cordova.plugins.notification.badge.registerPermission(fn);
             };
 
             switchAutoClear = function () {
@@ -188,7 +201,7 @@
                     autoClear: !cordova.plugins.notification.badge._config.autoClear
                 });
 
-                alert('Set autoClear to \n' + cordova.plugins.notification.badge._config.autoClear);
+                fn('Set autoClear to \n' + cordova.plugins.notification.badge._config.autoClear);
             };
 
             changeTitle = function () {
@@ -198,7 +211,7 @@
                     title: title
                 });
 
-                alert('Set title to \n"' + title + '"');
+                fn('Set title to \n"' + title + '"');
             };
         </script>
     </body>

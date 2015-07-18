@@ -36,5 +36,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "nl.x-services.plugins.toast": {
+        "source": {
+            "type": "registry",
+            "id": "nl.x-services.plugins.toast"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

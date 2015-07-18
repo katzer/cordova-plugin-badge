@@ -11,7 +11,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:exported="false" android:launchMode="singleInstance" android:name="de.appplant.cordova.plugin.badge.LaunchActivity" android:theme="@android:style/Theme.Black.NoTitleBar" />
     </application>
     <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="22" />
 </manifest>

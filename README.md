@@ -11,10 +11,10 @@ Cordova Badge Plugin - Example
 [Download][zip] or clone the _example_ branch and run the following command:
 
 ```bash
-cordova run [ios|android|wp8|browser]
+cordova run [android|browser|ios|windows|wp8] # choose one
 ```
 
-These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][studio] or [Eclipse][eclipse].
+These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][as] or [Visual Studio][vs].
 
 <p align="center">
     <img src="images/overview.png"></img>
@@ -67,8 +67,8 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [readme]: https://github.com/katzer/cordova-plugin-badge/blob/master/README.md
 [zip]: https://github.com/katzer/cordova-plugin-badge/archive/example.zip
 [xcode]: https://developer.apple.com/xcode/
-[studio]: https://developer.android.com/sdk/installing/studio.html
-[eclipse]: https://developer.android.com/sdk/index.html
+[as]: https://developer.android.com/sdk/installing/studio.html
+[vs]: https://www.visualstudio.com
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
 
 

@@ -1,0 +1,27 @@
+{
+    "version": "2.0.4",
+    "name": "nl.x-services.plugins.toast",
+    "cordova_name": "Toast",
+    "description": "\n    This plugin allows you to show a Toast.\n    A Toast is a little non intrusive buttonless popup which automatically disappears.\n  ",
+    "license": "MIT",
+    "repo": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+    "issue": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues",
+    "keywords": [
+        "Toast",
+        " Notification",
+        " Message",
+        " Alert"
+    ],
+    "platforms": [
+        "ios",
+        "android",
+        "wp8",
+        "blackberry10"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.0.0"
+        }
+    ]
+}

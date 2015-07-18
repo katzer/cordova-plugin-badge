@@ -7,12 +7,7 @@
         "files": {
             "config.xml": {
                 "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Badge\"><param name=\"browser-package\" value=\"Badge\" /></feature>",
-                            "count": 1
-                        }
-                    ]
+                    "/*": []
                 }
             }
         }
@@ -21,7 +16,7 @@
         "de.appplant.cordova.common.registerusernotificationsettings": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
-        "de.appplant.cordova.plugin.badge": {
+        "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },

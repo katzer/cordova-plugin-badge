@@ -10,7 +10,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <feature name="Badge">
-        <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge" />
+    <feature name="Toast">
+        <param name="android-package" value="nl.xservices.plugins.Toast" />
     </feature>
 </widget>
