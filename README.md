@@ -15,9 +15,12 @@ Users see notifications in the following ways:
 
 
 ## Supported Platforms
-The current 0.6 branch does support the following platforms*:
-- __iOS__ _(including iOS8)_<br>
-- __Android__ _(SDK >=11)_
+The current 0.7 branch does support the following platforms:
+- __Amazon FireOS__
+- __Android__
+- __Browser__
+- __iOS__
+- __Windows__
 - __WP8__ and __WP8.1 Silverlight__
 
 Find out more informations [here][wiki_platforms] in our wiki.
@@ -50,7 +53,7 @@ Find out more informations [here][wiki_kitchensink] in our wiki.
 
 
 ## What's new
-We are proud to announce our newest release version 0.6.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
+We are proud to announce our newest release version 0.7.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
 
 Find out more informations [here][wiki_changelog] in our wiki.
 
