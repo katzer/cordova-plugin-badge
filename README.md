@@ -1,5 +1,6 @@
 
 [![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
+[![npm version](https://badge.fury.io/js/de.appplant.cordova.plugin.badge.svg)](http://badge.fury.io/js/de.appplant.cordova.plugin.badge)
 [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
 
 Cordova Badge Plugin
