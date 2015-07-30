@@ -119,6 +119,8 @@
                 android:exported="false" />
         </config-file>
 
+        <framework src="src/android/badge.gradle" custom="true" type="gradleReference"/>
+
         <source-file
             src="src/android/Badge.java"
             target-dir="src/de/appplant/cordova/plugin/badge" />
@@ -135,6 +137,10 @@
 
     <!-- amazon-fireos -->
     <platform name="amazon-fireos">
+
+        <engines>
+            <engine name="cordova" version=">=4.0.0" />
+        </engines>
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
@@ -153,6 +159,8 @@
                 android:launchMode="singleInstance"
                 android:exported="false" />
         </config-file>
+
+        <framework src="src/android/badge.gradle" custom="true" type="gradleReference"/>
 
         <source-file
             src="src/android/Badge.java"

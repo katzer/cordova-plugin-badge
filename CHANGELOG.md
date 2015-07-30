@@ -1,4 +1,14 @@
 ## ChangeLog
+#### Version 0.7.1 (30.07.2015)
+- Support for app icon badges on selective Android platforms thanks to [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger)
+  - Sony
+  - Samsung
+  - LG
+  - HTC
+  - Xiaomi
+  - ASUS
+  - ADW, APEX, NOVA
+
 #### Version 0.7.0 (18.07.2015)
 - New platform support:
   - Amazon FireOS

@@ -23,7 +23,6 @@
 
 package de.appplant.cordova.plugin.badge;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,6 +37,9 @@ import android.os.Build;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
+import me.leolin.shortcutbadger.impl.DefaultBadger;
 
 /**
  * Implementation of the badge interface methods.
@@ -60,23 +62,38 @@ class BadgeImpl {
     protected static final String EXTRA_AUTO_CANCEL = "EXTRA_AUTO_CANCEL";
 
     /**
+     * Finds out if badgeing the app icon is possible on that device.
+     *
+     * @param ctx
+     * The application context.
+     * @return
+     * true if its supported.
+     */
+    private boolean canBadgeAppIcon (Context ctx) {
+        ShortcutBadger badger = ShortcutBadger.with(ctx);
+
+        return !(badger instanceof DefaultBadger);
+    }
+
+    /**
      * Clears the badge of the app icon.
      *
      * @param ctx
-     *      The application context
+     * The application context.
      */
     protected void clearBadge (Context ctx) {
         saveBadge(0, ctx);
         getNotificationManager(ctx).cancel(ID);
+        ShortcutBadger.with(ctx).remove();
     }
 
     /**
      * Retrieves the badge of the app icon.
      *
      * @param ctx
-     *      The application context
+     * The application context.
      * @param callback
-     *      The function to be exec as the callback
+     * The function to be exec as the callback.
      */
     protected void getBadge (CallbackContext callback, Context ctx) {
         SharedPreferences settings = getSharedPreferences(ctx);
@@ -92,14 +109,32 @@ class BadgeImpl {
      * Sets the badge of the app icon.
      *
      * @param args
-     *      The new badge number
+     * The new badge number
      * @param ctx
-     *      The application context
+     * The application context
      */
-    @SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
     protected void setBadge (JSONArray args, Context ctx) {
-        int badge          = args.optInt(0);
+        int badge = args.optInt(0);
+
+        saveBadge(badge, ctx);
+
+        if (canBadgeAppIcon(ctx)) {
+            ShortcutBadger.with(ctx).count(badge);
+        } else {
+            setBadgeNotification(badge, args, ctx);
+        }
+    }
+
+    /**
+     * Sets the badge of the app icon.
+     *
+     * @param args
+     * The new badge number
+     * @param ctx
+     * The application context
+     */
+    @SuppressWarnings("deprecation")
+    private void setBadgeNotification (int badge, JSONArray args, Context ctx) {
         String title       = args.optString(1, "%d new messages");
         String icon        = args.optString(2);
         boolean autoCancel = args.optBoolean(3, false);
@@ -127,8 +162,6 @@ class BadgeImpl {
                 .setLargeIcon(appIcon)
                 .setContentIntent(contentIntent);
 
-        saveBadge(badge, ctx);
-
         if (Build.VERSION.SDK_INT<16) {
             // Build notification for HoneyComb to ICS
             getNotificationManager(ctx).notify(ID, notification.getNotification());
@@ -143,9 +176,9 @@ class BadgeImpl {
      * the badge number back to the client.
      *
      * @param badge
-     *      The badge of the app icon
+     * The badge of the app icon.
      * @param ctx
-     *      The application context
+     * The application context.
      */
     protected void saveBadge (int badge, Context ctx) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
@@ -158,7 +191,7 @@ class BadgeImpl {
      * Informs if the app has the permission to show badges.
      *
      * @param callback
-     *      The function to be exec as the callback
+     * The function to be exec as the callback
      */
     protected void hasPermission (final CallbackContext callback) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, true);
@@ -174,8 +207,7 @@ class BadgeImpl {
     }
 
     /**
-     * @return
-     *      The NotificationManager for the app
+     * The NotificationManager for the app.
      */
     private NotificationManager getNotificationManager (Context context) {
         return (NotificationManager) context.getSystemService(
@@ -186,7 +218,7 @@ class BadgeImpl {
      * Returns the ID for the given resource.
      *
      * @return
-     *      The resource ID of the app icon
+     * The resource ID of the app icon
      */
     private int getDrawableIcon (Context ctx) {
         Resources res   = ctx.getResources();
@@ -202,7 +234,7 @@ class BadgeImpl {
      * Returns the ID for the given resource.
      *
      * @return
-     *      The resource ID for the small icon
+     * The resource ID for the small icon.
      */
     private int getResIdForSmallIcon (String smallIcon, Context ctx) {
         int resId;
@@ -223,12 +255,12 @@ class BadgeImpl {
     }
 
     /**
-     * Returns numerical icon Value
+     * Returns numerical icon Value.
      *
      * @param className
-     *      The class name prefix either from Android or the app
+     * The class name prefix either from Android or the app.
      * @param iconName
-     *      The resource name
+     * The resource name.
      */
     private int getResId (String className, String iconName) {
         int icon = 0;
