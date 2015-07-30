@@ -97,6 +97,10 @@
     <!-- android -->
     <platform name="android">
 
+        <engines>
+            <engine name="cordova" version=">=4.0.0" />
+        </engines>
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
