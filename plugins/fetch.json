@@ -29,14 +29,6 @@
             "id": "de.appplant.cordova.common.registerusernotificationsettings"
         }
     },
-    "de.appplant.cordova.plugin.badge": {
-        "source": {
-            "type": "local",
-            "path": "/Users/sebastian/Documents/github/cordova-plugin-badge"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "nl.x-services.plugins.toast": {
         "source": {
             "type": "registry",
@@ -49,6 +41,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-test-framework"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "de.appplant.cordova.plugin.badge": {
+        "source": {
+            "type": "local",
+            "path": "/Users/sebastian/Documents/github/cordova-plugin-badge"
         },
         "is_top_level": true,
         "variables": {}

@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -88,6 +89,9 @@ public class CordovaActivity extends Activity {
     // when another application (activity) is started.
     protected boolean keepRunning = true;
 
+    // Flag to keep immersive mode if set to fullscreen
+    protected boolean immersiveMode;
+
     // Read from config.xml:
     protected CordovaPreferences preferences;
     protected String launchUrl;
@@ -108,15 +112,23 @@ public class CordovaActivity extends Activity {
         {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
-        
+
         if(preferences.getBoolean("SetFullscreen", false))
         {
             Log.d(TAG, "The SetFullscreen configuration is deprecated in favor of Fullscreen, and will be removed in a future version.");
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            preferences.set("Fullscreen", true);
+        }
+        if(preferences.getBoolean("Fullscreen", false))
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            {
+                immersiveMode = true;
+            }
+            else
+            {
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else if (preferences.getBoolean("Fullscreen", false)) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
         } else {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -223,7 +235,10 @@ public class CordovaActivity extends Activity {
         LOG.d(TAG, "Paused the activity.");
 
         if (this.appView != null) {
-            this.appView.handlePause(this.keepRunning);
+            // CB-9382 If there is an activity that started for result and main activity is waiting for callback
+            // result, we shoudn't stop WebView Javascript timers, as activity for result might be using them
+            boolean keepRunning = this.keepRunning || this.cordovaInterface.activityResultCallback != null;
+            this.appView.handlePause(keepRunning);
         }
     }
 
@@ -294,6 +309,24 @@ public class CordovaActivity extends Activity {
 
         if (this.appView != null) {
             appView.handleDestroy();
+        }
+    }
+
+    /**
+     * Called when view focus is changed
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && immersiveMode) {
+            final int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+            getWindow().getDecorView().setSystemUiVisibility(uiOptions);
         }
     }
 

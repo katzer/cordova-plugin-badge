@@ -25,7 +25,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge"
-        version="0.7.0dev">
+        version="0.7.1dev">
 
     <name>Cordova Badge Plugin</name>
 
@@ -97,6 +97,10 @@
     <!-- android -->
     <platform name="android">
 
+        <engines>
+            <engine name="cordova" version=">=4.0.0" />
+        </engines>
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
@@ -114,6 +118,8 @@
                 android:launchMode="singleInstance"
                 android:exported="false" />
         </config-file>
+
+        <framework src="src/android/badge.gradle" custom="true" type="gradleReference"/>
 
         <source-file
             src="src/android/Badge.java"

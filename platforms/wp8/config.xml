@@ -9,10 +9,10 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <feature name="Badge">
-        <param name="wp-package" value="Badge" />
-    </feature>
     <feature name="Toast">
         <param name="wp-package" value="Toast" />
+    </feature>
+    <feature name="Badge">
+        <param name="wp-package" value="Badge" />
     </feature>
 </widget>

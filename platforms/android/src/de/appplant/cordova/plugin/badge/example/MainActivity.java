@@ -20,8 +20,7 @@
 package de.appplant.cordova.plugin.badge.example;
 
 import android.os.Bundle;
-
-import org.apache.cordova.CordovaActivity;
+import org.apache.cordova.*;
 
 public class MainActivity extends CordovaActivity
 {

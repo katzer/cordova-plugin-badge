@@ -24,11 +24,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="fe93d1e0-2d42-11e5-bc72-2bf41255cec4"
+    Name="26ba85c0-36ca-11e5-b2a2-7941d56cb897"
     Version="1.0.0.0"
     Publisher="CN=$username$" />
 
-  <mp:PhoneIdentity PhoneProductId="fe93d1e0-2d42-11e5-bc72-2bf41255cec4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="26ba85c0-36ca-11e5-b2a2-7941d56cb897" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>BadgeExample</DisplayName>

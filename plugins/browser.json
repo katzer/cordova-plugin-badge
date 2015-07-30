@@ -18,13 +18,10 @@
         }
     },
     "installed_plugins": {
-        "de.appplant.cordova.common.registerusernotificationsettings": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
-        "nl.x-services.plugins.toast": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
         "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "de.appplant.cordova.common.registerusernotificationsettings": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
         "de.appplant.cordova.plugin.badge": {

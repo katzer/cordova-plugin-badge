@@ -1,5 +1,6 @@
 
 [![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
+[![npm version](https://badge.fury.io/js/de.appplant.cordova.plugin.badge.svg)](http://badge.fury.io/js/de.appplant.cordova.plugin.badge)
 [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
 
 Cordova Badge Plugin
@@ -15,9 +16,12 @@ Users see notifications in the following ways:
 
 
 ## Supported Platforms
-The current 0.6 branch does support the following platforms*:
-- __iOS__ _(including iOS8)_<br>
-- __Android__ _(SDK >=11)_
+The current 0.7 branch does support the following platforms:
+- __Amazon FireOS__
+- __Android__
+- __Browser__
+- __iOS__
+- __Windows__
 - __WP8__ and __WP8.1 Silverlight__
 
 Find out more informations [here][wiki_platforms] in our wiki.
@@ -50,7 +54,7 @@ Find out more informations [here][wiki_kitchensink] in our wiki.
 
 
 ## What's new
-We are proud to announce our newest release version 0.6.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
+We are proud to announce our newest release version 0.7.x. Beside the hard work at the office and at the weekends it contains a lot of goodies, new features and easy to use APIs.
 
 Find out more informations [here][wiki_changelog] in our wiki.
 

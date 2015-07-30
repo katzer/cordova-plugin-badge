@@ -46,7 +46,7 @@ module.exports.metadata =
 {
     "cordova-plugin-test-framework": "1.0.1",
     "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
-    "de.appplant.cordova.plugin.badge": "0.7.0dev",
+    "de.appplant.cordova.plugin.badge": "0.7.1dev",
     "nl.x-services.plugins.toast": "2.0.4"
 }
 // BOTTOM OF METADATA

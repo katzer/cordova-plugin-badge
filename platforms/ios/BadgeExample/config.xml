@@ -23,10 +23,10 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <feature name="Badge">
-        <param name="ios-package" value="APPBadge" />
-    </feature>
     <feature name="Toast">
         <param name="ios-package" value="Toast" />
+    </feature>
+    <feature name="Badge">
+        <param name="ios-package" value="APPBadge" />
     </feature>
 </widget>

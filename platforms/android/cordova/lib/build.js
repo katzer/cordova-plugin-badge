@@ -82,7 +82,7 @@ function findOutputApksHelper(dir, build_type, arch) {
     if (ret.length === 0) {
         return ret;
     }
-    // Assume arch-specific build if newest api has -x86 or -arm.
+    // Assume arch-specific build if newest apk has -x86 or -arm.
     var archSpecific = !!/-x86|-arm/.exec(ret[0]);
     // And show only arch-specific ones (or non-arch-specific)
     ret = ret.filter(function(p) {
@@ -90,16 +90,30 @@ function findOutputApksHelper(dir, build_type, arch) {
         return !!/-x86|-arm/.exec(p) == archSpecific;
         /*jshint +W018 */
     });
-    if (arch && ret.length > 1) {
+    if (archSpecific && ret.length > 1) {
         ret = ret.filter(function(p) {
             return p.indexOf('-' + arch) != -1;
         });
     }
+
     return ret;
 }
 
 function hasCustomRules() {
     return fs.existsSync(path.join(ROOT, 'custom_rules.xml'));
+}
+
+function extractRealProjectNameFromManifest(projectPath) {
+    var manifestPath = path.join(projectPath, 'AndroidManifest.xml');
+    var manifestData = fs.readFileSync(manifestPath, 'utf8');
+    var m = /<manifest[\s\S]*?package\s*=\s*"(.*?)"/i.exec(manifestData);
+    if (!m) {
+        throw new Error('Could not find package name in ' + manifestPath);
+    }
+
+    var packageName=m[1];
+    var lastDotIndex = packageName.lastIndexOf('.');
+    return packageName.substring(lastDotIndex + 1);
 }
 
 function extractProjectNameFromManifest(projectPath) {
@@ -245,18 +259,28 @@ var builders = {
                 }
             }
 
-            var subProjectsAsGradlePaths = subProjects.map(function(p) { return ':' + p.replace(/[/\\]/g, ':'); });
+            var name = extractRealProjectNameFromManifest(ROOT);
+            //Remove the proj.id/name- prefix from projects: https://issues.apache.org/jira/browse/CB-9149
+            var settingsGradlePaths =  subProjects.map(function(p){
+                var realDir=p.replace(/[/\\]/g, ':');
+                var libName=realDir.replace(name+'-','');
+                var str='include ":'+libName+'"\n';
+                if(realDir.indexOf(name+'-')!==-1)
+                    str+='project(":'+libName+'").projectDir = new File("'+p+'")\n';
+                return str;
+            });
+
             // Write the settings.gradle file.
             fs.writeFileSync(path.join(projectPath, 'settings.gradle'),
                 '// GENERATED FILE - DO NOT EDIT\n' +
-                'include ":"\n' +
-                'include "' + subProjectsAsGradlePaths.join('"\ninclude "') + '"\n');
+                'include ":"\n' + settingsGradlePaths.join(''));
             // Update dependencies within build.gradle.
             var buildGradle = fs.readFileSync(path.join(projectPath, 'build.gradle'), 'utf8');
             var depsList = '';
-            subProjectsAsGradlePaths.forEach(function(p) {
-                depsList += '    debugCompile project(path: "' + p + '", configuration: "debug")\n';
-                depsList += '    releaseCompile project(path: "' + p + '", configuration: "release")\n';
+            subProjects.forEach(function(p) {
+                var libName=p.replace(/[/\\]/g, ':').replace(name+'-','');
+                depsList += '    debugCompile project(path: "' + libName + '", configuration: "debug")\n';
+                depsList += '    releaseCompile project(path: "' + libName + '", configuration: "release")\n';
             });
             // For why we do this mapping: https://issues.apache.org/jira/browse/CB-8390
             var SYSTEM_LIBRARY_MAPPINGS = [
@@ -305,9 +329,11 @@ var builders = {
                 var sdkDir = process.env['ANDROID_HOME'];
                 var wrapperDir = path.join(sdkDir, 'tools', 'templates', 'gradle', 'wrapper');
                 if (process.platform == 'win32') {
-                    shell.cp('-f', path.join(wrapperDir, 'gradlew.bat'), projectPath);
+                    shell.rm('-f', path.join(projectPath, 'gradlew.bat'));
+                    shell.cp(path.join(wrapperDir, 'gradlew.bat'), projectPath);
                 } else {
-                    shell.cp('-f', path.join(wrapperDir, 'gradlew'), projectPath);
+                    shell.rm('-f', path.join(projectPath, 'gradlew'));
+                    shell.cp(path.join(wrapperDir, 'gradlew'), projectPath);
                 }
                 shell.rm('-rf', path.join(projectPath, 'gradle', 'wrapper'));
                 shell.mkdir('-p', path.join(projectPath, 'gradle'));
@@ -319,6 +345,7 @@ var builders = {
                 var distributionUrlRegex = /distributionUrl.*zip/;
                 var distributionUrl = 'distributionUrl=http\\://services.gradle.org/distributions/gradle-2.2.1-all.zip';
                 var gradleWrapperPropertiesPath = path.join(projectPath, 'gradle', 'wrapper', 'gradle-wrapper.properties');
+                shell.chmod('u+w', gradleWrapperPropertiesPath);
                 shell.sed('-i', distributionUrlRegex, distributionUrl, gradleWrapperPropertiesPath);
 
                 var propertiesFile = opts.buildType + SIGNING_PROPERTIES;
@@ -467,16 +494,19 @@ function parseOpts(options, resolvedTarget) {
     // If some values are not specified as command line arguments - use build config to supplement them.
     // Command line arguemnts have precedence over build config.
     if (buildConfig) {
-        console.log(path.resolve(buildConfig));
         if (!fs.existsSync(buildConfig)) {
             throw new Error('Specified build config file does not exist: ' + buildConfig);
         }
-        console.log('Reading build config file: '+ buildConfig);
+        console.log('Reading build config file: '+ path.resolve(buildConfig));
         var config = JSON.parse(fs.readFileSync(buildConfig, 'utf8'));
         if (config.android && config.android[ret.buildType]) {
             var androidInfo = config.android[ret.buildType];
-            if(androidInfo.keystore) {
-                packageArgs.keystore = packageArgs.keystore || path.relative(ROOT, path.join(path.dirname(buildConfig), androidInfo.keystore));
+            if(androidInfo.keystore && !packageArgs.keystore) {
+                if(path.isAbsolute(androidInfo.keystore)) {
+                    packageArgs.keystore = androidInfo.keystore;
+                } else {
+                    packageArgs.keystore = path.relative(ROOT, path.join(path.dirname(buildConfig), androidInfo.keystore));
+                }
             }
 
             ['alias', 'storePassword', 'password','keystoreType'].forEach(function (key){
