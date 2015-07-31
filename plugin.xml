@@ -46,6 +46,8 @@
     <!-- cordova -->
     <engines>
         <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova-android" version=">=4"/>
+        <engine name="cordova-plugman" version=">=4.2.0"/><!-- needed for gradleReference support -->
     </engines>
 
     <!-- js -->
@@ -97,10 +99,6 @@
     <!-- android -->
     <platform name="android">
 
-        <engines>
-            <engine name="cordova" version=">=4.0.0" />
-        </engines>
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
@@ -137,10 +135,6 @@
 
     <!-- amazon-fireos -->
     <platform name="amazon-fireos">
-
-        <engines>
-            <engine name="cordova" version=">=4.0.0" />
-        </engines>
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
