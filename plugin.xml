@@ -67,7 +67,7 @@
     <!-- ios -->
     <platform name="ios">
 
-        <dependency id="de.appplant.cordova.common.registerusernotificationsettings" />
+        <dependency id="cordova-plugin-app-event" />
 
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
