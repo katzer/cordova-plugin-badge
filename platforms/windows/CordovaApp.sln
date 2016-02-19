@@ -1,7 +1,7 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 #
 # Licensed to the Apache Software Foundation (ASF) under one
@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CordovaApp", "CordovaApp", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CordovaApp", "CordovaApp.shproj", "{9EBDB27F-D75B-4D8C-B53F-7BE4A1FE89F9}"
 EndProject
-Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "CordovaApp.Windows8.0", "CordovaApp.Windows80.jsproj", "{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}"
-EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "CordovaApp.Windows", "CordovaApp.Windows.jsproj", "{58950FB6-2F93-4963-B9CD-637F83F3EFBF}"
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "CordovaApp.Phone", "CordovaApp.Phone.jsproj", "{31B67A35-9503-4213-857E-F44EB42AE549}"
@@ -36,7 +34,6 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CordovaApp.projitems*{58950fb6-2f93-4963-b9cd-637f83f3efbf}*SharedItemsImports = 5
-		CordovaApp.projitems*{efffab2f-bfc5-4eda-b545-45ef4995f55a}*SharedItemsImports = 5
 		CordovaApp.projitems*{9ebdb27f-d75b-4d8c-b53f-7be4a1fe89f9}*SharedItemsImports = 14
 		CordovaApp.projitems*{31b67a35-9503-4213-857e-f44eb42ae549}*SharedItemsImports = 5
 		CordovaApp.projitems*{f9B0ae20-c91c-42b9-9c6e-d3bc28b4509e}*SharedItemsImports = 5
@@ -100,30 +97,6 @@ Global
 		{31B67A35-9503-4213-857E-F44EB42AE549}.Release|x86.ActiveCfg = Release|x86
 		{31B67A35-9503-4213-857E-F44EB42AE549}.Release|x86.Build.0 = Release|x86
 		{31B67A35-9503-4213-857E-F44EB42AE549}.Release|x86.Deploy.0 = Release|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|ARM.ActiveCfg = Debug|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|ARM.Build.0 = Debug|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|ARM.Deploy.0 = Debug|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x64.ActiveCfg = Debug|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x64.Build.0 = Debug|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x64.Deploy.0 = Debug|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x86.ActiveCfg = Debug|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x86.Build.0 = Debug|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Debug|x86.Deploy.0 = Debug|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|ARM.ActiveCfg = Release|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|ARM.Build.0 = Release|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|ARM.Deploy.0 = Release|ARM
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x64.ActiveCfg = Release|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x64.Build.0 = Release|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x64.Deploy.0 = Release|x64
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x86.ActiveCfg = Release|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x86.Build.0 = Release|x86
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A}.Release|x86.Deploy.0 = Release|x86
 		{F9B0AE20-C91C-42B9-9C6E-D3BC28B4509E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9B0AE20-C91C-42B9-9C6E-D3BC28B4509E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9B0AE20-C91C-42B9-9C6E-D3BC28B4509E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -156,7 +129,6 @@ Global
 		{9EBDB27F-D75B-4D8C-B53F-7BE4A1FE89F9} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 		{58950FB6-2F93-4963-B9CD-637F83F3EFBF} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 		{31B67A35-9503-4213-857E-F44EB42AE549} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
-		{EFFFAB2F-BFC5-4EDA-B545-45EF4995F55A} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 		{F9B0AE20-C91C-42B9-9C6E-D3BC28B4509E} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 	EndGlobalSection
 EndGlobal

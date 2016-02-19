@@ -25,13 +25,13 @@
         "cordova-plugin-test-framework": {
             "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
         },
-        "de.appplant.cordova.common.registerusernotificationsettings": {
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
         },
-        "nl.x-services.plugins.toast": {
+        "cordova-plugin-app-event": {
             "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
         },
-        "de.appplant.cordova.plugin.badge": {
+        "cordova-plugin-badge": {
             "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
         }
     },

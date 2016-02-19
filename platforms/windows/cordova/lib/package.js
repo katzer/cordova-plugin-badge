@@ -17,12 +17,14 @@
        under the License.
 */
 
-var Q     = require('q'),
-    exec  = require('./exec'),
-    fs    = require('fs'),
-    path  = require('path'),
-    spawn = require('./spawn'),
-    utils = require('./utils');
+var Q     = require('q');
+var fs    = require('fs');
+var path  = require('path');
+var utils = require('./utils');
+var AppxManifest = require('./AppxManifest');
+var events = require('cordova-common').events;
+var spawn = require('cordova-common').superspawn.spawn;
+var CordovaError = require('cordova-common').CordovaError;
 
 // returns folder that contains package with chip architecture,
 // build and project types specified by script parameters
@@ -41,13 +43,16 @@ module.exports.getPackage = function (projectType, buildtype, buildArch) {
         return fs.statSync(pkgDir).isDirectory();
     });
 
-    for (var dir in pkgDirs) {
-        var packageFiles = fs.readdirSync(pkgDirs[dir]).filter(function(e) {
+    for (var dirIndex = 0; dirIndex < pkgDirs.length; dirIndex++) {
+        var dir = pkgDirs[dirIndex];
+        var packageFiles = fs.readdirSync(dir).filter(function(e) {
             return e.match('.*.(appx|appxbundle)$');
         });
 
-        for (var pkgFile in packageFiles) {
-            var packageFile = path.join(pkgDirs[dir], packageFiles[pkgFile]);
+        for (var pkgIndex = 0; pkgIndex < packageFiles.length; pkgIndex++) {
+            var pkgFile = packageFiles[pkgIndex];
+
+            var packageFile = path.join(dir, pkgFile);
             var pkgInfo = module.exports.getPackageFileInfo(packageFile);
 
             if (pkgInfo && pkgInfo.type == projectType &&
@@ -58,6 +63,7 @@ module.exports.getPackage = function (projectType, buildtype, buildArch) {
             }
         }
     }
+
     // reject because seems that no corresponding packages found
     return Q.reject('Package with specified parameters not found in AppPackages folder');
 };
@@ -70,14 +76,18 @@ function getPackagePhoneProductId(packageFile) {
 // returns package info object or null if it is not valid package
 module.exports.getPackageFileInfo = function (packageFile) {
     var pkgName = path.basename(packageFile);
+
     // CordovaApp.Windows_0.0.1.0_anycpu_debug.appx
     // CordovaApp.Phone_0.0.1.0_x86_debug.appxbundle
-    var props = /.*\.(Phone|Windows|Windows80|Windows10)_((?:\d*\.)*\d*)_(AnyCPU|x64|x86|ARM)(?:_(Debug))?.(appx|appxbundle)$/i.exec(pkgName);
+    // CordovaApp.Windows10_0.0.1.0_x64_x86_arm.appxbundle
+
+    var props = /.*\.(Phone|Windows|Windows80|Windows10)_((?:\d*\.)*\d*)*((?:_(AnyCPU|x86|x64|ARM)){1,4})(?:(_Debug))?.(appx|appxbundle)$/i.exec(pkgName);
     if (props) {
         return {
             type      : props[1].toLowerCase(),
-            arch      : props[3].toLowerCase(),
-            buildtype : props[4] ? props[4].toLowerCase() : 'release',
+            arch      : props[3].toLowerCase().substring(1),
+            archs     : props[3].toLowerCase().substring(1).split('_'),
+            buildtype : props[5] ? props[5].substring(1).toLowerCase() : 'release',
             appx      : packageFile,
             script    : path.join(packageFile, '..', 'Add-AppDevPackage.ps1'),
             phoneId   : getPackagePhoneProductId(packageFile)
@@ -89,9 +99,9 @@ module.exports.getPackageFileInfo = function (packageFile) {
 // return package app ID fetched from appxmanifest
 // return rejected promise if appxmanifest not valid
 module.exports.getAppId = function (platformPath) {
-    var manifest = path.join(platformPath, 'package.phone.appxmanifest');
     try {
-        return /PhoneProductId="(.*?)"/gi.exec(fs.readFileSync(manifest, 'utf8'))[1];
+        return AppxManifest.get(path.join(platformPath, 'package.phone.appxmanifest'))
+            .getPhoneIdentity().getPhoneProductId();
     } catch (e) {
         throw new Error('Can\'t read appId from phone manifest', e);
     }
@@ -103,9 +113,9 @@ function getPackageName(platformPath) {
     // Can reliably read from package.windows.appxmanifest even if targeting Windows 10
     // because the function is only used for desktop deployment, which always has the same
     // package name when uninstalling / reinstalling
-    var manifest = path.join(platformPath, 'package.windows.appxmanifest');
     try {
-        return Q.resolve(/Identity Name="(.*?)"/gi.exec(fs.readFileSync(manifest, 'utf8'))[1]);
+        return Q.when(AppxManifest.get(path.join(platformPath, 'package.windows.appxmanifest'))
+            .getIdentity().getName());
     } catch (e) {
         return Q.reject('Can\'t read package name from manifest ' + e);
     }
@@ -113,16 +123,32 @@ function getPackageName(platformPath) {
 
 // returns one of available devices which name match with provided string
 // return rejected promise if device with name specified not found
-module.exports.findDevice = function (target) {
+module.exports.findDevice = function (deploymentTool, target) {
     target = target.toLowerCase();
-    return module.exports.listDevices().then(function(deviceList) {
+    return deploymentTool.enumerateDevices().then(function(deviceList) {
         // CB-7617 since we use partial match shorter names should go first,
         // example case is ['Emulator 8.1 WVGA 4 inch 512MB', 'Emulator 8.1 WVGA 4 inch']
-        var sortedList = deviceList.concat().sort(function (l, r) { return l.length > r.length; });
-        for (var idx in sortedList){
-            if (sortedList[idx].toLowerCase().indexOf(target) > -1) {
-                // we should return index based on original list
-                return Q.resolve(deviceList.indexOf(sortedList[idx]));
+        // In CB-9283, we need to differentiate between emulator, device, and target.
+        // So, for emulators to honor the above CB-7617, we preserve the original behavior.
+        // Else, we choose either the target by ID (DeviceInfo.index) or if it's just device,
+        // we choose the default (aka first) device.
+        if (target === 'emulator') {
+            var sortedList = deviceList.concat().sort(function (l, r) { return l.toString().length > r.toString().length; });
+            for (var idx in sortedList){
+                if (sortedList[idx].toString().toLowerCase().indexOf(target) > -1) {
+                    // we should return index based on original list
+                    return Q.resolve(sortedList[idx]);
+                }
+            }
+        } else if (target === 'device') {
+            return Q.resolve(deviceList[0]);
+        } else {
+            var candidateList = deviceList.filter(function(device) {
+                return device.index === parseInt(target, 10);
+            });
+
+            if (candidateList.length > 0) {
+                return candidateList[0];
             }
         }
         return Q.reject('Specified device not found');
@@ -130,68 +156,54 @@ module.exports.findDevice = function (target) {
 };
 
 // returns array of available devices names
-module.exports.listDevices = function () {
-    return utils.getAppDeployUtils().then(function(appDeployUtils) {
-        return exec('"' + appDeployUtils + '" /enumeratedevices').then(function(output) {
-            return Q.resolve(output.split('\n').map(function(line) {
-                var match = /\s*(\d)+\s+(.*)/.exec(line);
-                return match && match[2];
-            }).filter(function (line) {
-                return line;
-            }));
+module.exports.listDevices = function (deploymentTool) {
+
+    return deploymentTool.enumerateDevices().then(function(deviceList) {
+        return deviceList.map(function(device) {
+            return device.toString();
         });
+
+    }, function(e) {
+        events.emit('error', new Error('Failed to enumerate devices: ' + e));
     });
 };
 
 
-function installAppToPhone(appDeployUtils, package, target, update) {
-    // /installlaunch option sometimes fails with 'Error: The parameter is incorrect.'
-    // so we use separate steps to /install or /update and then /launch
-    var cmd = update ? '/update' : '/install';
-    console.log('Installing application...');
-    return spawn(appDeployUtils, [cmd, package.appx, '/targetdevice:' + target]);
-}
-
-function runAppOnPhone(appDeployUtils, target) {
-    return Q().then(function() {
-        return module.exports.getAppId(path.join(__dirname, '..', '..'));
-    }).then(function(appId) {
-        console.log('Running application... ');
-        return spawn(appDeployUtils, ['/launch', appId, '/targetdevice:' + target]);
-    });
-}
-
 function uninstallAppFromPhone(appDeployUtils, package, target) {
-    console.log('Attempting to remove previously installed application...');
-    return spawn(appDeployUtils, ['/uninstall', package.phoneId, '/targetdevice:' + target]);
+    events.emit('log', 'Attempting to remove previously installed application...');
+    return appDeployUtils.uninstallAppPackage(package.phoneId, target);
 }
 
 // deploys specified phone package to device/emulator and launches it
-module.exports.deployToPhone = function (package, deployTarget, targetWindows10) {
-    var getTarget = deployTarget == 'device' ? Q('de') :
-        deployTarget == 'emulator' ? Q('xd') : module.exports.findDevice(deployTarget);
+module.exports.deployToPhone = function (package, deployTarget, targetWindows10, deploymentTool) {
+    var deployment;
+    if (deploymentTool) {
+        deployment = Q(deploymentTool);
+    }
+    else {
+        deployment = utils.getAppDeployUtils(targetWindows10);
+    }
 
-    return getTarget.then(function(target) {
-        return utils.getAppDeployUtils(targetWindows10).then(function(appDeployUtils) {
-
-            return uninstallAppFromPhone(appDeployUtils, package, target).then(
-                function() {}, function() {}).then(function() {
-                    return installAppToPhone(appDeployUtils, package, target, false);
-                }).then(function() {
-                    return runAppOnPhone(appDeployUtils, target);
-                }, function(error) {
-                    if (error.indexOf('Error code 2148734208 for command') === 0) {
-                        return installAppToPhone(appDeployUtils, package, target, true);
-                    } else if (error.indexOf('Error code -2146233088') === 0) {
-                        throw new Error('No Windows Phone device was detected.');
-                    } else {
-                        console.warn('Unexpected error from installation:');
-                        console.warn(error);
-                        console.warn('You may have previously installed the app with an earlier version of cordova-windows.');
-                        console.warn('Ensure the app is uninstalled from the phone and then try to run again.');
-                        throw error;
-                    }
-                });
+    return deployment.then(function(deploymentTool) {
+        return module.exports.findDevice(deploymentTool, deployTarget).then(function(target) {
+            return uninstallAppFromPhone(deploymentTool, package, target)
+            .then(function() {}, function() {})
+            .then(function() {
+                // shouldUpdate = false because we've already uninstalled
+                events.emit('log', 'Deploying app package...');
+                return deploymentTool.installAppPackage(package.appx, target, /*shouldLaunch*/ true, /*shouldUpdate*/ false);
+            })
+            .then(function() { }, function(error) {
+                if (error.message.indexOf('Error code 2148734208 for command') === 0) {
+                    return deploymentTool.installAppPackage(package.appx, target, /*shouldLaunch*/ true, /*shouldUpdate*/ true);
+                } else if (error.message.indexOf('Error code -2146233088') === 0) {
+                    throw new CordovaError('No Windows Phone device was detected.');
+                } else {
+                    throw new CordovaError('Unexpected error from installation: ' + error.message +
+                        ' You may have previously installed the app with an earlier version of cordova-windows.' +
+                        ' Ensure the app is uninstalled from the phone and then try to run again.');
+                }
+            });
         });
     });
 };
@@ -204,15 +216,31 @@ module.exports.deployToDesktop = function (package, deployTarget) {
 
     return utils.getAppStoreUtils().then(function(appStoreUtils) {
         return getPackageName(path.join(__dirname, '..', '..')).then(function(pkgname) {
+
+            var oldArch;
             // uninstalls previous application instance (if exists)
-            console.log('Attempt to uninstall previous application version...');
-            return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned', 'Import-Module "' + appStoreUtils + '"; Uninstall-App ' + pkgname])
+            events.emit('log', 'Attempting to uninstall previous application version...');
+            return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned',
+                'Import-Module "' + appStoreUtils + '"; Uninstall-App ' + pkgname],
+                { stdio: 'inherit' })
             .then(function() {
-                console.log('Attempt to install application...');
-                return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned', 'Import-Module "' + appStoreUtils + '"; Install-App', utils.quote(package.script)]);
+                events.emit('log', 'Attempting to install application...');
+                oldArch = process.env.PROCESSOR_ARCHITECTURE;
+                if (package.arch === 'x64') {
+                    process.env.PROCESSOR_ARCHITECTURE = 'AMD64';
+                }
+                return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned',
+                    'Import-Module "' + appStoreUtils + '"; Install-App', utils.quote(package.script)],
+                    { stdio: 'inherit' });
             }).then(function() {
-                console.log('Starting application...');
-                return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned', 'Import-Module "' + appStoreUtils + '"; Start-Locally', pkgname]);
+                process.env.PROCESSOR_ARCHITECTURE = oldArch;
+                events.emit('log', 'Starting application...');
+                return spawn('powershell', ['-ExecutionPolicy', 'RemoteSigned',
+                    'Import-Module "' + appStoreUtils + '"; Start-Locally', pkgname],
+                    { stdio: 'inherit' });
+            }, function (error) {
+                process.env.PROCESSOR_ARCHITECTURE = oldArch;
+                throw error;
             });
         });
     });

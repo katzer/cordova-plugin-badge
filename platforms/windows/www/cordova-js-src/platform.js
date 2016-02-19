@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,9 +27,16 @@ module.exports = {
         var cordova = require('cordova'),
             exec = require('cordova/exec'),
             channel = cordova.require('cordova/channel'),
+            platform = require('cordova/platform'),
             modulemapper = require('cordova/modulemapper');
 
         modulemapper.clobbers('cordova/exec/proxy', 'cordova.commandProxy');
+
+        // we will make sure we get this channel
+        // TODO: remove this once other platforms catch up.
+        if(!channel.onActivated) {
+            channel.onActivated = cordova.addDocumentEventHandler('activated');
+        }
         channel.onNativeReady.fire();
 
         var onWinJSReady = function () {
@@ -42,8 +49,22 @@ module.exports = {
                 cordova.fireDocumentEvent('resume',null,true);
             };
 
+            // activation args are available via the activated event
+            // OR cordova.require('cordova/platform').activationContext
+            // activationContext:{type: actType, args: args};
+            var activationHandler = function (e) {
+                var args = e.detail.arguments;
+                var actType = e.detail.type;
+                platform.activationContext = { type: actType, args: args };
+                cordova.fireDocumentEvent('activated', platform.activationContext, true);
+            };
+
             app.addEventListener("checkpoint", checkpointHandler);
+            app.addEventListener("activated", activationHandler, false);
             Windows.UI.WebUI.WebUIApplication.addEventListener("resuming", resumingHandler, false);
+
+            injectBackButtonHandler();
+
             app.start();
         };
 
@@ -52,7 +73,7 @@ module.exports = {
 
             if (navigator.appVersion.indexOf('MSAppHost/3.0') !== -1) {
                 // Windows 10 UWP
-                scriptElem.src = '/WinJS/js/base.js';
+                scriptElem.src = '/www/WinJS/js/base.js';
             } else if (navigator.appVersion.indexOf("Windows Phone 8.1;") !== -1) {
                 // windows phone 8.1 + Mobile IE 11
                 scriptElem.src = "//Microsoft.Phone.WinJS.2.1/js/base.js";
@@ -71,3 +92,52 @@ module.exports = {
         }
     }
 };
+
+function injectBackButtonHandler() {
+
+    var app = WinJS.Application;
+
+    // create document event handler for backbutton
+    var backButtonChannel = cordova.addDocumentEventHandler('backbutton');
+
+    // preserve reference to original backclick implementation
+    // `false` as a result will trigger system default behaviour
+    var defaultBackButtonHandler = app.onbackclick || function () { return false; };
+
+    var backRequestedHandler = function backRequestedHandler(evt) {
+        // check if listeners are registered, if yes use custom backbutton event
+        // NOTE: On Windows Phone 8.1 backbutton handlers have to throw an exception in order to exit the app
+        if (backButtonChannel.numHandlers >= 1) {
+            try {
+                cordova.fireDocumentEvent('backbutton', evt, true);
+                evt.handled = true; // Windows Mobile requires handled to be set as well;
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        // if not listeners are active, use default implementation (backwards compatibility)
+        else {
+            return defaultBackButtonHandler.apply(app, arguments);
+        }
+    };
+
+    // Only load this code if we're running on Win10 in a non-emulated app frame, otherwise crash \o/
+    if (navigator.appVersion.indexOf('MSAppHost/3.0') !== -1) { // Windows 10 UWP (PC/Tablet/Phone)
+        var navigationManager = Windows.UI.Core.SystemNavigationManager.getForCurrentView();
+        // Inject a listener for the backbutton on the document.
+        backButtonChannel.onHasSubscribersChange = function () {
+            // If we just attached the first handler or detached the last handler,
+            // let native know we need to override the back button.
+            navigationManager.appViewBackButtonVisibility = (this.numHandlers > 0) ?
+                Windows.UI.Core.AppViewBackButtonVisibility.visible :
+                Windows.UI.Core.AppViewBackButtonVisibility.collapsed;
+        };
+
+        navigationManager.addEventListener("backrequested", backRequestedHandler, false);
+    } else { // Windows 8.1 Phone
+        // inject new back button handler
+        app.onbackclick = backRequestedHandler;
+    }
+}

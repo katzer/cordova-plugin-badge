@@ -17,210 +17,167 @@
     under the License.
 */
 
-/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
-          indent:4, unused:vars, latedef:nofunc,
-          sub:true
-*/
+/* jshint sub:true */
 
-var et = require('elementtree'),
-    fs = require('fs');
+var util = require('util');
+var Version = require('./Version');
+var ConfigParser = require('cordova-common').ConfigParser;
 
-/** Wraps a config.xml file */
-function ConfigParser(path) {
-    this.path = path;
-    try {
-        var contents = fs.readFileSync(path, 'utf-8');
-        if(contents) {
-            //Windows is the BOM. Skip the Byte Order Mark.
-            contents = contents.substring(contents.indexOf('<'));
-        }
-        this.doc = new et.ElementTree(et.XML(contents));
+var BASE_UAP_VERSION    = new Version(10, 0, 10240, 0);
 
-    } catch (e) {
-        console.error('Parsing '+path+' failed');
-        throw e;
-    }
-    var r = this.doc.getroot();
-    if (r.tag !== 'widget') {
-        throw new Error(path + ' has incorrect root node name (expected "widget", was "' + r.tag + '")');
-    }
+/**
+ * A wrapper arount config.xml file, based on cordova-common implementation,
+ *   extended with some windows-specific methods.
+ *
+ * @constructor
+ * @extends {ConfigParser}
+ *
+ * @param  {String}  path  Path to config.xml file
+ */
+function WindowsConfigParser(path) {
+    ConfigParser.call(this, path);
 }
 
-function getNodeTextSafe(el) {
-    return el && el.text && el.text.trim();
-}
+util.inherits(WindowsConfigParser, ConfigParser);
 
-function findOrCreate(doc, name) {
-    var ret = doc.find(name);
-    if (!ret) {
-        ret = new et.Element(name);
-        doc.getroot().append(ret);
+WindowsConfigParser.prototype.startPage = function() {
+    var content = this.doc.find('content');
+    if (content) {
+        return content.attrib.src;
     }
-    return ret;
-}
-
-ConfigParser.prototype = {
-    packageName: function(id) {
-        return this.doc.getroot().attrib['id'];
-    },
-    setPackageName: function(id) {
-        this.doc.getroot().attrib['id'] = id;
-    },
-    name: function() {
-        return getNodeTextSafe(this.doc.find('name'));
-    },
-    setName: function(name) {
-        var el = findOrCreate(this.doc, 'name');
-        el.text = name;
-    },
-    startPage: function() {
-        var content = this.doc.find('content');
-        if (content) {
-            return content.attrib.src;
-        }
-        return null;
-    },
-    description: function() {
-        return this.doc.find('description').text.trim();
-    },
-    setDescription: function(text) {
-        var el = findOrCreate(this.doc, 'description');
-        el.text = text;
-    },
-    version: function() {
-        return this.doc.getroot().attrib['version'];
-    },
-    android_versionCode: function() {
-        return this.doc.getroot().attrib['android-versionCode'];
-    },
-    ios_CFBundleVersion: function() {
-        return this.doc.getroot().attrib['ios-CFBundleVersion'];
-    },
-    setVersion: function(value) {
-        this.doc.getroot().attrib['version'] = value;
-    },
-    author: function() {
-        return getNodeTextSafe(this.doc.find('author'));
-    },
-    getPreference: function(name) {
-        var preferences = this.doc.findall('preference');
-        var ret = null;
-        preferences.forEach(function (preference) {
-            // Take the last one that matches.
-            if (preference.attrib.name.toLowerCase() === name.toLowerCase()) {
-                ret = preference.attrib.value;
-            }
-        });
-        return ret;
-    },
-    getMatchingPreferences: function(regexp) {
-        var preferences = this.doc.findall('preference');
-        var result = [];
-        preferences.forEach(function(preference) {
-            if (regexp.test(preference.attrib.name)) {
-                result.push({ name: preference.attrib.name, value: preference.attrib.value });
-            }
-        });
-
-        return result;
-    },
-    /**
-     * Returns all resources.
-     * @param {string}  resourceName Type of static resources to return.
-     *                               "icon" and "splash" currently supported.
-     * @return {Array}               Resources for the platform specified.
-     */
-    getStaticResources: function(resourceName) {
-        return this.doc.findall(resourceName).map(function (elt) {
-            var res = {};
-            res.src = elt.attrib.src;
-            res.target = elt.attrib.target;
-            res.density = elt.attrib['density'] || elt.attrib['cdv:density'] || elt.attrib['gap:density'];
-            res.platform = elt.platform || null; // null means icon represents default icon (shared between platforms)
-            res.width = elt.attrib.width;
-            res.height = elt.attrib.height;
-
-            return res;
-        });
-    },
-
-    /**
-     * Returns all defined icons.
-     * @return {Resource[]}      Array of icon objects.
-     */
-    getIcons: function() {
-        return this.getStaticResources('icon');
-    },
-
-    /**
-     * Returns all defined splash images.
-     * @return {Resource[]}      Array of Splash objects.
-     */
-    getSplashScreens: function() {
-        return this.getStaticResources('splash');
-    },
-
-    /**
-     * Returns all access rules.
-     * @return {string[]}      Array of access rules.
-     */
-    getAccessRules: function() { 
-        var rules = this.doc.getroot().findall('access'); 
-        var ret = []; 
-        rules.forEach(function (rule) { 
-         if (rule.attrib.origin) {
-             ret.push(rule.attrib.origin); 
-         } 
-        }); 
-        return ret; 
-    },
-    
-    /**
-     * Returns all <allow-navigation> rules.
-     * @return {string[]} Array of allow-navigation rules.
-     */
-    getNavigationWhitelistRules: function() {
-        var rules = this.doc.getroot().findall('allow-navigation');
-        var result = [];
-        rules.forEach(function(rule) {
-            if (rule.attrib.href) {
-                result.push(rule.attrib.href);
-            }
-        });
-
-        return result;
-    },
-
-    getWindowsTargetVersion: function() {
-        var preference = this.getPreference('windows-target-version');
-
-        if (!preference) 
-            preference = '8.1'; // default is 8.1.
-
-        return preference;
-    },
-
-    getWindowsPhoneTargetVersion: function() {
-        // This is a little more complicated than the previous one.
-        // 1. Check for an explicit preference.  If the preference is set explicitly, return that, irrespective of whether it is valid
-        // 2. Get the Windows baseline version.  If it's equivalent to 8.0, bump it to 8.1.
-        // 3. Return the Windows baseline version.
-        var explicitPreference = this.getPreference('windows-phone-target-version');
-        if (explicitPreference)
-            return explicitPreference;
-
-        var windowsTargetVersion = this.getWindowsTargetVersion();
-        if (windowsTargetVersion === '8' || windowsTargetVersion === '8.0')
-            windowsTargetVersion = '8.1';
-
-        return windowsTargetVersion;
-
-    },
-    
-    // Returns the widget defaultLocale
-    defaultLocale: function() {
-        return this.doc.getroot().attrib['defaultlocale'];
-    }
+    return null;
 };
 
-module.exports = ConfigParser;
+WindowsConfigParser.prototype.windows_packageVersion = function() {
+    return this.doc.getroot().attrib['windows-packageVersion'];
+};
+
+WindowsConfigParser.prototype.getMatchingPreferences = function(regexp) {
+    var preferences = this.doc.findall('preference');
+    var result = [];
+    preferences.forEach(function(preference) {
+        if (regexp.test(preference.attrib.name)) {
+            result.push({ name: preference.attrib.name, value: preference.attrib.value });
+        }
+    });
+
+    return result;
+};
+
+WindowsConfigParser.prototype.getWindowsTargetVersion = function() {
+    var preference = this.getPreference('windows-target-version');
+
+    if (!preference)
+        preference = '8.1'; // default is 8.1.
+
+    return preference;
+};
+
+WindowsConfigParser.prototype.getWindowsPhoneTargetVersion = function() {
+    // This is a little more complicated than the previous one.
+    // 1. Check for an explicit preference.  If the preference is set explicitly, return that, irrespective of whether it is valid
+    // 2. Get the Windows baseline version.  If it's equivalent to 8.0, bump it to 8.1.
+    // 3. Return the Windows baseline version.
+    var explicitPreference = this.getPreference('windows-phone-target-version');
+    if (explicitPreference)
+        return explicitPreference;
+
+    var windowsTargetVersion = this.getWindowsTargetVersion();
+    if (windowsTargetVersion === '8' || windowsTargetVersion === '8.0')
+        windowsTargetVersion = '8.1';
+
+    return windowsTargetVersion;
+};
+
+/**
+ * Gets min/max UAP versions from the configuration. If no version preferences
+ *   are in the configuration file, this will provide Windows.Universal at
+ *   BASE_UAP_VERSION for both min and max. This will always return a rational
+ *   object or will fail; for example, if a platform expects a higher
+ *   min-version than max-version, it will raise the max version to the min
+ *   version.
+ *
+ * @return {Object[]} An array of objects in the shape of:
+ *   [ {'Name': 'Windows.Mobile', 'MinVersion': Version, 'MaxVersion': Version } ] (where
+ *   Version is a Version object)
+ *
+ * @exception {RangeError} Thrown if a Version string is badly formed.
+ */
+WindowsConfigParser.prototype.getAllMinMaxUAPVersions = function () {
+    var uapVersionPreferenceTest = /(Microsoft.+?|Windows.+?)\-(MinVersion|MaxVersionTested)/i;
+    var platformBag = Object.create(null);
+
+    this.getMatchingPreferences(uapVersionPreferenceTest)
+    .forEach(function(verPref) {
+        var matches = uapVersionPreferenceTest.exec(verPref.name);
+        // 'matches' should look like: ['Windows.Universal-MinVersion', 'Windows.Universal', 'MinVersion']
+        var platformName = matches[1];
+        var versionPropertyName = matches[2];
+
+        var platformVersionSet = platformBag[platformName];
+        if (typeof platformVersionSet === 'undefined') {
+            platformVersionSet = { };
+            platformBag[platformName] = platformVersionSet;
+        }
+
+        var versionTest = Version.tryParse(verPref.value);
+        if (!versionTest) {
+            throw new RangeError('Could not comprehend a valid version from the string "' + verPref.value + '" of platform-boundary "' + verPref.name + '".');
+        }
+
+        platformVersionSet[versionPropertyName] = versionTest;
+    });
+
+    for (var platformName in platformBag) {
+        // Go through each and make sure there are min/max set
+        var versionPref = platformBag[platformName];
+        if (!versionPref.MaxVersionTested && !!versionPref.MinVersion) { // min is set, but max is not
+            versionPref.MaxVersionTested = versionPref.MinVersion;
+        }
+        else if (!versionPref.MinVersion && !!versionPref.MaxVersionTested) { // max is set, min is not
+            versionPref.MinVersion = versionPref.MaxVersionTested;
+        }
+        else if (!versionPref.MinVersion && !versionPref.MaxVersionTested) { // neither are set
+            versionPref.MinVersion = BASE_UAP_VERSION;
+            versionPref.MaxVersionTested = BASE_UAP_VERSION;
+        }
+        else { // both are set
+            if (versionPref.MinVersion.gt(versionPref.MaxVersionTested)) {
+                versionPref.MaxVersionTested = versionPref.MinVersion;
+            }
+        }
+    }
+
+    if (Object.keys(platformBag).length === 0) {
+        platformBag['Windows.Universal'] = { MinVersion: BASE_UAP_VERSION, MaxVersionTested: BASE_UAP_VERSION };
+    }
+
+    return Object.keys(platformBag).map(function (platformName) {
+        return {
+            Name: platformName,
+            MinVersion: platformBag[platformName].MinVersion.toString(),
+            MaxVersionTested: platformBag[platformName].MaxVersionTested.toString(),
+        };
+    });
+};
+
+// Returns the widget defaultLocale
+WindowsConfigParser.prototype.defaultLocale = function() {
+    return this.doc.getroot().attrib['defaultlocale'];
+};
+
+/**
+ * Checks to see whether access rules or
+ * @return {boolean} True if the config specifies remote URIs for access or start; false otherwise.
+ */
+WindowsConfigParser.prototype.hasRemoteUris = function() {
+    var test = /(https?|ms-appx-web):\/\//i;
+
+    return test.test(this.startPage) ||
+        this.getAllowNavigations()
+        .some(function(rule) {
+            return test.test(rule.href);
+        });
+};
+
+module.exports = WindowsConfigParser;

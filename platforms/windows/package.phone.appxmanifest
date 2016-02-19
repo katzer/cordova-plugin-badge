@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
     <Identity Name="de.appplant.cordova.plugin.badge.example" Publisher="CN=$username$" Version="0.6.0.0" />
-    <mp:PhoneIdentity PhoneProductId="26ba85c0-36ca-11e5-b2a2-7941d56cb897" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
+    <mp:PhoneIdentity PhoneProductId="cf1037d0-d745-11e5-85ca-f3040160167b" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
     <Properties>
         <DisplayName>BadgeExample</DisplayName>
         <PublisherDisplayName>Sebastián Katzer</PublisherDisplayName>
@@ -24,6 +24,11 @@
                     </m3:ShowNameOnTiles>
                 </m3:DefaultTile>
                 <m3:SplashScreen Image="images\SplashScreenPhone.png" />
+                <m3:InitialRotationPreference>
+                    <m3:Rotation Preference="portrait" />
+                    <m3:Rotation Preference="landscape" />
+                    <m3:Rotation Preference="landscapeFlipped" />
+                </m3:InitialRotationPreference>
             </m3:VisualElements>
         </Application>
     </Applications>

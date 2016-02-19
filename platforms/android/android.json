@@ -1,0 +1,86 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/manifest/application": [
+                        {
+                            "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.badge.LaunchActivity\" android:theme=\"@android:style/Theme.Black.NoTitleBar\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/tests.js",
+            "id": "cordova-plugin-test-framework.cdvtests"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/jasmine_helpers.js",
+            "id": "cordova-plugin-test-framework.jasmine_helpers"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/medic.js",
+            "id": "cordova-plugin-test-framework.medic"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/main.js",
+            "id": "cordova-plugin-test-framework.main"
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests"
+        },
+        {
+            "file": "plugins/cordova-plugin-badge/www/badge.js",
+            "id": "cordova-plugin-badge.Badge",
+            "clobbers": [
+                "plugin.notification.badge",
+                "cordova.plugins.notification.badge"
+            ]
+        }
+    ]
+}

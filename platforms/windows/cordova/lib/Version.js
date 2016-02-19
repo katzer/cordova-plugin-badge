@@ -31,7 +31,7 @@ function zeroIfUndefined(val) {
     return val;
 }
 
-Version.Expression = /^\d{1,8}\.\d{1,8}\.\d{1,8}\.\d{1,8}$/;
+Version.Expression = /^\d{1,8}(\.\d{1,8}){0,3}$/;
 Version.fromString = function(str) {
     var result = Version.tryParse(str);
     if (!result)

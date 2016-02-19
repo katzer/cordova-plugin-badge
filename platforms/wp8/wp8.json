@@ -1,0 +1,89 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"wp-package\" value=\"Toast\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Badge\"><param name=\"wp-package\" value=\"Badge\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-test-framework": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "{f5c63fd0-2d42-11e5-aec1-ed616f5da995}"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/tests.js",
+            "id": "cordova-plugin-test-framework.cdvtests",
+            "pluginId": "cordova-plugin-test-framework"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/jasmine_helpers.js",
+            "id": "cordova-plugin-test-framework.jasmine_helpers",
+            "pluginId": "cordova-plugin-test-framework"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/medic.js",
+            "id": "cordova-plugin-test-framework.medic",
+            "pluginId": "cordova-plugin-test-framework"
+        },
+        {
+            "file": "plugins/cordova-plugin-test-framework/www/main.js",
+            "id": "cordova-plugin-test-framework.main",
+            "pluginId": "cordova-plugin-test-framework"
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "pluginId": "cordova-plugin-x-toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests",
+            "pluginId": "cordova-plugin-x-toast"
+        },
+        {
+            "file": "plugins/cordova-plugin-badge/www/badge.js",
+            "id": "cordova-plugin-badge.Badge",
+            "pluginId": "cordova-plugin-badge",
+            "clobbers": [
+                "plugin.notification.badge",
+                "cordova.plugins.notification.badge"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-test-framework": "1.0.1",
+        "cordova-plugin-x-toast": "2.4.2",
+        "cordova-plugin-app-event": "1.2.0",
+        "cordova-plugin-badge": "0.7.2-dev"
+    }
+}

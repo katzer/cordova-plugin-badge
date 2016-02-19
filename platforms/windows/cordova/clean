@@ -19,9 +19,13 @@
        under the License.
 */
 
-var clean = require('./lib/clean');
+var Api = require('./Api');
 
-clean.run(process.argv).done(null, function(err) {
-    console.error('ERROR: ' + err);
-    process.exit(2);
-});
+// Support basic help commands
+if(['--help', '/?', '-h', 'help', '-help', '/help'].indexOf(process.argv[2]) >= 0) {
+    console.log('Usage: \n    clean\n');
+    console.log('Cleans the project directory.');
+    process.exit(0);
+}
+
+new Api().clean().done();

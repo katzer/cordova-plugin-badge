@@ -1,0 +1,12 @@
+{
+	"source"    : {
+		"dir"   : "./src",
+		"files" : ["utils",      "vars",     "coerce",  "diff",    "fns",     "format",
+				   "lexicalize", "localize", "filters", "formats", "parsers", "expose"]
+	},
+	"target"    : {
+		"dir"   : "{pwd}",
+		"min"   : true
+	},
+	"type"      : "application/javascript"
+}

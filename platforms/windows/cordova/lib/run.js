@@ -17,166 +17,118 @@
        under the License.
 */
 
-var Q = require('q'),
-    nopt  = require('nopt'),
-    path  = require('path'),
-    build = require('./build'),
-    utils = require('./utils'),
-    ConfigParser = require('./ConfigParser'),
-    packages = require('./package');
+var Q = require('q');
+var nopt  = require('nopt');
+var build = require('./build');
+var utils = require('./utils');
+var packages = require('./package');
+var execSync = require('child_process').execSync;
+var CordovaError = require('cordova-common').CordovaError;
+var events = require('cordova-common').events;
 
-var ROOT = path.join(__dirname, '..', '..');
-
-module.exports.run = function (argv) {
-    if (!utils.isCordovaProject(ROOT)){
-        return Q.reject('Could not find project at ' + ROOT);
+module.exports.run = function (options) {
+    if (!utils.isCordovaProject(this.root)){
+        return Q.reject(new CordovaError('Could not find project at ' + this.root));
     }
+
+    // Check if ran from admin prompt and fail quickly if CLI has administrative permissions
+    // http://stackoverflow.com/a/11995662/64949
+    if (ranWithElevatedPermissions())
+        return Q.reject(new CordovaError('Can not run this platform with administrative ' +
+            'permissions. Please run from a non-admin prompt.'));
 
     // parse arg
-    var args  = nopt({'debug': Boolean, 'release': Boolean, 'nobuild': Boolean,
-        'device': Boolean, 'emulator': Boolean, 'target': String, 'archs': String,
-        'phone': Boolean, 'win': Boolean, 'appx': String}, {'r' : '--release'}, argv);
+    var args  = nopt({
+        'archs': String,
+        'phone': Boolean,
+        'win': Boolean,
+        'appx': String,
+        'win10tools': Boolean
+    }, {'r' : '--release'}, options.argv, 0);
 
     // Validate args
-    if (args.debug && args.release) {
-        return Q.reject('Only one of "debug"/"release" options should be specified');
+    if (options.debug && options.release) {
+        return Q.reject(new CordovaError('Only one of "debug"/"release" options should be specified'));
     }
-    if ((args.device && args.emulator) || ((args.device || args.emulator) && args.target)) {
-        return Q.reject('Only one of "device"/"emulator"/"target" options should be specified');
+    if ((options.device && options.emulator) || ((options.device || options.emulator) && options.target)) {
+        return Q.reject(new CordovaError('Only one of "device"/"emulator"/"target" options should be specified'));
     }
     if (args.phone && args.win) {
-        return Q.reject('Only one of "phone"/"win" options should be specified');
+        return Q.reject(new CordovaError('Only one of "phone"/"win" options should be specified'));
     }
 
     // Get build/deploy options
-    var buildType    = args.release ? 'release' : 'debug',
+    var buildType    = options.release ? 'release' : 'debug',
         buildArchs   = args.archs ? args.archs.split(' ') : ['anycpu'],
-        projectType  = args.phone ? 'phone' : 'windows',
-        deployTarget = args.target ? args.target : (args.emulator ? 'emulator' : 'device'),
-        projOverride = args.appx;
+        deployTarget = options.target ? options.target : (options.emulator ? 'emulator' : 'device');
 
-    // for win switch we should correctly handle 8.0 and 8.1 version as per configuration
-    // as well as 10
-    var targetWindowsVersion = getWindowsTargetVersion();
-    if (projectType == 'windows') {
-        if (targetWindowsVersion == '8.0') {
-            projectType = 'windows80';
-        }
-        else if (targetWindowsVersion === '10.0') {
-            projectType = 'windows10';
-        }
-    }
-    else if (projectType === 'phone') {
-        if (targetWindowsVersion === '10.0' || targetWindowsVersion === 'UAP') {
-            projectType = 'windows10';
-        }
-    }
+     var buildTargets = build.getBuildTargets(args.win, args.phone, args.appx);
 
-    if (projOverride) {
-        switch (projOverride) {
-            case '8.1-phone':
-                projectType = 'phone';
-                targetWindowsVersion = '8.1';
-                break;
-            case '8.1-win':
-                projectType = 'windows';
-                targetWindowsVersion = '8.1';
-                break;
-            case 'uap':
-                projectType = 'windows10';
-                break;
-            default:
-                console.warn('Unrecognized --appx parameter passed to run: "' + projOverride + '", ignoring.');
-                break;
-        }
-    }
+     if (!buildTargets || buildTargets.length <= 0) {
+         return Q.reject(new CordovaError('Unable to determine deploy target.'));
+     }
 
-    if (projectType == 'windows' && getWindowsTargetVersion() == '8.0') {
-        console.log('Warning: windows8 has been deprecated.  Please update you project to target windows8.1');
-        projectType = 'windows80';
-    }
+     // we deploy the first build target so we use buildTargets[0] to determine
+     // what project type we should deploy
+     var projectType = projFileToType(buildTargets[0]);
 
     // if --nobuild isn't specified then build app first
-    var buildPackages = args.nobuild ? Q() : build.run(argv);
+    var buildPackages = options.nobuild ? packages.getPackage(projectType, buildType, buildArchs) : build.run.call(this, options);
 
-    return buildPackages.then(function () {
-        return packages.getPackage(projectType, buildType, buildArchs[0]);
-    }).then(function(pkg) {
-        console.log('\nDeploying ' + pkg.type + ' package to ' + deployTarget + ':\n' + pkg.appx);
+    // buildPackages also deploys bundles
+    return buildPackages
+    .then(function(pkg) {
+        events.emit('log', 'Deploying ' + pkg.type + ' package to ' + deployTarget + ':\n' + pkg.appx);
         switch (pkg.type) {
             case 'phone':
-                return packages.deployToPhone(pkg, deployTarget, false).catch(function(e) {
-                    if (args.target || args.emulator || args.device) {
-                        throw e; // Explicit target, carry on
+                return packages.deployToPhone(pkg, deployTarget, args.win10tools)
+                .catch(function(e) {
+                    if (options.target || options.emulator || options.device) {
+                        return Q.reject(e); // Explicit target, carry on
                     }
-                    
                     // 'device' was inferred initially, because no target was specified
-                    return packages.deployToPhone(pkg, 'emulator', false);
+                    return packages.deployToPhone(pkg, 'emulator', args.win10tools);
                 });
-                
             case 'windows10':
                 if (args.phone) {
                     // Win10 emulator launch is not currently supported, always force device
-                    if (args.emulator || args.target === 'emulator') {
-                        console.warn('Windows 10 Phone emulator is not currently supported, attempting deploy to device.');
+                    if (options.emulator || options.target === 'emulator') {
+                        events.emit('warn', 'Windows 10 Phone emulator is currently not supported. ' +
+                            'If you want to deploy to emulator, please use Visual Studio instead. ' +
+                            'Attempting to deploy to device...');
                     }
-                    return packages.deployToPhone(pkg, 'device', true);
-                }
-                else {
+                    return packages.deployToPhone(pkg, deployTarget, true);
+                } else {
                     return packages.deployToDesktop(pkg, deployTarget, projectType);
                 }
-            
-                break;    
+                break;
             default: // 'windows'
                 return packages.deployToDesktop(pkg, deployTarget, projectType);
-                
         }
     });
 };
 
-module.exports.help = function () {
-    console.log('\nUsage: run [ --device | --emulator | --target=<id> ] [ --debug | --release | --nobuild ]');
-    console.log('           [ --x86 | --x64 | --arm ] [--phone | --win]');
-    console.log('    --device      : Deploys and runs the project on the connected device.');
-    console.log('    --emulator    : Deploys and runs the project on an emulator.');
-    console.log('    --target=<id> : Deploys and runs the project on the specified target.');
-    console.log('    --debug       : Builds project in debug mode.');
-    console.log('    --release     : Builds project in release mode.');
-    console.log('    --nobuild     : Uses pre-built package, or errors if project is not built.');
-    console.log('    --archs       : Specific chip architectures (`anycpu`, `arm`, `x86`, `x64`).');
-    console.log('    --phone, --win');
-    console.log('                  : Specifies project type to deploy');
-    console.log('    --appx=<8.1-win|8.1-phone|uap>');
-    console.log('                  : Overrides windows-target-version to build Windows 8.1, ');
-    console.log('                              Windows Phone 8.1, or Windows 10.');
-    console.log('');
-    console.log('Examples:');
-    console.log('    run');
-    console.log('    run --emulator');
-    console.log('    run --device');
-    console.log('    run --target=7988B8C3-3ADE-488d-BA3E-D052AC9DC710');
-    console.log('    run --device --release');
-    console.log('    run --emulator --debug');
-    console.log('    run --device --appx=phone-8.1');
-    console.log('');
+// Retrieves project type for the project file specified.
+// @param   {String}  projFile Project file, for example 'CordovaApp.Windows10.jsproj'
+// @returns {String}  Proejct type, for example 'windows10'
+function projFileToType(projFile)
+{
+    return projFile.replace(/CordovaApp|jsproj|\./gi, '').toLowerCase();
+}
 
-    process.exit(0);
-};
-
-
-function getWindowsTargetVersion() {
-    var config = new ConfigParser(path.join(ROOT, 'config.xml'));
-    var windowsTargetVersion = config.getWindowsTargetVersion();
-    switch(windowsTargetVersion) {
-        case '8':
-        case '8.0':
-            return '8.0';
-        case '8.1':
-            return '8.1';
-        case '10.0':
-        case 'UAP':
-            return '10.0';
-        default:
-            throw new Error('Unsupported windows-target-version value: ' + windowsTargetVersion);
+/**
+ * Checks if current process is an with administrative permissions (e.g. from
+ *   elevated command prompt).
+ *
+ * @return  {Boolean}  true if elevated permissions detected, otherwise false
+ */
+function ranWithElevatedPermissions () {
+    try {
+        // Check if ran from admin prompt and fail quickly if CLI has administrative permissions
+        // http://stackoverflow.com/a/11995662/64949
+        execSync('net session', {'stdio': 'ignore'});
+        return true;
+    } catch (e) {
+        return false;
     }
 }

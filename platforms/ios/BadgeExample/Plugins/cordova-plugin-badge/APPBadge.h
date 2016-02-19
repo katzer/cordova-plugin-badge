@@ -1,0 +1,1 @@
+../../../../../../cordova-plugin-badge/src/ios/APPBadge.h

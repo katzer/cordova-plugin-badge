@@ -218,9 +218,9 @@
         </PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="Plugins\nl.x-services.plugins.toast\Toast.cs" />
+        <Compile Include="Plugins\cordova-plugin-x-toast\Toast.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\de.appplant.cordova.plugin.badge\Badge.cs" />
+        <Compile Include="Plugins\cordova-plugin-badge\Badge.cs" />
     </ItemGroup>
 </Project>

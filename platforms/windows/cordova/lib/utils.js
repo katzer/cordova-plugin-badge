@@ -19,36 +19,11 @@
 
 /* jshint sub:true */
 
-var Q     = require('Q'),
-    fs    = require('fs'),
-    path  = require('path'),
-    exec  = require('./exec'),
-    spawn = require('./spawn');
-
-// returns full path to msbuild tools required to build the project and tools version
-module.exports.getMSBuildTools = function () {
-    var versions = ['12.0', '4.0'];
-    // create chain of promises, which returns specific msbuild version object
-    // or null, if specific msbuild path not found in registry
-    return Q.all(versions.map(function (version) {
-        return exec(
-            'reg query HKLM\\SOFTWARE\\Microsoft\\MSBuild\\ToolsVersions\\' + version + ' /v MSBuildToolsPath'
-        ).then(function(output) {
-            // fetch msbuild path from 'reg' output
-            var msbPath = /MSBuildToolsPath\s+REG_SZ\s+(.*)/i.exec(output);
-            if (msbPath) {
-                return {version: version, path: msbPath[1]};
-            }
-            return null;
-        });
-    })).then(function (versions) {
-        // select first msbuild version available, and resolve promise with it
-        return versions[0] || versions[1] ?
-            Q.resolve(versions[0] || versions[1]) :
-            // Reject promise if no msbuild versions found
-            Q.reject('MSBuild tools not found');
-    });
-};
+var Q     = require('q');
+var fs    = require('fs');
+var path  = require('path');
+var spawn = require('cordova-common').superspawn.spawn;
+var DeploymentTool = require('./deployment');
 
 // unblocks and returns path to WindowsStoreAppUtils.ps1
 // which provides helper functions to install/unistall/start Windows Store app
@@ -57,36 +32,20 @@ module.exports.getAppStoreUtils = function () {
     if (!fs.existsSync (appStoreUtils)) {
         return Q.reject('Can\'t unblock AppStoreUtils script');
     }
-    return spawn('powershell', ['Unblock-File', module.exports.quote(appStoreUtils)]).then(function () {
-        return Q.resolve(appStoreUtils);
-    }).fail(function (err) {
-        return Q.reject(err);
-    });
+    return spawn('powershell', ['Unblock-File', module.exports.quote(appStoreUtils)], {stdio: 'ignore'})
+    .thenResolve(appStoreUtils);
 };
-
-function getProgramFiles32Folder() {
-    /* jshint ignore:start */ /* Wants to use dot syntax for ProgramFiles, leaving as-is for consistency */
-    return process.env['ProgramFiles(x86)'] || process.env['ProgramFiles'];
-    /* jshint ignore:end */
-}
 
 // returns path to AppDeploy util from Windows Phone 8.1 SDK
 module.exports.getAppDeployUtils = function (targetWin10) {
-    var appDeployUtils,
-        appDeployCmdName;
-    if (targetWin10) {
-        appDeployCmdName = 'WinAppDeployCmd.exe';
-        appDeployUtils = path.join(getProgramFiles32Folder(), 'Windows Kits', '10', 'bin', 'x86', appDeployCmdName);
-    } else {
-        appDeployCmdName = 'AppDeployCmd.exe';
-        appDeployUtils = path.join(getProgramFiles32Folder(), 'Microsoft SDKs', 'Windows Phone', 'v8.1', 'Tools', 'AppDeploy', appDeployCmdName);
+    var version = targetWin10 ? '10.0' : '8.1';
+    var tool = DeploymentTool.getDeploymentTool(version);
+
+    if (!tool.isAvailable()) {
+        return Q.reject('App deployment utilities: "' + tool.path + '", not found.  Ensure the Windows SDK is installed.');
     }
-    // Check if AppDeployCmd is exists
-    if (!fs.existsSync(appDeployUtils)) {
-        console.warn('WARNING: AppDeploy tool (' + appDeployCmdName + ') wasn\'t found. Make sure that it\'s in %PATH%');
-        return Q.resolve(appDeployCmdName);
-    }
-    return Q.resolve(appDeployUtils);
+
+    return Q.resolve(tool);
 };
 
 // checks to see if a .jsproj file exists in the project root

@@ -10,15 +10,16 @@
         "cordova-plugin-test-framework": {
             "PACKAGE_NAME": "BadgeExample"
         },
-        "de.appplant.cordova.common.registerusernotificationsettings": {
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "BadgeExample"
         },
-        "de.appplant.cordova.plugin.badge": {
-            "PACKAGE_NAME": "BadgeExample"
-        },
-        "nl.x-services.plugins.toast": {
+        "cordova-plugin-badge": {
             "PACKAGE_NAME": "BadgeExample"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "BadgeExample"
+        }
+    }
 }

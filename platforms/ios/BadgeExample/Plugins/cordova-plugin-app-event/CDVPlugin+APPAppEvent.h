@@ -1,0 +1,1 @@
+../../../../../../cordova-plugin-app-event/src/ios/CDVPlugin+APPAppEvent.h

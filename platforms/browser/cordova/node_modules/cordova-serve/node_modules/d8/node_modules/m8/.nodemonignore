@@ -1,0 +1,6 @@
+.git/*
+.idea/*
+node_modules/*
+m8.js
+m8.min.js
+*.sh
