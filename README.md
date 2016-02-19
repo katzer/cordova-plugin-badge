@@ -17,8 +17,8 @@ Users see notifications in the following ways:
 
 ## Supported Platforms
 The current 0.7 branch does support the following platforms:
-- __Amazon FireOS__
-- __Android__
+- __Amazon FireOS__ (<= 0.7.1)
+- __Android__ (via [ShortcutBadger][shortcut_badger])
 - __Browser__
 - __iOS__
 - __Windows__
@@ -103,6 +103,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 
 
 [cordova]: https://cordova.apache.org
+[shortcut_badger]: https://github.com/leolin310148/ShortcutBadger
 [wiki]: https://github.com/katzer/cordova-plugin-badge/wiki
 [wiki_platforms]: https://github.com/katzer/cordova-plugin-badge/wiki/01.-Platforms
 [wiki_installation]: https://github.com/katzer/cordova-plugin-badge/wiki/02.-Installation
