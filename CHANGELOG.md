@@ -1,4 +1,9 @@
 ## ChangeLog
+#### Version 0.7.2 (not yet released)
+- Upgraded ShortcutBadger to v1.1.4
+- Use new app-event plugin
+- Removed support for Amazon FireOS (ShortcutBadger doesnt support it) 
+
 #### Version 0.7.1 (30.07.2015)
 - Support for app icon badges on selective Android platforms thanks to [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger)
   - Sony
