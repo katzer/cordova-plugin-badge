@@ -52,12 +52,7 @@ exports.clear = function (callback, scope) {
  *      The callback function's scope
  */
 exports.set = function (badge, callback, scope) {
-    var args = [
-        parseInt(badge) || 0,
-        this._config.title,
-        this._config.smallIcon,
-        this._config.autoClear
-    ];
+    var args = [parseInt(badge) || 0];
 
     this.registerPermission(function (granted) {
         if (granted) {
@@ -154,57 +149,12 @@ exports.configure = function (config) {
 };
 
 
-/****************
- * DEPRECATIONS *
- ****************/
-
-/**
- * Sets the custom notification title for Android.
- *
- * @param {String} title
- *      The title of the notification
- */
-exports.setTitle = function (title) {
-    console.warn('badge.setTitle(title) is deprecated! Please use badge.configure({ title:title }) instead.');
-
-    this._config.title = title;
-};
-
-/**
- * Tells the plugin if the badge needs to be cleared when the user taps
- * the icon.
- *
- * @param {Boolean} clearOnTap
- *      Either true or false
- */
-exports.setClearOnTap = function (clearOnTap) {
-    console.warn('badge.clearOnTap(bool) is deprecated! Please use badge.configure({ autoClear:bool }) instead.');
-
-    this._config.autoClear = clearOnTap;
-};
-
-/**
- * Register permission to show notifications
- * if not already granted.
- */
-exports.promptForPermission = function () {
-    console.warn('Depreated: Please use `notification.badge.registerPermission` instead.');
-
-    this.registerPermission.apply(this, arguments);
-};
-
-
 /***********
  * MEMBERS *
  ***********/
 
 exports._config = {
-    // Titel der Meldung für Android
-    title: '%d new messages',
-    // Ob die Badge Zahl automatisch beim Öffnen der App gelöscht werden soll
-    autoClear: false,
-    // Ob und welches Icon für Android verwendet werden soll
-    smallIcon: 'ic_dialog_email'
+    autoClear: false
 };
 
 
