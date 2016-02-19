@@ -99,7 +99,7 @@ Thank you!
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2015 appPlant UG, Inc. All rights reserved
+© 2013-2016 appPlant UG, Inc. All rights reserved
 
 
 [cordova]: https://cordova.apache.org
