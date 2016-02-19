@@ -1,40 +1,42 @@
 {
-    "version": "0.7.1",
-    "name": "de.appplant.cordova.plugin.badge",
-    "cordova_name": "Cordova Badge Plugin",
-    "description": "Cordova plugin to access and modify the badge number of the app icon",
-    "author": "Sebastián Katzer",
-    "license": "Apache 2.0",
-    "repo": "https://github.com/katzer/cordova-plugin-badge.git",
-    "issue": "https://github.com/katzer/cordova-plugin-badge/issues",
-    "keywords": [
-        "appplant",
-        "badge",
-        "cordova",
-        "ecosystem:cordova",
-        "cordova-android",
-        "cordova-amazon-fireos",
-        "cordova-ios",
-        "cordova-wp8",
-        "cordova-windows",
-        "cordova-browser"
-    ],
-    "platforms": [
-        "ios",
-        "wp8",
-        "android",
-        "amazon-fireos",
-        "browser",
-        "windows"
-    ],
-    "engines": [
-        {
-            "name": "cordova",
-            "version": ">=3.0.0"
-        }
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/katzer/cordova-plugin-badge.git"
+  "name": "cordova-plugin-badge",
+  "version": "0.7.1",
+  "description": "Shows the count of unread messages as a badge on the app icon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katzer/cordova-plugin-badge.git"
+  },
+  "keywords": [
+      "appplant",
+      "badge",
+      "cordova",
+      "ecosystem:cordova"
+  ],
+  "platforms": [
+      "ios",
+      "wp8",
+      "android",
+      "browser",
+      "windows"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    },
+    {
+      "name": "cordova-android",
+      "version": ">=4"
+    },
+    {
+      "name": "cordova-plugin",
+      "version": ">=4.2.0"
     }
+  ],
+  "author": "Sebastián Katzer",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/katzer/cordova-plugin-badge/issues"
+  },
+  "homepage": "https://github.com/katzer/cordova-plugin-badge#readme"
 }

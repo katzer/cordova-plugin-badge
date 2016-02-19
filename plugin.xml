@@ -24,13 +24,13 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="de.appplant.cordova.plugin.badge"
+        id="cordova-plugin-badge"
         version="0.7.2-dev">
 
-    <name>Cordova Badge Plugin</name>
+    <name>Badges</name>
 
     <description>
-        Cordova plugin to access and modify the badge number of the app icon
+        Shows the count of unread messages as a badge on the app icon.
     </description>
 
     <repo>https://github.com/katzer/cordova-plugin-badge.git</repo>
