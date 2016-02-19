@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-badge",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Shows the count of unread messages as a badge on the app icon",
   "repository": {
     "type": "git",

@@ -1,5 +1,6 @@
 ## ChangeLog
-#### Version 0.7.2 (not yet released)
+
+#### Version 0.7.2 (19.02.2016)
 - __New ID__ `cordova-plugin-badge`
 - Upgraded ShortcutBadger to v1.1.4
 - Use new app-event plugin

@@ -1,12 +1,14 @@
 
 [![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
-[![npm version](https://badge.fury.io/js/de.appplant.cordova.plugin.badge.svg)](http://badge.fury.io/js/de.appplant.cordova.plugin.badge)
+[![npm version](https://badge.fury.io/js/de.appplant.cordova.plugin.badge.svg)](http://badge.fury.io/js/cordova-plugin-badge)
 [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
 
 Cordova Badge Plugin
 ====================
 
 The essential purpose of badge numbers is to enable an application to inform its users that it has something for them — for example, unread messages — when the application isn’t running in the foreground.
+
+__Note:__ With v0.7.2 the plugin ID is `cordova-plugin-badge`
 
 <img height="150px" align="right" hspace="19" vspace="12" src="http://4.bp.blogspot.com/-GBwBSN92DvU/UB8Kut7Oz0I/AAAAAAAAJKs/mJgBmj1RKqU/s1600/whatsapp+wp8+10.png"></img>
 
