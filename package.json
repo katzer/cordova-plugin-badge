@@ -33,6 +33,9 @@
       "version": ">=4.2.0"
     }
   ],
+  "dependencies": {
+    "cordova-plugin-app-event": ">=1.2.0"
+  },
   "author": "Sebastián Katzer",
   "license": "Apache-2.0",
   "bugs": {
