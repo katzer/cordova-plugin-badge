@@ -21,10 +21,11 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
+#import "APPAppEventDelegate.h"
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-@interface APPBadge : CDVPlugin
+@interface APPBadge : CDVPlugin <APPAppEventDelegate>
 
 // Clears the badge of the app icon
 - (void) clearBadge:(CDVInvokedUrlCommand *)command;

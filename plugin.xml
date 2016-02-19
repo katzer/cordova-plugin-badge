@@ -25,7 +25,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge"
-        version="0.7.2dev">
+        version="0.7.2-dev">
 
     <name>Cordova Badge Plugin</name>
 
@@ -50,6 +50,9 @@
         <engine name="cordova-plugman" version=">=4.2.0"/><!-- needed for gradleReference support -->
     </engines>
 
+    <!-- dependencies -->
+    <dependency id="cordova-plugin-app-event" version=">=1.2.0" />
+
     <!-- js -->
     <js-module src="www/badge.js" name="Badge">
         <clobbers target="plugin.notification.badge" />
@@ -66,9 +69,6 @@
 
     <!-- ios -->
     <platform name="ios">
-
-        <dependency id="cordova-plugin-app-event" />
-
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="ios-package" value="APPBadge"/>
@@ -80,7 +80,6 @@
 
         <header-file src="src/ios/UIApplication+APPBadge.h" />
         <source-file src="src/ios/UIApplication+APPBadge.m" />
-
     </platform>
 
     <!-- wp8 -->

@@ -143,23 +143,6 @@
 }
 
 #pragma mark -
-#pragma mark Life Cycle
-
-/**
- * Registers obervers after plugin was initialized.
- */
-- (void) pluginInitialize
-{
-    NSNotificationCenter* center = [NSNotificationCenter
-                                    defaultCenter];
-
-    [center addObserver:self
-               selector:@selector(didRegisterUserNotificationSettings:)
-                   name:UIApplicationRegisterUserNotificationSettings
-                 object:nil];
-}
-
-#pragma mark -
 #pragma mark Helper
 
 /**
