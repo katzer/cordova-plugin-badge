@@ -59,14 +59,6 @@
         <clobbers target="cordova.plugins.notification.badge" />
     </js-module>
 
-    <!-- info -->
-    <info>
-        Your support is needed. If you use the badge plugin please support us in order to ensure further development.
-        https://github.com/katzer/cordova-plugin-badge#supporting
-
-        Thank you!
-    </info>
-
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
