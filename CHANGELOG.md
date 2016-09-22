@@ -1,5 +1,10 @@
 ## ChangeLog
 
+#### Version 0.7.3 (22.09.2016)
+- Upgrade ShortcutBadger to v1.1.8
+- Support for Huawei
+- Support for iOS 10
+
 #### Version 0.7.2 (19.02.2016)
 - __New ID__ `cordova-plugin-badge`
 - Upgraded ShortcutBadger to v1.1.4
