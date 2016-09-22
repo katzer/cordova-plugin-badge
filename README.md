@@ -19,12 +19,12 @@ Users see notifications in the following ways:
 
 ## Supported Platforms
 The current 0.7 branch does support the following platforms:
-- __Amazon FireOS__ (<= 0.7.1)
+- __Amazon FireOS__ (deprecated with 0.7.1)
 - __Android__ (via [ShortcutBadger][shortcut_badger])
 - __Browser__
 - __iOS__
 - __Windows__
-- __WP8__ and __WP8.1 Silverlight__
+- __WP8__ and __WP8.1 Silverlight__ (deprecated)
 
 Find out more informations [here][wiki_platforms] in our wiki.
 
@@ -52,7 +52,7 @@ To get a deep overview we recommend to read about all the topics in this wiki an
 ## I want to see the plugin in action
 The plugin offers a kitchen sink sample app. Check out the cordova project and run the app directly from your command line or preferred IDE.
 
-Find out more informations [here][wiki_kitchensink] in our wiki.
+Find out more informations [here][wiki_kitchensink].
 
 
 ## What's new
@@ -80,6 +80,17 @@ document.addEventListener('pause', function () {
 Find out more informations [here][wiki_samples] in our wiki.
 
 
+## Quirks
+
+On Android not all launchers support badges. In order for us to set badges we use [ShortcutBadger][shortcut_badger] in order to set the badge. Check out their website to see which launchers are supported.
+
+If you're using PhoneGap Build please make sure you specify gradle as your Android build tool in config.xml:
+
+```xml
+<preference name="android-build-tool" value="gradle" />
+```
+
+
 ## Supporting
 Your support is needed. If you use the plugin please support us in order to ensure further development and send us a drop through the donation button.
 
@@ -101,7 +112,7 @@ Thank you!
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2016 appPlant UG, Inc. All rights reserved
+© 2013-2016 appPlant GmbH, Inc. All rights reserved
 
 
 [cordova]: https://cordova.apache.org
