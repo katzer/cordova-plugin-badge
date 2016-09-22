@@ -19,7 +19,7 @@
 
 /* jshint sub:true */
 
-var Q    = require('Q'),
+var Q    = require('q'),
     fs   = require('fs'),
     path = require('path'),
     proc = require('child_process'),

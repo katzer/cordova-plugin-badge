@@ -19,42 +19,44 @@
  * under the License.
  */
  
-var path = require('path'),
-    fs = require('fs'),
-    clean = require('./clean'),
-    shjs = require('shelljs'),
-    zip = require('adm-zip'),
+var path    = require('path'),
+    fs      = require('fs'),
+    shjs    = require('shelljs'),
+    zip     = require('adm-zip'),
+    Q       = require('q'),
+    clean   = require('./clean'),
     check_reqs = require('./check_reqs'),
     platformWwwDir          = path.join('platforms', 'browser', 'www'),
     platformBuildDir        = path.join('platforms', 'browser', 'build'),
     packageFile             = path.join(platformBuildDir, 'package.zip');
 
 /**
- * buildProject
+ * run
  *   Creates a zip file int platform/build folder
  */
-exports.buildProject = function(){
+module.exports.run = function(){
 
-    // Check that requirements are (stil) met
-    if (!check_reqs.run()) {
-        console.error('Please make sure you meet the software requirements in order to build a browser cordova project');
-        process.exit(2);
-    }
-    
-    clean.cleanProject(); // remove old build result
+    return check_reqs.run()
+    .then(function(){
+            return clean.cleanProject();
+        },
+        function checkReqsError(err){
+            console.error('Please make sure you meet the software requirements in order to build a browser cordova project');
+    })
+    .then(function(){
 
-    if (!fs.existsSync(platformBuildDir)) {
-        fs.mkdirSync(platformBuildDir);
-    }
+        if (!fs.existsSync(platformBuildDir)) {
+            fs.mkdirSync(platformBuildDir);
+        }
 
-    // add the project to a zipfile
-    var zipFile = zip();
-    zipFile.addLocalFolder(platformWwwDir, '.');
-    zipFile.writeZip(packageFile);
+        // add the project to a zipfile
+        var zipFile = zip();
+        zipFile.addLocalFolder(platformWwwDir, '.');
+        zipFile.writeZip(packageFile);
 
-    console.log('Browser packaged app built in '+ packageFile);
+        return Q.resolve();
 
-    process.exit(0);
+    });
 };
 
 module.exports.help = function() {

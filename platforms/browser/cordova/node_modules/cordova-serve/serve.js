@@ -17,9 +17,41 @@
  under the License.
  */
 
-module.exports = {
-    sendStream: require('./src/stream'),
-    servePlatform: require('./src/platform'),
-    launchServer: require('./src/server'),
-    launchBrowser: require('./src/browser')
+var chalk = require('chalk'),
+    compression = require('compression'),
+    express = require('express'),
+    server = require('./src/server');
+
+module.exports = function () {
+    return new CordovaServe();
 };
+
+function CordovaServe() {
+    this.app = express();
+
+    // Attach this before anything else to provide status output
+    this.app.use(function (req, res, next) {
+        res.on('finish', function () {
+            var color = this.statusCode == '404' ? chalk.red : chalk.green;
+            var msg = color(this.statusCode) + ' ' + this.req.originalUrl;
+            var encoding = this._headers && this._headers['content-encoding'];
+            if (encoding) {
+                msg += chalk.gray(' (' + encoding + ')');
+            }
+            server.log(msg);
+        });
+        next();
+    });
+
+    // Turn on compression
+    this.app.use(compression());
+
+    this.servePlatform = require('./src/platform');
+    this.launchServer = server;
+}
+
+module.exports.launchBrowser = require('./src/browser');
+
+// Expose some useful express statics
+module.exports.Router = express.Router;
+module.exports.static = express.static;

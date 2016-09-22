@@ -323,10 +323,14 @@ static id styling;
     UIColor *theColor = backgroundColor == nil ? [UIColor blackColor] : [self colorFromHexString:backgroundColor];
 
     NSNumber * horizontalPadding = styling[@"horizontalPadding"];
-    NSNumber * verticalPadding = styling[@"verticalPadding"];
     CGFloat theHorizontalPadding = horizontalPadding == nil ? CSToastHorizontalPadding : [horizontalPadding floatValue];
+
+    NSNumber * verticalPadding = styling[@"verticalPadding"];
     CGFloat theVerticalPadding = verticalPadding == nil ? CSToastVerticalPadding : [verticalPadding floatValue];
     
+    NSNumber * textSize = styling[@"textSize"];
+    CGFloat theTextSize = textSize == nil ? CSToastFontSize : [textSize floatValue];
+
     wrapperView.backgroundColor = theColor;
 
     if(image != nil) {
@@ -352,8 +356,8 @@ static id styling;
 
         titleLabel = [[UILabel alloc] init];
         titleLabel.numberOfLines = CSToastMaxTitleLines;
-        titleLabel.font = [UIFont boldSystemFontOfSize:CSToastFontSize];
-        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.font = [UIFont boldSystemFontOfSize:theTextSize];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.textColor = theTitleLabelTextColor;
         titleLabel.backgroundColor = [UIColor clearColor];
@@ -372,8 +376,9 @@ static id styling;
 
         messageLabel = [[UILabel alloc] init];
         messageLabel.numberOfLines = CSToastMaxMessageLines;
-        messageLabel.font = [UIFont systemFontOfSize:CSToastFontSize];
+        messageLabel.font = [UIFont systemFontOfSize:theTextSize];
         messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.textColor = theMessageLabelTextColor;
         messageLabel.backgroundColor = [UIColor clearColor];
         messageLabel.alpha = 1.0;

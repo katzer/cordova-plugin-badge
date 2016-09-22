@@ -17,21 +17,25 @@
     under the License.
 */
 
-var Q = require('q');
-var fs = require('fs');
 var path = require('path');
-var shell = require('shelljs');
-
+var events = require('cordova-common').events;
 var JsprojManager = require('./lib/JsprojManager');
-var PluginHandler = require('./lib/PluginHandler');
-var ConsoleLogger = require('./lib/ConsoleLogger');
-var ActionStack = require('cordova-common').ActionStack;
-var CordovaError = require('cordova-common').CordovaError;
-var PlatformJson = require('cordova-common').PlatformJson;
-var PlatformMunger = require('cordova-common').ConfigChanges.PlatformMunger;
-var PluginInfoProvider = require('cordova-common').PluginInfoProvider;
+var PluginManager = require('cordova-common').PluginManager;
+var CordovaLogger = require('cordova-common').CordovaLogger;
 
 var PLATFORM = 'windows';
+
+function setupEvents(externalEventEmitter) {
+    if (externalEventEmitter) {
+        // This will make the platform internal events visible outside
+        events.forwardEventsTo(externalEventEmitter);
+        return;
+    }
+
+    // There is no logger if external emitter is not present,
+    // so attach a console logger
+    CordovaLogger.get().subscribe(events);
+}
 
 /**
  * Class, that acts as abstraction over particular platform. Encapsulates the
@@ -44,19 +48,13 @@ var PLATFORM = 'windows';
  *
  * * platform: String that defines a platform name.
  */
-function Api(platform, platformRootDir, events) {
+function Api(platform, platformRootDir, eventEmitter) {
     this.platform = PLATFORM;
     this.root = path.resolve(__dirname, '..');
-    this.events = events || ConsoleLogger.get();
-    // NOTE: trick to share one EventEmitter instance across all js code
-    require('cordova-common').events = this.events;
 
-    this._platformJson = PlatformJson.load(this.root, platform);
-    this._pluginInfoProvider = new PluginInfoProvider();
-    this._munger = new PlatformMunger(this.platform, this.root, this._platformJson, this._pluginInfoProvider);
+    setupEvents(eventEmitter);
 
     var self = this;
-
     this.locations = {
         root: self.root,
         www: path.join(self.root, 'www'),
@@ -88,12 +86,13 @@ function Api(platform, platformRootDir, events) {
  * @return {Promise<PlatformApi>} Promise either fulfilled with PlatformApi
  *   instance or rejected with CordovaError.
  */
-Api.createPlatform = function (destinationDir, projectConfig, options, events) {
+Api.createPlatform = function (destinationDir, projectConfig, options, eventEmitter) {
+    setupEvents(eventEmitter);
     return require('../../bin/lib/create')
-    .create(destinationDir, projectConfig, options, events || ConsoleLogger.get())
+    .create(destinationDir, projectConfig, options)
     .then(function () {
         var PlatformApi = require(path.resolve(destinationDir, 'cordova/Api'));
-        return new PlatformApi(PLATFORM, destinationDir, events);
+        return new PlatformApi(PLATFORM, destinationDir, eventEmitter);
     });
 };
 
@@ -107,16 +106,18 @@ Api.createPlatform = function (destinationDir, projectConfig, options, events) {
  *   should override the default one from platform.
  * @param  {Boolean}  [options.link=false]  Flag that indicates that platform's sources
  *   will be linked to installed platform instead of copying.
+ * @param {EventEmitter} [eventEmitter] The emitter that will be used for logging
  *
  * @return {Promise<PlatformApi>} Promise either fulfilled with PlatformApi
  *   instance or rejected with CordovaError.
  */
-Api.updatePlatform = function (destinationDir, options, events) {
+Api.updatePlatform = function (destinationDir, options, eventEmitter) {
+    setupEvents(eventEmitter);
     return require('../../bin/lib/update')
-    .update(destinationDir, options, events || ConsoleLogger.get())
+    .update(destinationDir, options)
     .then(function () {
         var PlatformApi = require(path.resolve(destinationDir, 'cordova/Api'));
-        return new PlatformApi(PLATFORM, destinationDir, events);
+        return new PlatformApi(PLATFORM, destinationDir, eventEmitter);
     });
 };
 
@@ -152,8 +153,8 @@ Api.prototype.getPlatformInfo = function () {
  * @return  {Promise}  Return a promise either fulfilled, or rejected with
  *   CordovaError instance.
  */
-Api.prototype.prepare = function (cordovaProject) {
-    return require('./lib/prepare').prepare.call(this, cordovaProject);
+Api.prototype.prepare = function (cordovaProject, prepareOptions) {
+    return require('./lib/prepare').prepare.call(this, cordovaProject, prepareOptions);
 };
 
 /**
@@ -178,49 +179,19 @@ Api.prototype.prepare = function (cordovaProject) {
  */
 Api.prototype.addPlugin = function (plugin, installOptions) {
 
-    if (!plugin || plugin.constructor.name !== 'PluginInfo')
-        return Q.reject(new CordovaError('The parameter is incorrect. The first parameter ' +
-            'should be valid PluginInfo instance'));
-
+    var jsProject = JsprojManager.getProject(this.root);
     installOptions = installOptions || {};
     installOptions.variables = installOptions.variables || {};
-
-    var self = this;
-    var actions = new ActionStack();
-    var jsProject = JsprojManager.getProject(this.root);
-
     // Add PACKAGE_NAME variable into vars
     if (!installOptions.variables.PACKAGE_NAME) {
         installOptions.variables.PACKAGE_NAME = jsProject.getPackageName();
     }
 
-    // gather all files needs to be handled during install
-    plugin.getFilesAndFrameworks(this.platform)
-        .concat(plugin.getAssets(this.platform))
-        .concat(plugin.getJsModules(this.platform))
-    .forEach(function(item) {
-        actions.push(actions.createAction(
-            PluginHandler.getInstaller(item.itemType), [item, plugin, jsProject, installOptions],
-            PluginHandler.getUninstaller(item.itemType), [item, plugin, jsProject, installOptions]));
-    });
-
-    // run through the action stack
-    return actions.process(this.platform)
-    .then(function () {
-        jsProject.write();
-
-        self._munger
-            // Ignore passed `is_top_level` option since platform itself doesn't know
-            // anything about managing dependencies - it's responsibility of caller.
-            .add_plugin_changes(plugin, installOptions.variables, /*is_top_level=*/true, /*should_increment=*/true)
-            .save_all();
-
-        var targetDir = installOptions.usePlatformWww ?
-            self.getPlatformInfo().locations.platformWww :
-            self.getPlatformInfo().locations.www;
-
-        self._addModulesInfo(plugin, targetDir);
-    });
+    return PluginManager.get(this.platform, this.locations, jsProject)
+        .addPlugin(plugin, installOptions)
+        // CB-11022 return non-falsy value to indicate
+        // that there is no need to run prepare after
+        .thenResolve(true);
 };
 
 /**
@@ -237,42 +208,13 @@ Api.prototype.addPlugin = function (plugin, installOptions) {
  *   CordovaError instance.
  */
 Api.prototype.removePlugin = function (plugin, uninstallOptions) {
-
-    var self = this;
-    var actions = new ActionStack();
-    var projectFile = JsprojManager.getProject(this.root);
-
-    // queue up plugin files
-    plugin.getFilesAndFrameworks(this.platform)
-        .concat(plugin.getAssets(this.platform))
-        .concat(plugin.getJsModules(this.platform))
-    .forEach(function(item) {
-        actions.push(actions.createAction(
-            PluginHandler.getUninstaller(item.itemType), [item, plugin, projectFile, uninstallOptions],
-            PluginHandler.getInstaller(item.itemType),   [item, plugin, projectFile, uninstallOptions]));
-    });
-
-    // run through the action stack
-    return actions.process(this.platform)
-    .then(function() {
-        projectFile.write();
-
-        self._munger
-            // Ignore passed `is_top_level` option since platform itself doesn't know
-            // anything about managing dependencies - it's responsibility of caller.
-            .remove_plugin_changes(plugin, /*is_top_level=*/true)
-            .save_all();
-
-        var targetDir = uninstallOptions.usePlatformWww ?
-            self.getPlatformInfo().locations.platformWww :
-            self.getPlatformInfo().locations.www;
-
-        self._removeModulesInfo(plugin, targetDir);
-        // Remove stale plugin directory
-        shell.rm('-rf', path.resolve(self.root, 'Plugins', plugin.id));
-    });
+    var jsProject = JsprojManager.getProject(this.root);
+    return PluginManager.get(this.platform, this.locations, jsProject)
+        .removePlugin(plugin, uninstallOptions)
+        // CB-11022 return non-falsy value to indicate
+        // that there is no need to run prepare after
+        .thenResolve(true);
 };
-
 
 /**
  * Builds an application package for current platform.
@@ -352,7 +294,11 @@ Api.prototype.run = function(runOptions) {
  *   CordovaError.
  */
 Api.prototype.clean = function(cleanOpts) {
-    return require('./lib/build').clean.call(this, cleanOpts);
+    var self = this;
+    return require('./lib/build').clean.call(this, cleanOpts)
+    .then(function () {
+        return require('./lib/prepare').clean.call(self, cleanOpts);
+    });
 };
 
 /**
@@ -368,103 +314,3 @@ Api.prototype.requirements = function() {
 };
 
 module.exports = Api;
-
-/**
- * Removes the specified modules from list of installed modules and updates
- *   platform_json and cordova_plugins.js on disk.
- *
- * @param   {PluginInfo}  plugin  PluginInfo instance for plugin, which modules
- *   needs to be added.
- * @param   {String}  targetDir  The directory, where updated cordova_plugins.js
- *   should be written to.
- */
-Api.prototype._addModulesInfo = function(plugin, targetDir) {
-    var installedModules = this._platformJson.root.modules || [];
-
-    var installedPaths = installedModules.map(function (installedModule) {
-        return installedModule.file;
-    });
-
-    var modulesToInstall = plugin.getJsModules(this.platform)
-    .filter(function (moduleToInstall) {
-        return installedPaths.indexOf(moduleToInstall.file) === -1;
-    }).map(function (moduleToInstall) {
-        var moduleName = plugin.id + '.' + ( moduleToInstall.name || moduleToInstall.src.match(/([^\/]+)\.js/)[1] );
-        var obj = {
-            file: ['plugins', plugin.id, moduleToInstall.src].join('/'),
-            id: moduleName,
-            pluginId: plugin.id
-        };
-        if (moduleToInstall.clobbers.length > 0) {
-            obj.clobbers = moduleToInstall.clobbers.map(function(o) { return o.target; });
-        }
-        if (moduleToInstall.merges.length > 0) {
-            obj.merges = moduleToInstall.merges.map(function(o) { return o.target; });
-        }
-        if (moduleToInstall.runs) {
-            obj.runs = true;
-        }
-
-        return obj;
-    });
-
-    this._platformJson.root.modules = installedModules.concat(modulesToInstall);
-    this._writePluginModules(targetDir);
-    this._platformJson.save();
-};
-
-/**
- * Removes the specified modules from list of installed modules and updates
- *   platform_json and cordova_plugins.js on disk.
- *
- * @param   {PluginInfo}  plugin  PluginInfo instance for plugin, which modules
- *   needs to be removed.
- * @param   {String}  targetDir  The directory, where updated cordova_plugins.js
- *   should be written to.
- */
-Api.prototype._removeModulesInfo = function(plugin, targetDir) {
-    var installedModules = this._platformJson.root.modules || [];
-    var modulesToRemove = plugin.getJsModules(this.platform)
-    .map(function (jsModule) {
-        return  ['plugins', plugin.id, jsModule.src].join('/');
-    });
-
-    var updatedModules = installedModules
-    .filter(function (installedModule) {
-        return (modulesToRemove.indexOf(installedModule.file) === -1);
-    });
-
-    this._platformJson.root.modules = updatedModules;
-    this._writePluginModules(targetDir);
-    this._platformJson.save();
-};
-
-/**
- * Fetches all installed modules, generates cordova_plugins contents and writes
- *   it to file.
- *
- * @param   {String}  targetDir  Directory, where write cordova_plugins.js to.
- *   Ususally it is either <platform>/www or <platform>/platform_www
- *   directories.
- */
-Api.prototype._writePluginModules = function (targetDir) {
-    var self = this;
-    // Write out moduleObjects as JSON wrapped in a cordova module to cordova_plugins.js
-    var final_contents = 'cordova.define(\'cordova/plugin_list\', function(require, exports, module) {\n';
-    final_contents += 'module.exports = ' + JSON.stringify(this._platformJson.root.modules, null, '    ') + ';\n';
-    final_contents += 'module.exports.metadata = \n';
-    final_contents += '// TOP OF METADATA\n';
-
-    var pluginMetadata = Object.keys(this._platformJson.root.installed_plugins)
-    .reduce(function (metadata, plugin) {
-        metadata[plugin] = self._platformJson.root.installed_plugins[plugin].version;
-        return metadata;
-    }, {});
-
-    final_contents += JSON.stringify(pluginMetadata, null, '    ') + '\n';
-    final_contents += '// BOTTOM OF METADATA\n';
-    final_contents += '});'; // Close cordova.define.
-
-    shell.mkdir('-p', targetDir);
-    fs.writeFileSync(path.join(targetDir, 'cordova_plugins.js'), final_contents, 'utf-8');
-};

@@ -112,17 +112,36 @@ AppxManifest.get = function (fileName, ignoreCache) {
     return result;
 };
 
+/**
+ * Removes manifests from cache to prevent using stale entries
+ *
+ * @param {String|String[]} [cacheKeys] The keys to delete from cache. If not
+ *   specified, the whole cache will be purged
+ */
+AppxManifest.purgeCache = function (cacheKeys) {
+    if (!cacheKeys) {
+        // if no arguments passed, remove all entries
+        manifestCache = {};
+        return;
+    }
+
+    var keys = Array.isArray(cacheKeys) ? cacheKeys : [cacheKeys];
+    keys.forEach(function (key) {
+        delete manifestCache[key];
+    });
+};
+
 AppxManifest.prototype.getPhoneIdentity = function () {
     var phoneIdentity = this.doc.getroot().find('./mp:PhoneIdentity');
     if (!phoneIdentity)
-        throw new Error('Failed to find PhoneIdentity element.');
+        throw new Error('Failed to find PhoneIdentity element in appxmanifest at ' + this.path);
 
     return {
         getPhoneProductId: function () {
             return phoneIdentity.attrib.PhoneProductId;
         },
         setPhoneProductId: function (id) {
-            if (!id) throw new Error('Argument for "setPhoneProductId" must be defined');
+            if (!id) throw new Error('Argument for "setPhoneProductId" must be defined in appxmanifest at ' + this.path);
             phoneIdentity.attrib.PhoneProductId = id;
             return this;
         }
@@ -139,7 +158,7 @@ AppxManifest.prototype.getIdentity = function () {
             return identity.attrib.Name;
         },
         setName: function (name) {
-            if (!name) throw new TypeError('Identity.Name attribute must be non-empty');
+            if (!name) throw new TypeError('Identity.Name attribute must be non-empty in appxmanifest at ' + this.path);
             identity.attrib.Name = name;
             return this;
         },
@@ -147,7 +166,7 @@ AppxManifest.prototype.getIdentity = function () {
             return identity.attrib.Publisher;
         },
         setPublisher: function (publisherId) {
-            if (!publisherId) throw new TypeError('Identity.Publisher attribute must be non-empty');
+            if (!publisherId) throw new TypeError('Identity.Publisher attribute must be non-empty in appxmanifest at ' + this.path);
             identity.attrib.Publisher = publisherId;
             return this;
         },
@@ -155,7 +174,7 @@ AppxManifest.prototype.getIdentity = function () {
             return identity.attrib.Version;
         },
         setVersion: function (version) {
-            if (!version) throw new TypeError('Identity.Version attribute must be non-empty');
+            if (!version) throw new TypeError('Identity.Version attribute must be non-empty in appxmanifest at ' + this.path );
 
             // Adjust version number as per CB-5337 Windows8 build fails due to invalid app version
             if(version && version.match(/\.\d/g)) {
@@ -183,7 +202,7 @@ AppxManifest.prototype.getProperties = function () {
             return displayName && displayName.text;
         },
         setDisplayName: function (name) {
-            if (!name) throw new TypeError('Properties.DisplayName elements must be non-empty');
+            if (!name) throw new TypeError('Properties.DisplayName elements must be non-empty in appxmanifest at ' + this.path);
             var displayName = properties.find('./DisplayName');
 
             if (!displayName) {
@@ -200,7 +219,7 @@ AppxManifest.prototype.getProperties = function () {
             return publisher && publisher.text;
         },
         setPublisherDisplayName: function (name) {
-            if (!name) throw new TypeError('Properties.PublisherDisplayName elements must be non-empty');
+            if (!name) throw new TypeError('Properties.PublisherDisplayName elements must be non-empty in appxmanifest at ' + this.path);
             var publisher = properties.find('./PublisherDisplayName');
 
             if (!publisher) {
@@ -211,14 +230,36 @@ AppxManifest.prototype.getProperties = function () {
             publisher.text = name;
 
             return this;
-        }
+        },
+        getDescription: function () {
+            var description = properties.find('./Description');
+            return description && description.text;
+        },
+        setDescription: function (text) {
+
+            var description = properties.find('./Description');
+
+            if (!text || text.length === 0) {
+                if (description) properties.remove(description);
+                return this;
+            }
+
+            if (!description) {
+                description = new et.Element('Description');
+                properties.append(description);
+            }
+
+            description.text = processDescription(text);
+
+            return this;
+        },
     };
 };
 
 AppxManifest.prototype.getApplication = function () {
     var application = this.doc.getroot().find('./Applications/Application');
     if (!application)
-        throw new Error('Failed to find "Application" element. The appxmanifest is invalid');
+        throw new Error('Failed to find "Application" element. The appxmanifest at ' + this.path + ' is invalid');
 
     var self = this;
 
@@ -231,7 +272,7 @@ AppxManifest.prototype.getApplication = function () {
             return application.attrib.Id;
         },
         setId: function (id) {
-            if (!id) throw new TypeError('Application.Id attribute must be defined');
+            if (!id) throw new TypeError('Application.Id attribute must be defined in appxmanifest at ' + this.path);
             // 64 symbols restriction goes from manifest schema definition
             // http://msdn.microsoft.com/en-us/library/windows/apps/br211415.aspx
             var appId = id.length <= 64 ? id : id.substr(0, 64);
@@ -282,7 +323,7 @@ AppxManifest.prototype.getVisualElements = function () {
         this.prefix  + 'VisualElements');
 
     if (!visualElements)
-        throw new Error('Failed to find "VisualElements" node. The appxmanifest is invalid');
+        throw new Error('Failed to find "VisualElements" node. The appxmanifest at ' + this.path + ' is invalid');
 
     return {
         _node: visualElements,
@@ -290,7 +331,7 @@ AppxManifest.prototype.getVisualElements = function () {
             return visualElements.attrib.DisplayName;
         },
         setDisplayName: function (name) {
-            if (!name) throw new TypeError('VisualElements.DisplayName attribute must be defined');
+            if (!name) throw new TypeError('VisualElements.DisplayName attribute must be defined in appxmanifest at ' + this.path);
             visualElements.attrib.DisplayName = name;
             return this;
         },
@@ -334,7 +375,7 @@ AppxManifest.prototype.getVisualElements = function () {
         },
         setBackgroundColor: function (color) {
             if (!color)
-                throw new TypeError('VisualElements.BackgroundColor attribute must be defined');
+                throw new TypeError('VisualElements.BackgroundColor attribute must be defined in appxmanifest at ' + this.path);
 
             visualElements.attrib.BackgroundColor = refineColor(color);
             return this;
@@ -368,7 +409,17 @@ AppxManifest.prototype.getVisualElements = function () {
             }
 
             return this;
-        }
+        },
+        getDescription: function () {
+            return visualElements.attrib.Description;
+        },
+        setDescription: function (description) {
+            if (!description || description.length === 0)
+                throw new TypeError('VisualElements.Description attribute must be defined and non-empty in appxmanifest at ' + this.path);
+
+            visualElements.attrib.Description = processDescription(description);
+            return this;
+        },
     };
 };
 
@@ -401,6 +452,19 @@ function refineColor(color) {
         color = color.slice(2);
     }
     return '#' + color;
+}
+
+function processDescription(text) {
+    var result = text;
+
+    // Description value limitations: https://msdn.microsoft.com/en-us/library/windows/apps/br211429.aspx
+    // value should be no longer than 2048 characters
+    if (text.length > 2048) {
+        result = text.substr(0, 2048);
+    }
+
+    // value should not contain newlines and tabs
+    return result.replace(/(\n|\r)/g, ' ').replace(/\t/g, '    ');
 }
 
 // Shortcut for getIdentity.setName
@@ -514,7 +578,7 @@ Win10AppxManifest.prototype.getVisualElements = function () {
                 return defaultTitle.attrib.ShortName;
             },
             setShortName: function (name) {
-                if (!name) throw new TypeError('Argument for "setDisplayName" must be defined');
+                if (!name) throw new TypeError('Argument for "setDisplayName" must be defined in appxmanifest at ' + this.path);
                 defaultTitle.attrib.ShortName = name;
                 return this;
             }
@@ -590,10 +654,15 @@ Win10AppxManifest.prototype.setDependencies = function (dependencies) {
  *   manifest will be written to file it has been read from.
  */
 Win10AppxManifest.prototype.write = function(destPath) {
+    fs.writeFileSync(destPath || this.path, this.writeToString(), 'utf-8');
+};
+
+Win10AppxManifest.prototype.writeToString = function() {
     ensureUapPrefixedCapabilities(this.doc.find('.//Capabilities'));
+    ensureUniqueCapabilities(this.doc.find('.//Capabilities'));
     // sort Capability elements as per CB-5350 Windows8 build fails due to invalid 'Capabilities' definition
     sortCapabilities(this.doc);
-    fs.writeFileSync(destPath || this.path, this.doc.write({indent: 4}), 'utf-8');
+    return this.doc.write({indent: 4});
 };
 
 /**
@@ -605,6 +674,23 @@ function ensureUapPrefixedCapabilities(capabilities) {
     .forEach(function(el) {
         if (CAPS_NEEDING_UAPNS.indexOf(el.attrib.Name) > -1 && el.tag.indexOf('uap:') !== 0) {
             el.tag = 'uap:' + el.tag;
+        }
+    });
+}
+
+/**
+ * Cleans up duplicate capability declarations that were generated during the prepare process
+ * @param capabilities {ElementTree.Element} The appx manifest element for <capabilities>
+ */
+function ensureUniqueCapabilities(capabilities) {
+    var uniqueCapabilities = [];
+    capabilities.getchildren()
+    .forEach(function(el) {
+        var name = el.attrib.Name;
+        if (uniqueCapabilities.indexOf(name) !== -1) {
+            capabilities.remove(el);
+        } else {
+            uniqueCapabilities.push(name);
         }
     });
 }

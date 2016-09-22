@@ -34,6 +34,14 @@ MSBuildTools.prototype.buildProject = function(projFile, buildType, buildarch, o
     events.emit('log', '\tConfiguration : ' + buildType);
     events.emit('log', '\tPlatform      : ' + buildarch);
 
+    var checkWinSDK = function (target_platform) {
+        return require('./check_reqs').isWinSDKPresent(target_platform);
+    };
+
+    var checkPhoneSDK = function () {
+        return require('./check_reqs').isPhoneSDKPresent();
+    };
+
     var args = ['/clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal', '/nologo',
     '/p:Configuration=' + buildType,
     '/p:Platform=' + buildarch];
@@ -45,7 +53,23 @@ MSBuildTools.prototype.buildProject = function(projFile, buildType, buildarch, o
         });
     }
 
-    return spawn(path.join(this.path, 'msbuild'), [projFile].concat(args), { stdio: 'inherit' });
+    var that = this;
+    var promise;
+
+    // Check if SDK required to build the respective platform is present. If not present, return with corresponding error, else call msbuild.
+    if (projFile.indexOf('CordovaApp.Phone.jsproj') > -1) {
+        promise = checkPhoneSDK();
+    }
+    else if (projFile.indexOf('CordovaApp.Windows.jsproj') > -1) {
+        promise = checkWinSDK('8.1');
+    }
+    else {
+        promise = checkWinSDK('10.0');
+    }
+
+    return promise.then(function () {
+        return spawn(path.join(that.path, 'msbuild'), [projFile].concat(args), { stdio: 'inherit' });
+    });
 };
 
 // returns full path to msbuild tools required to build the project and tools version
@@ -60,7 +84,7 @@ module.exports.findAvailableVersion = function () {
     });
 };
 
-module.exports.findAllAvailableVersions = function () {
+function findAllAvailableVersionsFallBack() {
     var versions = ['15.0', '14.0', '12.0', '4.0'];
     events.emit('verbose', 'Searching for available MSBuild versions...');
 
@@ -68,6 +92,39 @@ module.exports.findAllAvailableVersions = function () {
         return unprocessedResults.filter(function(item) {
             return !!item;
         });
+    });
+}
+
+module.exports.findAllAvailableVersions = function () {
+    // CB-11548 use VSINSTALLDIR environment if defined to find MSBuild. If VSINSTALLDIR
+    // is not specified or doesn't contain the MSBuild path we are looking for - fall back
+    // to default discovery mechanism.
+    if (process.env.VSINSTALLDIR) {
+        var msBuildPath = path.join(process.env.VSINSTALLDIR, 'MSBuild/15.0/Bin');
+        return module.exports.getMSBuildToolsAt(msBuildPath)
+        .then(function (msBuildTools) {
+            return [msBuildTools];
+        }).catch(findAllAvailableVersionsFallBack);
+    }
+
+    return findAllAvailableVersionsFallBack();
+};
+
+/**
+ * Gets MSBuildTools instance for user-specified location
+ *
+ * @param {String}  location  FS location where to search for MSBuild
+ * @returns  Promise<MSBuildTools>  The MSBuildTools instance at specified location
+ */
+module.exports.getMSBuildToolsAt = function (location) {
+    var msbuildExe = path.resolve(location, 'msbuild');
+
+    // TODO: can we account on these params availability and printed version format?
+    return spawn(msbuildExe, ['-version', '-nologo'])
+    .then(function (output) {
+        // MSBuild prints its' version as 14.0.25123.0, so we pick only first 2 segments
+        var version = output.match(/^(\d+\.\d+)/)[1];
+        return new MSBuildTools(version, location);
     });
 };
 

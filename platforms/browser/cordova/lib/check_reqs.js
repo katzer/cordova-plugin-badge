@@ -21,6 +21,8 @@ under the License.
 
 //add methods as we determine what are the requirements
 
+var Q = require('q');
+
 module.exports.run = function() {
-    return true;
-}
+    return Q.resolve();
+};

@@ -22,9 +22,6 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-test-framework": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
@@ -38,46 +35,31 @@
     "dependent_plugins": {},
     "modules": [
         {
-            "file": "plugins/cordova-plugin-test-framework/www/tests.js",
-            "id": "cordova-plugin-test-framework.cdvtests",
-            "pluginId": "cordova-plugin-test-framework"
-        },
-        {
-            "file": "plugins/cordova-plugin-test-framework/www/jasmine_helpers.js",
-            "id": "cordova-plugin-test-framework.jasmine_helpers",
-            "pluginId": "cordova-plugin-test-framework"
-        },
-        {
-            "file": "plugins/cordova-plugin-test-framework/www/medic.js",
-            "id": "cordova-plugin-test-framework.medic",
-            "pluginId": "cordova-plugin-test-framework"
-        },
-        {
-            "file": "plugins/cordova-plugin-test-framework/www/main.js",
-            "id": "cordova-plugin-test-framework.main",
-            "pluginId": "cordova-plugin-test-framework"
-        },
-        {
-            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
             "id": "cordova-plugin-x-toast.Toast",
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
             "pluginId": "cordova-plugin-x-toast",
             "clobbers": [
                 "window.plugins.toast"
             ]
         },
         {
-            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
             "id": "cordova-plugin-x-toast.tests",
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
             "pluginId": "cordova-plugin-x-toast"
         },
         {
-            "file": "plugins/cordova-plugin-badge/www/badge.js",
             "id": "cordova-plugin-badge.Badge",
+            "file": "plugins/cordova-plugin-badge/www/badge.js",
             "pluginId": "cordova-plugin-badge",
             "clobbers": [
                 "plugin.notification.badge",
                 "cordova.plugins.notification.badge"
             ]
         }
-    ]
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-x-toast": "2.5.2",
+        "cordova-plugin-app-event": "1.2.0",
+        "cordova-plugin-badge": "0.7.3"
+    }
 }

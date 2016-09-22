@@ -25,11 +25,22 @@ var shell = require('shelljs');
 var events = require('cordova-common').events;
 var CordovaError = require('cordova-common').CordovaError;
 
+// returns relative file path for a file in the plugin's folder that can be referenced
+// from a project file.
+function getPluginFilePath(plugin, pluginFile, targetDir) {
+    var src = path.resolve(plugin.dir, pluginFile);
+    return '$(ProjectDir)' + path.relative(targetDir, src);
+}
+
 var handlers = {
     'source-file': {
         install:function(obj, plugin, project, options) {
             var dest = path.join('plugins', plugin.id, obj.targetDir || '', path.basename(obj.src));
-            copyNewFile(plugin.dir, obj.src, project.root, dest);
+            if (options && options.force) {
+                copyFile(plugin.dir, obj.src, project.root, dest);
+            } else {
+                copyNewFile(plugin.dir, obj.src, project.root, dest);
+            }
             // add reference to this file to jsproj.
             project.addSourceFile(dest);
         },
@@ -42,13 +53,18 @@ var handlers = {
     },
     'resource-file':{
         install:function(obj, plugin, project, options) {
-            // as per specification resource-file target is specified relative to platform root
-            copyFile(plugin.dir, obj.src, project.root, obj.target);
-            project.addResourceFileToProject(obj.target, getTargetConditions(obj));
+            // do not copy, but reference the file in the plugin folder. This allows to
+            // have multiple source files map to the same target and select the appropriate
+            // one based on the current build settings, e.g. architecture.
+            // also, we don't check for existence. This allows to insert build variables
+            // into the source file name, e.g.
+            // <resource-file src="$(Platform)/My.dll" target="My.dll" />
+            var relativeSrcPath = getPluginFilePath(plugin, obj.src, project.projectFolder);
+            project.addResourceFileToProject(relativeSrcPath, obj.target, getTargetConditions(obj));
         },
         uninstall:function(obj, plugin, project, options) {
-            removeFile(project.root, obj.target);
-            project.removeResourceFileFromProject(obj.target, getTargetConditions(obj));
+            var relativeSrcPath = getPluginFilePath(plugin, obj.src, project.projectFolder);
+            project.removeResourceFileFromProject(relativeSrcPath, getTargetConditions(obj));
         }
     },
     'lib-file': {
@@ -69,12 +85,12 @@ var handlers = {
             var src = obj.src;
             var dest = src;
             var type = obj.type;
+            var targetDir = obj.targetDir || '';
 
             if(type === 'projectReference') {
-                project.addProjectReference(path.join(plugin.dir,src), getTargetConditions(obj));
-            }
-            else {
-                var targetDir = obj.targetDir || '';
+                dest = path.join('plugins', plugin.id, targetDir, src);
+                project.addProjectReference(dest, getTargetConditions(obj));
+            } else {
                 // path.join ignores empty paths passed so we don't check whether targetDir is not empty
                 dest = path.join('plugins', plugin.id, targetDir, path.basename(src));
                 copyFile(plugin.dir, src, project.root, dest);
@@ -101,30 +117,33 @@ var handlers = {
     asset:{
         install:function(obj, plugin, project, options) {
             if (!obj.src) {
-                throw new CordovaError('<asset> tag without required "src" attribute. plugin=' + plugin.dir);
+                throw new CordovaError(generateAttributeError('src', 'asset', plugin.id));
             }
             if (!obj.target) {
-                throw new CordovaError('<asset> tag without required "target" attribute');
+                throw new CordovaError(generateAttributeError('target', 'asset', plugin.id));
             }
 
-            var www = options.usePlatformWww ? project.platformWww : project.www;
-            copyFile(plugin.dir, obj.src, www, obj.target);
+            copyFile(plugin.dir, obj.src, project.www, obj.target);
+            if (options && options.usePlatformWww) copyFile(plugin.dir, obj.src, project.platformWww, obj.target);
         },
         uninstall:function(obj, plugin, project, options) {
             var target = obj.target || obj.src;
 
-            if (!target) throw new CordovaError('<asset> tag without required "target" attribute');
+            if (!target) throw new CordovaError(generateAttributeError('target', 'asset', plugin.id));
 
-            var www = options.usePlatformWww ? project.platformWww : project.www;
-            removeFile(www, target);
-            shell.rm('-Rf', path.resolve(www, 'plugins', plugin.id));
+            removeFile(project.www, target);
+            removeFile(project.www, path.join('plugins', plugin.id));
+            if (options && options.usePlatformWww) {
+                removeFile(project.platformWww, target);
+                removeFile(project.platformWww, path.join('plugins', plugin.id));
+            }
         }
     },
     'js-module': {
         install: function (obj, plugin, project, options) {
             // Copy the plugin's files into the www directory.
             var moduleSource = path.resolve(plugin.dir, obj.src);
-            var moduleName = plugin.id + '.' + (obj.name || path.parse(obj.src).name);
+            var moduleName = plugin.id + '.' + (obj.name || path.basename(obj.src, path.extname (obj.src)));
 
             // Read in the file, prepend the cordova.define, and write it back out.
             var scriptContent = fs.readFileSync(moduleSource, 'utf-8').replace(/^\ufeff/, ''); // Window BOM
@@ -133,15 +152,19 @@ var handlers = {
             }
             scriptContent = 'cordova.define("' + moduleName + '", function(require, exports, module) {\n' + scriptContent + '\n});\n';
 
-            var www = options.usePlatformWww ? project.platformWww : project.www;
-            var moduleDestination = path.resolve(www, 'plugins', plugin.id, obj.src);
+            var moduleDestination = path.resolve(project.www, 'plugins', plugin.id, obj.src);
             shell.mkdir('-p', path.dirname(moduleDestination));
             fs.writeFileSync(moduleDestination, scriptContent, 'utf-8');
+            if (options && options.usePlatformWww) {
+                var platformWwwDestination = path.resolve(project.platformWww, 'plugins', plugin.id, obj.src);
+                shell.mkdir('-p', path.dirname(platformWwwDestination));
+                fs.writeFileSync(platformWwwDestination, scriptContent, 'utf-8');
+            }
         },
         uninstall: function (obj, plugin, project, options) {
             var pluginRelativePath = path.join('plugins', plugin.id, obj.src);
-            var www = options.usePlatformWww ? project.platformWww : project.www;
-            removeFileAndParents(www, pluginRelativePath);
+            removeFileAndParents(project.www, pluginRelativePath);
+            if (options && options.usePlatformWww) removeFileAndParents(project.platformWww, pluginRelativePath);
         }
     }
 };
@@ -176,13 +199,13 @@ function copyFile (plugin_dir, src, project_dir, dest, link) {
     var real_path = fs.realpathSync(src);
     var real_plugin_path = fs.realpathSync(plugin_dir);
     if (real_path.indexOf(real_plugin_path) !== 0)
-        throw new CordovaError('"' + src + '" not located within plugin!');
+        throw new CordovaError('File "' + src + '" is located outside the plugin directory "' + plugin_dir + '"');
 
     dest = path.resolve(project_dir, dest);
 
     // check that dest path is located in project directory
     if (dest.indexOf(project_dir) !== 0)
-        throw new CordovaError('"' + dest + '" not located within project!');
+        throw new CordovaError('Destination "' + dest + '" for source file "' + src + '" is located outside the project');
 
     shell.mkdir('-p', path.dirname(dest));
 
@@ -230,4 +253,8 @@ function removeFileAndParents (baseDir, destFile, stopper) {
             break;
         }
     }
+}
+
+function generateAttributeError(attribute, element, id) {
+    return 'Required attribute "' + attribute + '" not specified in <' + element + '> element from plugin: ' + id;
 }

@@ -23,7 +23,7 @@ var fs = require('fs'),
     path = require('path'),
     nopt  = require('nopt'),
     url = require('url'),
-    serve = require('cordova-serve');
+    cordovaServe = require('cordova-serve');
 
 var args = process.argv;
 
@@ -44,11 +44,17 @@ function start(argv) {
         configXML = fs.readFileSync(configFile, 'utf8'),
         sourceFile = /<content[\s]+?src\s*=\s*"(.*?)"/i.exec(configXML);
 
-    serve.servePlatform('browser', {port: args.port}).then(function (serverInfo) {
-        var projectUrl = url.resolve('http://localhost:' + serverInfo.port + '/', sourceFile ? sourceFile[1] : 'index.html');
+    var server = cordovaServe();
+    server.servePlatform('browser', {port: args.port, noServerInfo: true}).then(function () {
+        var projectUrl = url.resolve('http://localhost:' + server.port + '/', sourceFile ? sourceFile[1] : 'index.html');
         console.log('Static file server running @ ' + projectUrl + '\nCTRL + C to shut down');
-        return serve.launchBrowser({target: args.target, url: projectUrl});
-    }).done();
+        return cordovaServe.launchBrowser({target: args.target, url: projectUrl});
+    }).catch(function (error) {
+        console.log(error.message || error.toString());
+        if (server.server) {
+            server.server.close();
+        }
+    });
 }
 
 function help() {

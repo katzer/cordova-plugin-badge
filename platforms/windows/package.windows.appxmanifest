@@ -5,6 +5,7 @@
         <DisplayName>BadgeExample</DisplayName>
         <PublisherDisplayName>Sebastián Katzer</PublisherDisplayName>
         <Logo>images\StoreLogo.png</Logo>
+        <Description>Cordova plugin to access and modify the badge number</Description>
     </Properties>
     <Prerequisites>
         <OSMinVersion>6.3.0</OSMinVersion>
@@ -15,7 +16,7 @@
     </Resources>
     <Applications>
         <Application Id="de.appplant.cordova.plugin.badge.example" StartPage="www/index.html">
-            <m2:VisualElements BackgroundColor="#464646" Description="CordovaApp" DisplayName="BadgeExample" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square30x30Logo="images\Square30x30Logo.png">
+            <m2:VisualElements BackgroundColor="#464646" Description="Cordova plugin to access and modify the badge number" DisplayName="BadgeExample" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square30x30Logo="images\Square30x30Logo.png">
                 <m2:DefaultTile Square310x310Logo="images\Square310x310Logo.png" Square70x70Logo="images\Square70x70Logo.png" Wide310x150Logo="images\Wide310x150Logo.png">
                     <m2:ShowNameOnTiles>
                         <m2:ShowOn Tile="square150x150Logo" />

@@ -1,26 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-test-framework/www/tests.js",
-        "id": "cordova-plugin-test-framework.cdvtests",
-        "pluginId": "cordova-plugin-test-framework"
-    },
-    {
-        "file": "plugins/cordova-plugin-test-framework/www/jasmine_helpers.js",
-        "id": "cordova-plugin-test-framework.jasmine_helpers",
-        "pluginId": "cordova-plugin-test-framework"
-    },
-    {
-        "file": "plugins/cordova-plugin-test-framework/www/medic.js",
-        "id": "cordova-plugin-test-framework.medic",
-        "pluginId": "cordova-plugin-test-framework"
-    },
-    {
-        "file": "plugins/cordova-plugin-test-framework/www/main.js",
-        "id": "cordova-plugin-test-framework.main",
-        "pluginId": "cordova-plugin-test-framework"
-    },
-    {
         "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
         "id": "cordova-plugin-x-toast.Toast",
         "pluginId": "cordova-plugin-x-toast",
@@ -60,10 +40,9 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
+    "cordova-plugin-x-toast": "2.5.2",
     "cordova-plugin-app-event": "1.2.0",
-    "cordova-plugin-test-framework": "1.0.1",
-    "cordova-plugin-x-toast": "2.4.2",
-    "cordova-plugin-badge": "0.7.2-dev"
+    "cordova-plugin-badge": "0.7.3"
 }
 // BOTTOM OF METADATA
 });

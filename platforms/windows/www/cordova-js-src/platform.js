@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,15 +20,15 @@
 */
 
 module.exports = {
-    // for backward compatibility we report 'windows8' when run on Windows 8.0 and 
-    // 'windows' for Windows 8.1 and Windows Phone 8.1
-    id: (navigator.appVersion.indexOf("MSAppHost/1.0") !== -1) ? 'windows8' : 'windows',
+    id: 'windows',
     bootstrap:function() {
         var cordova = require('cordova'),
             exec = require('cordova/exec'),
             channel = cordova.require('cordova/channel'),
             platform = require('cordova/platform'),
-            modulemapper = require('cordova/modulemapper');
+            modulemapper = require('cordova/modulemapper'),
+            configHelper = require('cordova/confighelper'),
+            utils = require('cordova/utils');
 
         modulemapper.clobbers('cordova/exec/proxy', 'cordova.commandProxy');
 
@@ -40,7 +40,11 @@ module.exports = {
         channel.onNativeReady.fire();
 
         var onWinJSReady = function () {
-            var app = WinJS.Application;
+            var app = WinJS.Application,
+                splashscreen = require('cordova/splashscreen');
+
+            modulemapper.clobbers('cordova/splashscreen', 'navigator.splashscreen');
+
             var checkpointHandler = function checkpointHandler() {
                 cordova.fireDocumentEvent('pause',null,true);
             };
@@ -53,10 +57,35 @@ module.exports = {
             // OR cordova.require('cordova/platform').activationContext
             // activationContext:{type: actType, args: args};
             var activationHandler = function (e) {
-                var args = e.detail.arguments;
-                var actType = e.detail.type;
-                platform.activationContext = { type: actType, args: args };
-                cordova.fireDocumentEvent('activated', platform.activationContext, true);
+                // Making all the details available as activationContext
+                platform.activationContext = utils.clone(e.detail);         /* CB-10653 to avoid losing detail properties for some activation kinds */
+                platform.activationContext.raw = e.detail;                  /* CB-11522 to preserve types */
+                platform.activationContext.args = e.detail.arguments;       /* for backwards compatibility */
+
+                function makePromise(fn) {
+                    return new WinJS.Promise(function init(completeDispatch, errorDispatch) {
+                        fn(function successCb(results) {
+                            completeDispatch(results);
+                        }, function errorCb(error) {
+                            errorDispatch(error);
+                        });
+                    });
+                }
+
+                if (e.detail.previousExecutionState === Windows.ApplicationModel.Activation.ApplicationExecutionState.running
+                        || e.detail.previousExecutionState === Windows.ApplicationModel.Activation.ApplicationExecutionState.suspended) {
+                    cordova.fireDocumentEvent('activated', platform.activationContext, true);
+                    return;
+                }
+
+                e.setPromise(makePromise(configHelper.readConfig).then(function (config) {
+                    splashscreen.firstShow(config, e);
+                }).then(function () {
+                    // Avoids splashimage flicker on Windows Phone 8.1/10
+                    return WinJS.Promise.timeout();
+                }).then(function () {
+                    cordova.fireDocumentEvent('activated', platform.activationContext, true);
+                }));
             };
 
             app.addEventListener("checkpoint", checkpointHandler);
@@ -67,6 +96,11 @@ module.exports = {
 
             app.start();
         };
+
+        function appendScript(scriptElem, loadedCb) {
+            scriptElem.addEventListener("load", loadedCb);
+            document.head.appendChild(scriptElem);
+        }
 
         if (!window.WinJS) {
             var scriptElem = document.createElement("script");
@@ -80,9 +114,6 @@ module.exports = {
             } else if (navigator.appVersion.indexOf("MSAppHost/2.0;") !== -1) {
                 // windows 8.1 + IE 11
                 scriptElem.src = "//Microsoft.WinJS.2.0/js/base.js";
-            } else {
-                // windows 8.0 + IE 10
-                scriptElem.src = "//Microsoft.WinJS.1.0/js/base.js";
             }
             scriptElem.addEventListener("load", onWinJSReady);
             document.head.appendChild(scriptElem);

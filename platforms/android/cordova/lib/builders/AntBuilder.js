@@ -45,7 +45,7 @@ util.inherits(AntBuilder, GenericBuilder);
 AntBuilder.prototype.getArgs = function(cmd, opts) {
     var args = [cmd, '-f', path.join(this.root, 'build.xml')];
     // custom_rules.xml is required for incremental builds.
-    if (hasCustomRules()) {
+    if (hasCustomRules(this.root)) {
         args.push('-Dout.dir=ant-build', '-Dgen.absolute.dir=ant-gen');
     }
     if(opts.packageInfo) {
@@ -79,7 +79,7 @@ AntBuilder.prototype.prepEnv = function(opts) {
             writeBuildXml(path.join(self.root, subProjects[i]));
         }
         if (propertiesObj.systemLibs.length > 0) {
-            throw new CordovaError('Project contains at least one plugin that requires a system library. This is not supported with ANT. Please build using gradle.');
+            throw new CordovaError('Project contains at least one plugin that requires a system library. This is not supported with ANT. Use gradle instead.');
         }
 
         var propertiesFile = opts.buildType + SIGNING_PROPERTIES;
@@ -99,7 +99,7 @@ AntBuilder.prototype.prepEnv = function(opts) {
 AntBuilder.prototype.build = function(opts) {
     // Without our custom_rules.xml, we need to clean before building.
     var ret = Q();
-    if (!hasCustomRules()) {
+    if (!hasCustomRules(this.root)) {
         // clean will call check_ant() for us.
         ret = this.clean(opts);
     }
@@ -107,7 +107,22 @@ AntBuilder.prototype.build = function(opts) {
     var args = this.getArgs(opts.buildType == 'debug' ? 'debug' : 'release', opts);
     return check_reqs.check_ant()
     .then(function() {
-        return spawn('ant', args, {stdio: 'inherit'});
+        return spawn('ant', args, {stdio: 'pipe'});
+    }).progress(function (stdio){
+        if (stdio.stderr) {
+            process.stderr.write(stdio.stderr);
+        } else {
+            process.stdout.write(stdio.stdout);
+        }
+    }).catch(function (error) {
+        if (error.toString().indexOf('Unable to resolve project target') >= 0) {
+            return check_reqs.check_android_target(error).then(function() {
+                // If due to some odd reason - check_android_target succeeds
+                // we should still fail here.
+                return Q.reject(error);
+            });
+        }
+        return Q.reject(error);
     });
 };
 

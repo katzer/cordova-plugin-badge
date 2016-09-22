@@ -4,7 +4,7 @@
     <Languages xmlns="">
         <Language code="en-US" />
     </Languages>
-    <App Author="Sebastián Katzer" BitsPerPixel="32" Description="Cordova plugin to access and modify the badge number" Genre="apps.normal" ProductID="{f5c63fd0-2d42-11e5-aec1-ed616f5da995}" Publisher="Sebastián Katzer" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="BadgeExample" Version="0.6.0" xmlns="">
+    <App Author="Sebastián Katzer" BitsPerPixel="32" Description="Cordova plugin to access and modify the badge number" Genre="apps.normal" ProductID="{74a13bc0-80ad-11e6-b1e9-17cc1539e102}" Publisher="Sebastián Katzer" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="BadgeExample" Version="0.6.0" xmlns="">
         <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
         <Capabilities>
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />

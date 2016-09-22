@@ -1,5 +1,5 @@
 // Platform: android
-// ded62dda172755defaf75378ed007dc05730ec22
+// d403ce434788ffe1937711d6ebcbcc837fcbcb14
 /*
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -19,7 +19,7 @@
  under the License.
 */
 ;(function() {
-var PLATFORM_VERSION_BUILD_LABEL = '5.1.0';
+var PLATFORM_VERSION_BUILD_LABEL = '5.2.2';
 // file: src/scripts/require.js
 
 /*jshint -W079 */
@@ -1614,6 +1614,9 @@ exports.reset();
 // file: /Users/steveng/repo/cordova/cordova-android/cordova-js-src/platform.js
 define("cordova/platform", function(require, exports, module) {
 
+// The last resume event that was received that had the result of a plugin call.
+var lastResumeEvent = null;
+
 module.exports = {
     id: 'android',
     bootstrap: function() {
@@ -1653,6 +1656,19 @@ module.exports = {
         bindButtonChannel('volumeup');
         bindButtonChannel('volumedown');
 
+        // The resume event is not "sticky", but it is possible that the event
+        // will contain the result of a plugin call. We need to ensure that the
+        // plugin result is delivered even after the event is fired (CB-10498)
+        var cordovaAddEventListener = document.addEventListener;
+
+        document.addEventListener = function(evt, handler, capture) {
+            cordovaAddEventListener(evt, handler, capture);
+
+            if (evt === 'resume' && lastResumeEvent) {
+                handler(lastResumeEvent);
+            }
+        };
+
         // Let native code know we are all done on the JS side.
         // Native code will then un-hide the WebView.
         channel.onCordovaReady.subscribe(function() {
@@ -1691,6 +1707,10 @@ function onMessageFromNative(msg) {
                     }
                     msg.pendingResult.result = res;
                 }
+
+                // Save the plugin result so that it can be delivered to the js
+                // even if they miss the initial firing of the event
+                lastResumeEvent = msg;
             }
             cordova.fireDocumentEvent(action, msg);
             break;
@@ -2063,7 +2083,7 @@ utils.clone = function(obj) {
 
     retVal = {};
     for(i in obj){
-        if(!(i in retVal) || retVal[i] != obj[i]) {
+        if((!(i in retVal) || retVal[i] != obj[i]) && typeof obj[i] != 'undefined') {
             retVal[i] = utils.clone(obj[i]);
         }
     }

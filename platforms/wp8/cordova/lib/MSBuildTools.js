@@ -17,7 +17,7 @@
        under the License.
 */
 
-var Q     = require('Q'),
+var Q     = require('q'),
     path  = require('path'),
     utils = require('./utils');
 

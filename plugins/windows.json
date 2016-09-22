@@ -7,9 +7,6 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-test-framework": {
-            "PACKAGE_NAME": "BadgeExample"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "BadgeExample"
         },

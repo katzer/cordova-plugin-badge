@@ -7,12 +7,6 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
-        "cordova-plugin-test-framework": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
@@ -20,5 +14,9 @@
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        }
+    }
 }

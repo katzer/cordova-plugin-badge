@@ -81,7 +81,7 @@ module.exports.getPackageFileInfo = function (packageFile) {
     // CordovaApp.Phone_0.0.1.0_x86_debug.appxbundle
     // CordovaApp.Windows10_0.0.1.0_x64_x86_arm.appxbundle
 
-    var props = /.*\.(Phone|Windows|Windows80|Windows10)_((?:\d*\.)*\d*)*((?:_(AnyCPU|x86|x64|ARM)){1,4})(?:(_Debug))?.(appx|appxbundle)$/i.exec(pkgName);
+    var props = /.*\.(Phone|Windows|Windows10)_((?:\d*\.)*\d*)*((?:_(AnyCPU|x86|x64|ARM)){1,4})(?:(_Debug))?.(appx|appxbundle)$/i.exec(pkgName);
     if (props) {
         return {
             type      : props[1].toLowerCase(),
@@ -164,7 +164,7 @@ module.exports.listDevices = function (deploymentTool) {
         });
 
     }, function(e) {
-        events.emit('error', new Error('Failed to enumerate devices: ' + e));
+        events.emit('error', new Error('Failed to list devices: ' + e));
     });
 };
 

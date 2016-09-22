@@ -35,7 +35,7 @@ module.exports.run = function (options) {
     // http://stackoverflow.com/a/11995662/64949
     if (ranWithElevatedPermissions())
         return Q.reject(new CordovaError('Can not run this platform with administrative ' +
-            'permissions. Please run from a non-admin prompt.'));
+            'permissions. Must be run from a non-admin prompt.'));
 
     // parse arg
     var args  = nopt({
@@ -94,7 +94,7 @@ module.exports.run = function (options) {
                     // Win10 emulator launch is not currently supported, always force device
                     if (options.emulator || options.target === 'emulator') {
                         events.emit('warn', 'Windows 10 Phone emulator is currently not supported. ' +
-                            'If you want to deploy to emulator, please use Visual Studio instead. ' +
+                            'If you want to deploy to emulator, use Visual Studio instead. ' +
                             'Attempting to deploy to device...');
                     }
                     return packages.deployToPhone(pkg, deployTarget, true);

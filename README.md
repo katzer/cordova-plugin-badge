@@ -12,7 +12,8 @@ Cordova Badge Plugin - Example
 [Download][zip] or clone the _example_ branch and run the following command:
 
 ```bash
-cordova run [android|browser|ios|windows|wp8] # choose one
+cordova build [android|browser|ios|windows|wp8]
+cordova run   [android|browser|ios|windows|wp8]
 ```
 
 These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][as] or [Visual Studio][vs].
@@ -61,7 +62,7 @@ Thank you!
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2015 appPlant UG, Inc. All rights reserved
+© 2013-2016 appPlant GmbH, Inc. All rights reserved
 
 
 [cordova]: https://cordova.apache.org

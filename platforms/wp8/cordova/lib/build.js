@@ -19,7 +19,7 @@
 
 /* jshint sub:true */
 
-var Q     = require('Q'),
+var Q     = require('q'),
     path  = require('path'),
     nopt  = require('nopt'),
     utils = require('./utils'),

@@ -42,7 +42,5 @@ exports.cleanProject = function(){
     catch(err) {
         console.log('could not remove '+platformBuildDir+' : '+err.message);
     }
-
-
-}
+};
 

@@ -73,6 +73,16 @@ WindowsConfigParser.prototype.getWindowsTargetVersion = function() {
     return preference;
 };
 
+WindowsConfigParser.prototype.getUAPTargetMinVersion = function() {
+    var preference = this.getPreference('uap-target-min-version');
+
+    if (!preference) {
+        preference = '10.0.10240.0'; // set default to 10.0.10240.0 (initial release)
+    }
+
+    return preference;
+};
+
 WindowsConfigParser.prototype.getWindowsPhoneTargetVersion = function() {
     // This is a little more complicated than the previous one.
     // 1. Check for an explicit preference.  If the preference is set explicitly, return that, irrespective of whether it is valid
@@ -122,7 +132,7 @@ WindowsConfigParser.prototype.getAllMinMaxUAPVersions = function () {
 
         var versionTest = Version.tryParse(verPref.value);
         if (!versionTest) {
-            throw new RangeError('Could not comprehend a valid version from the string "' + verPref.value + '" of platform-boundary "' + verPref.name + '".');
+            throw new RangeError('Could not parse a valid version from the string "' + verPref.value + '" of platform-boundary "' + verPref.name + '".');
         }
 
         platformVersionSet[versionPropertyName] = versionTest;

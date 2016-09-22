@@ -43,12 +43,6 @@ try {
 // reference: https://msdn.microsoft.com/en-us/library/bb164659(v=vs.120).aspx
 var VS2013_UPDATE2_RC = new Version(12, 0, 30324);
 var REQUIRED_VERSIONS = {
-    '8.0': {
-        os: '6.2',
-        msbuild: '11.0',
-        visualstudio: '11.0',
-        windowssdk: '8.0'
-    },
     '8.1': {
         os: '6.3',
         msbuild: '12.0',
@@ -68,21 +62,15 @@ var REQUIRED_VERSIONS = {
     }
 };
 
-function getConfig() {
-    try {
-        return new ConfigParser(path.join(__dirname, '../../config.xml'));
-    } catch (e) {
-        throw new CordovaError('Can\'t check requirements for Windows platform.' +
-            'The config.xml file is either missing or malformed.');
+function getMinimalRequiredVersionFor (requirement, windowsTargetVersion, windowsPhoneTargetVersion) {
+
+    if (windowsTargetVersion === '8' || windowsTargetVersion === '8.0') {
+        throw new CordovaError('windows8 platform is deprecated. To use windows-target-version=8.0 you may downgrade to cordova-windows@4.');
     }
-}
 
-
-function getMinimalRequiredVersionFor (requirement) {
-
-    var config = getConfig();
-    var windowsTargetVersion = config.getWindowsTargetVersion();
-    var windowsPhoneTargetVersion = config.getWindowsPhoneTargetVersion();
+    if (windowsPhoneTargetVersion === '8' || windowsPhoneTargetVersion === '8.0') {
+        throw new CordovaError('8.0 is not a valid version for windows-phone-target-version (use the wp8 Cordova platform instead)');
+    }
     var windowsReqVersion = Version.tryParse(REQUIRED_VERSIONS[windowsTargetVersion][requirement]);
     var phoneReqVersion = Version.tryParse(REQUIRED_VERSIONS[windowsPhoneTargetVersion][requirement]);
 
@@ -128,7 +116,7 @@ function getWindowsVersion() {
 }
 
 /**
- * Lists all Visual Studio versions insalled. For VS 2013 if it present, alao
+ * Lists all Visual Studio versions insalled. For VS 2013 if it present, also
  *   checks if Update 2 is installed.
  *
  * @return  {String[]}  List of installed Visual Studio versions.
@@ -257,14 +245,14 @@ function mapVSVersionToName(version) {
  * Check if current OS is supports building windows platform
  * @return {Promise} Promise either fullfilled or rejected with error message.
  */
-var checkOS = function () {
+var checkOS = function (windowsTargetVersion, windowsPhoneTargetVersion) {
     if (process.platform !== 'win32') {
         // Build Universal windows apps available for windows platform only, so we reject on others platforms
         return Q.reject('Cordova tooling for Windows requires Windows OS to build project');
     }
 
     return getWindowsVersion().then(function (actualVersion) {
-        var requiredOsVersion = getMinimalRequiredVersionFor('os');
+        var requiredOsVersion = getMinimalRequiredVersionFor('os', windowsTargetVersion, windowsPhoneTargetVersion);
         if (actualVersion.gte(requiredOsVersion) ||
             // Special case for Windows 10/Phone 10  targets which can be built on Windows 7 (version 6.1)
             actualVersion.major === 6 && actualVersion.minor === 1 && getConfig().getWindowsTargetVersion() === '10.0') {
@@ -281,10 +269,10 @@ var checkOS = function () {
  * @return {Promise} Promise either fullfilled with MSBuild version
  *                           or rejected with error message.
  */
-var checkMSBuild = function () {
+var checkMSBuild = function (windowsTargetVersion, windowsPhoneTargetVersion) {
     return MSBuildTools.findAllAvailableVersions()
     .then(function (msbuildToolsVersions) {
-        var msbuildRequiredVersion = getMinimalRequiredVersionFor('msbuild');
+        var msbuildRequiredVersion = getMinimalRequiredVersionFor('msbuild', windowsTargetVersion, windowsPhoneTargetVersion);
         msbuildToolsVersions = msbuildToolsVersions.map(function (msbuildToolsVersion) {
             return msbuildToolsVersion.version;
         });
@@ -293,13 +281,13 @@ var checkMSBuild = function () {
         return appropriateVersion ?
             shortenVersion(appropriateVersion) :
             Q.reject('MSBuild tools v.' + shortenVersion(msbuildRequiredVersion) + ' not found. ' +
-                'Please install Visual Studio ' + mapVSVersionToName(getMinimalRequiredVersionFor('visualstudio')) +
+                'Please install Visual Studio ' + mapVSVersionToName(getMinimalRequiredVersionFor('visualstudio', windowsTargetVersion, windowsPhoneTargetVersion)) +
                 ' from https://www.visualstudio.com/downloads/download-visual-studio-vs');
     });
 };
 
-var checkVS = function () {
-    var vsRequiredVersion = getMinimalRequiredVersionFor('visualstudio');
+var checkVS = function (windowsTargetVersion, windowsPhoneTargetVersion) {
+    var vsRequiredVersion = getMinimalRequiredVersionFor('visualstudio', windowsTargetVersion, windowsPhoneTargetVersion);
 
     return getInstalledVSVersions()
     .then(function (installedVersions) {
@@ -312,15 +300,15 @@ var checkVS = function () {
     });
 };
 
-var checkWinSdk = function () {
+var checkWinSdk = function (windowsTargetVersion, windowsPhoneTargetVersion) {
     return getInstalledWindowsSdks()
     .then(function (installedSdks) {
-        var requiredVersion = getMinimalRequiredVersionFor('windowssdk');
+        var requiredVersion = getMinimalRequiredVersionFor('windowssdk', windowsTargetVersion, windowsPhoneTargetVersion);
         var hasSdkInstalled = installedSdks.some(function (installedSdk) {
             return installedSdk.eq(requiredVersion);
         });
         if (!hasSdkInstalled) {
-            return Q.reject('Windows SDK not found. Please ensure that you have installed ' +
+            return Q.reject('Windows SDK not found. Ensure that you have installed ' +
                 'Windows ' + shortenVersion(requiredVersion) + ' SDK along with Visual Studio or install ' +
                 'Windows ' + shortenVersion(requiredVersion) + ' SDK separately from ' +
                 'https://dev.windows.com/en-us/downloads');
@@ -330,13 +318,10 @@ var checkWinSdk = function () {
     });
 };
 
-var checkPhoneSdk = function () {
-    var requiredVersion = getMinimalRequiredVersionFor('phonesdk');
-
+var checkPhoneSdk = function (windowsTargetVersion, windowsPhoneTargetVersion) {
+    var requiredVersion = getMinimalRequiredVersionFor('phonesdk', windowsTargetVersion, windowsPhoneTargetVersion);
     return getInstalledPhoneSdks()
     .then(function (installedSdks) {
-        var requiredVersion = getMinimalRequiredVersionFor('phonesdk');
-
         var hasSdkInstalled = installedSdks.some(function (installedSdk) {
             return installedSdk.eq(requiredVersion);
         });
@@ -346,7 +331,7 @@ var checkPhoneSdk = function () {
             Q.reject();
     })
     .fail(function () {
-        return Q.reject('Windows Phone SDK not found. Please ensure that you have installed ' +
+        return Q.reject('Windows Phone SDK not found. Ensure that you have installed ' +
             'Windows Phone ' + shortenVersion(requiredVersion) + ' SDK along with Visual Studio or install ' +
             'Windows Phone ' + shortenVersion(requiredVersion) + ' SDK separately from ' +
             'https://dev.windows.com/develop/download-phone-sdk');
@@ -357,6 +342,18 @@ module.exports.run = function () {
     return checkOS().then(function () {
         return MSBuildTools.findAvailableVersion();
     });
+};
+
+/** Checks if Windows SDK required to build the target_platform is present
+ * @param {String}  target_platorm        Target platform ('8.1' or '10.0')
+ */ 
+module.exports.isWinSDKPresent = function (target_platform) {
+    return checkWinSdk(target_platform, '8.1');
+};
+
+// Checks if min SDK required to build Windows Phone 8.1 project is present
+module.exports.isPhoneSDKPresent = function () {
+    return checkPhoneSdk('8.1', '8.1');
 };
 
 /**
@@ -385,6 +382,17 @@ var requirements = [
 // Define list of checks needs to be performed
 var checkFns = [checkOS, checkMSBuild, checkVS, checkWinSdk, checkPhoneSdk];
 
+var config = null;
+function getConfig() {
+    try {
+        config = config || new ConfigParser(path.join(__dirname, '../../config.xml'));
+        return Q(config);
+    } catch (e) {
+        return Q.reject(new CordovaError('Can\'t check requirements for Windows platform.' +
+            'The config.xml file is either missing or malformed.'));
+    }
+}
+
 /**
  * Methods that runs all checks one by one and returns a result of checks
  * as an array of Requirement objects. This method intended to be used by cordova-lib check_reqs method.
@@ -401,18 +409,21 @@ module.exports.check_all = function() {
             // If fatal requirement is failed,
             // we don't need to check others
             if (fatalIsHit) return Q();
-
             var requirement = requirements[idx];
-            return checkFn()
-            .then(function (version) {
-                requirement.installed = true;
-                requirement.metadata.version = version;
-                result.push(requirement);
-            }, function (err) {
-                if (requirement.isFatal) fatalIsHit = true;
-                requirement.metadata.reason = err;
-                result.push(requirement);
+            return getConfig()
+            .then(function (config) {
+                return checkFn(config.getWindowsTargetVersion(), config.getWindowsPhoneTargetVersion())
+                .then(function (version) {
+                    requirement.installed = true;
+                    requirement.metadata.version = version;
+                    result.push(requirement);
+                }).catch( function (err) {
+                    if (requirement.isFatal) fatalIsHit = true;
+                    requirement.metadata.reason = err;
+                    result.push(requirement);
+                });  
             });
+            
         });
     }, Q())
     .then(function () {

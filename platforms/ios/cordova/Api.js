@@ -21,9 +21,24 @@
 
 var fs = require('fs');
 var path = require('path');
+var unorm = require('unorm');
+var projectFile = require('./lib/projectFile');
 
 var CordovaError = require('cordova-common').CordovaError;
-var ConsoleLogger = require('./lib/ConsoleLogger');
+var CordovaLogger = require('cordova-common').CordovaLogger;
+var events = require('cordova-common').events;
+var PluginManager = require('cordova-common').PluginManager;
+
+function setupEvents(externalEventEmitter) {
+    if (externalEventEmitter) {
+        // This will make the platform internal events visible outside
+        events.forwardEventsTo(externalEventEmitter);
+    } else {
+        // There is no logger if external emitter is not present,
+        // so attach a console logger
+        CordovaLogger.get().subscribe(events);
+    }
+}
 
 /**
  * Creates a new PlatformApi instance.
@@ -41,9 +56,8 @@ function Api(platform, platformRootDir, events) {
     this.platform = platform || 'ios';
 
     this.root = platformRootDir || path.resolve(__dirname, '..');
-    this.events = events || ConsoleLogger.get();
-    // NOTE: trick to share one EventEmitter instance across all js code
-    require('cordova-common').events = this.events;
+
+    setupEvents(events);
 
     var xcodeProjDir;
     var xcodeCordovaProj;
@@ -95,8 +109,15 @@ function Api(platform, platformRootDir, events) {
  *   instance or rejected with CordovaError.
  */
 Api.createPlatform = function (destination, config, options, events) {
+    setupEvents(events);
+
+    // CB-6992 it is necessary to normalize characters
+    // because node and shell scripts handles unicode symbols differently
+    // We need to normalize the name to NFD form since iOS uses NFD unicode form
+    var name = unorm.nfd(config.name());
+
     return require('../../../lib/create')
-    .createProject(destination, config.packageName(), config.name(), options, events || ConsoleLogger.get())
+    .createProject(destination, config.packageName(), name, options)
     .then(function () {
         // after platform is created we return Api instance based on new Api.js location
         // This is required to correctly resolve paths in the future api calls
@@ -122,11 +143,13 @@ Api.createPlatform = function (destination, config, options, events) {
  *   instance or rejected with CordovaError.
  */
 Api.updatePlatform = function (destination, options, events) {
+    setupEvents(events);
+
     return require('../../../lib/create')
-    .updateProject(destination, options, events || ConsoleLogger.get())
+    .updateProject(destination, options)
     .then(function () {
         var PlatformApi = require(path.resolve(destination, 'cordova/Api'));
-        return new PlatformApi('android', destination, events);
+        return new PlatformApi('ios', destination, events);
     });
 };
 
@@ -183,8 +206,20 @@ Api.prototype.prepare = function (cordovaProject) {
  *   CordovaError instance.
  */
 Api.prototype.addPlugin = function (plugin, installOptions) {
-    var Plugman = require('./lib/plugman/Plugman');
-    return Plugman.get(this.locations, this.events).addPlugin(plugin, installOptions);
+    var xcodeproj = projectFile.parse(this.locations);
+
+    installOptions = installOptions || {};
+    installOptions.variables = installOptions.variables || {};
+    // Add PACKAGE_NAME variable into vars
+    if (!installOptions.variables.PACKAGE_NAME) {
+        installOptions.variables.PACKAGE_NAME = xcodeproj.getPackageName();
+    }
+
+    return PluginManager.get(this.platform, this.locations, xcodeproj)
+        .addPlugin(plugin, installOptions)
+        // CB-11022 return non-falsy value to indicate
+        // that there is no need to run prepare after
+        .thenResolve(true);
 };
 
 /**
@@ -201,8 +236,13 @@ Api.prototype.addPlugin = function (plugin, installOptions) {
  *   CordovaError instance.
  */
 Api.prototype.removePlugin = function (plugin, uninstallOptions) {
-    var Plugman = require('./lib/plugman/Plugman');
-    return Plugman.get(this.locations, this.events).removePlugin(plugin, uninstallOptions);
+
+    var xcodeproj = projectFile.parse(this.locations);
+    return PluginManager.get(this.platform, this.locations, xcodeproj)
+        .removePlugin(plugin, uninstallOptions)
+        // CB-11022 return non-falsy value to indicate
+        // that there is no need to run prepare after
+        .thenResolve(true);
 };
 
 /**
@@ -276,6 +316,9 @@ Api.prototype.clean = function(cleanOptions) {
     return require('./lib/check_reqs').run()
     .then(function () {
         return require('./lib/clean').run.call(self, cleanOptions);
+    })
+    .then(function () {
+        return require('./lib/prepare').clean.call(self, cleanOptions);
     });
 };
 

@@ -25,7 +25,21 @@ var path  = require('path'),
     build = require('./build'),
     emulator = require('./emulator'),
     device   = require('./device'),
-    Q = require('q');
+    Q = require('q'),
+    events = require('cordova-common').events;
+
+function getInstallTarget(runOptions) {
+    var install_target;
+    if (runOptions.target) {
+        install_target = runOptions.target;
+    } else if (runOptions.device) {
+        install_target = '--device';
+    } else if (runOptions.emulator) {
+        install_target = '--emulator';
+    }
+
+    return install_target;
+}
 
 /**
  * Runs the application on a device if available. If no device is found, it will
@@ -40,10 +54,7 @@ var path  = require('path'),
  module.exports.run = function(runOptions) {
 
     var self = this;
-
-    var install_target = runOptions.device ? '--device' :
-        runOptions.emulator ? '--emulator' :
-        runOptions.target;
+    var install_target = getInstallTarget(runOptions);
 
     return Q()
     .then(function() {
@@ -52,10 +63,10 @@ var path  = require('path'),
             return device.list()
             .then(function(device_list) {
                 if (device_list.length > 0) {
-                    self.events.emit('warn', 'No target specified, deploying to device \'' + device_list[0] + '\'.');
+                    events.emit('warn', 'No target specified, deploying to device \'' + device_list[0] + '\'.');
                     install_target = device_list[0];
                 } else {
-                    self.events.emit('warn', 'No target specified, deploying to emulator');
+                    events.emit('warn', 'No target specified and no devices found, deploying to emulator');
                     install_target = '--emulator';
                 }
             });
@@ -116,8 +127,8 @@ var path  = require('path'),
     });
 };
 
-module.exports.help = function(args) {
-    console.log('Usage: ' + path.relative(process.cwd(), args[1]) + ' [options]');
+module.exports.help = function() {
+    console.log('Usage: ' + path.relative(process.cwd(), process.argv[1]) + ' [options]');
     console.log('Build options :');
     console.log('    --debug : Builds project in debug mode');
     console.log('    --release : Builds project in release mode');

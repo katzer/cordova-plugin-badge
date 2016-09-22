@@ -23,14 +23,22 @@ var path = require('path');
 var shell = require('shelljs');
 var et = require('elementtree');
 var Version = require('./Version');
+var MRTImage = require('./MRTImage');
 var AppxManifest = require('./AppxManifest');
 var MSBuildTools = require('./MSBuildTools');
 var ConfigParser = require('./ConfigParser');
 var events = require('cordova-common').events;
 var xmlHelpers = require('cordova-common').xmlHelpers;
+var FileUpdater = require('cordova-common').FileUpdater;
+var PlatformJson = require('cordova-common').PlatformJson;
+var PlatformMunger = require('cordova-common').ConfigChanges.PlatformMunger;
+var PluginInfoProvider = require('cordova-common').PluginInfoProvider;
+
+// Default value for VisualElements' Description attribute.
+// This is equal to the value that comes with default App template
+var DEFAULT_DESCRIPTION = 'CordovaApp';
 
 var PROJECT_WINDOWS10   = 'CordovaApp.Windows10.jsproj',
-    MANIFEST_WINDOWS8   = 'package.windows80.appxmanifest',
     MANIFEST_WINDOWS    = 'package.windows.appxmanifest',
     MANIFEST_PHONE      = 'package.phone.appxmanifest',
     MANIFEST_WINDOWS10  = 'package.windows10.appxmanifest';
@@ -173,6 +181,13 @@ function applyCoreProperties(config, manifest) {
         manifest.getVisualElements().setDisplayName(name);
     }
 
+    var description = config.description();
+    manifest.getProperties().setDescription(description);
+    // 'Description' attribute is required for VisualElements node (see
+    // https://msdn.microsoft.com/en-us/library/windows/apps/br211471.aspx),
+    // so we set it to '<description>' from config.xml or default value
+    manifest.getVisualElements().setDescription(description || DEFAULT_DESCRIPTION);
+
     // CB-9410: Get a display name and publisher display name.  In the Windows Store, certain
     // strings which are typically used in Cordova aren't valid for Store ingestion.
     // Here, we check for Windows-specific preferences, and if we find it, prefer that over
@@ -261,7 +276,7 @@ function applyNavigationWhitelist(config, manifest) {
     .filter(function(rule) {
         if (UriSchemeTest.test(rule.href)) return true;
 
-        events.emit('warn', 'The following navigation rule had an invalid URI scheme and is ignored: "' + rule.href + '".');
+        events.emit('warn', 'The following navigation rule had an invalid URI scheme and will be ignored: "' + rule.href + '".');
         return false;
     })
     .map(function (rule) {
@@ -281,43 +296,8 @@ function applyNavigationWhitelist(config, manifest) {
     manifest.getApplication().setAccessRules(whitelistRules);
 }
 
-function copyImages(config, platformRoot) {
-
-    var appRoot = path.dirname(config.path);
-
-    function copyImage(src, dest) {
-        src = path.join(appRoot, src);
-        dest = path.join(platformRoot, 'images', dest);
-        events.emit('verbose', 'Copying image from ' + src + ' to ' + dest);
-        shell.cp('-f', src, dest);
-    }
-
-    function copyMrtImage(src, dest) {
-        var srcDir = path.dirname(src),
-            srcExt = path.extname(src),
-            srcFileName = path.basename(src, srcExt);
-
-        var destExt = path.extname(dest),
-            destFileName = path.basename(dest, destExt);
-
-        // all MRT images: logo.png, logo.scale-100.png, logo.scale-200.png, etc
-        var images = fs.readdirSync(srcDir).filter(function(e) {
-            return e.match('^'+srcFileName + '(.scale-[0-9]+)?' + srcExt);
-        });
-        // warn if no images found
-        if (images.length === 0) {
-            events.emit('warn', 'No images found for target: ' + destFileName);
-            return;
-        }
-        // copy images with new name but keeping scale suffix
-        images.forEach(function(img) {
-            var scale = path.extname(path.basename(img, srcExt));
-            if (scale === '') {
-                scale = '.scale-100';
-            }
-            copyImage(path.join(srcDir, img), destFileName+scale+destExt);
-        });
-    }
+function mapImageResources(images, imagesDir) {
+    var pathMap = {};
 
     // Platform default images
     var platformImages = [
@@ -357,21 +337,73 @@ function copyImages(config, platformRoot) {
         return null;
     }
 
-    var images = config.getIcons('windows').concat(config.getSplashScreens('windows'));
-
     images.forEach(function (img) {
         if (img.target) {
-            copyMrtImage(img.src, img.target + '.png');
+            // Parse source path into new MRTImage
+            var imageToCopy = new MRTImage(img.src);
+
+            // then get all matching MRT images in source directory
+            var candidates = fs.readdirSync(imageToCopy.location)
+            .map(function (file) { return new MRTImage(path.join(imageToCopy.location, file)); })
+            .filter(imageToCopy.matchesTo, imageToCopy);
+
+            // Warn user if no images were copied
+            if (candidates.length === 0) {
+                events.emit('warn', 'No images found for target: ' + img.target);
+            } else {
+                candidates.forEach(function(mrtImage) {
+                    // copy images with new base name but keeping qualifier
+                    var targetPath = path.join(imagesDir, mrtImage.generateFilenameFrom(img.target));
+                    pathMap[targetPath] = mrtImage.path;
+                });
+            }
         } else {
             // find target image by size
-            var targetImg = findPlatformImage (img.width, img.height);
+            var targetImg = findPlatformImage(img.width, img.height);
             if (targetImg) {
-                copyImage(img.src, targetImg.dest);
+                var targetPath = path.join(imagesDir, targetImg.dest);
+                pathMap[targetPath] = img.src;
             } else {
-                events.emit('warn', 'The following image is skipped due to unsupported size: ' + img.src);
+                events.emit('warn', 'The following image was skipped because it has an unsupported size (' + img.width + 'x' + img.height + '): ' + img.src);
             }
         }
     });
+
+    return pathMap;
+}
+
+function copyImages(cordovaProject, locations) {
+    var images = cordovaProject.projectConfig.getIcons('windows')
+        .concat(cordovaProject.projectConfig.getSplashScreens('windows'));
+
+    if (images.length === 0) {
+        events.emit('verbose', 'This app does not have any icons or splash screens defined');
+        return;
+    }
+
+    var imagesDir = path.join(path.relative(cordovaProject.root, locations.root), 'images');
+    var resourceMap = mapImageResources(images, imagesDir);
+    events.emit('verbose', 'Updating icons and splash screens at ' + imagesDir);
+    FileUpdater.updatePaths(
+        resourceMap, { rootDir: cordovaProject.root }, logFileOp);
+}
+
+function cleanImages(projectRoot, projectConfig, locations) {
+    var images = projectConfig.getIcons('windows')
+        .concat(projectConfig.getSplashScreens('windows'));
+
+    if (images.length > 0) {
+        var imagesDir = path.join(path.relative(projectRoot, locations.root), 'images');
+        var resourceMap = mapImageResources(images, imagesDir);
+        Object.keys(resourceMap).forEach(function (targetImagePath) {
+            resourceMap[targetImagePath] = null;
+        });
+        events.emit('verbose', 'Cleaning icons and splash screens at ' + imagesDir);
+
+        // Source paths are removed from the map, so updatePaths() will delete the target files.
+        FileUpdater.updatePaths(
+            resourceMap, { rootDir: projectRoot, all: true }, logFileOp);
+    }
 }
 
 function applyUAPVersionToProject(projectFilePath, uapVersionInfo) {
@@ -390,7 +422,7 @@ function applyUAPVersionToProject(projectFilePath, uapVersionInfo) {
 }
 
 // returns {minUAPVersion: Version, targetUAPVersion: Version} | false
-function getUAPVersions() {
+function getUAPVersions(config) {
     var baselineVersions = MSBuildTools.getAvailableUAPVersions();
     if (!baselineVersions || baselineVersions.length === 0) {
         return false;
@@ -398,29 +430,61 @@ function getUAPVersions() {
 
     baselineVersions.sort(Version.comparer);
 
+    var uapTargetMinPreference = config.getUAPTargetMinVersion();
+
     return {
-        minUAPVersion: baselineVersions[0],
-        targetUAPVersion: baselineVersions[baselineVersions.length - 1]
+        minUAPVersion: uapTargetMinPreference,
+        targetUAPVersion: baselineVersions[baselineVersions.length - 1] /* The highest available SDK on the system */
     };
 }
 
-module.exports.prepare = function (cordovaProject) {
+module.exports.prepare = function (cordovaProject, options) {
     var self = this;
 
-    this._config = updateConfigFilesFrom(cordovaProject.projectConfig,
-        this._munger, this.locations);
+    var platformJson = PlatformJson.load(this.root, this.platform);
+    var munger = new PlatformMunger(this.platform, this.root, platformJson, new PluginInfoProvider());
+    this._config = updateConfigFilesFrom(cordovaProject.projectConfig, munger, this.locations);
+
+    // CB-10845 avoid using cached appxmanifests since they could be
+    // previously modififed outside of AppxManifest class
+    // TODO: invalidate only entries that were affected by config munge
+    AppxManifest.purgeCache();
 
     // Update own www dir with project's www assets and plugins' assets and js-files
-    return Q.when(updateWwwFrom(cordovaProject, this.locations))
+    return Q.when(updateWww(cordovaProject, this.locations))
     .then(function () {
         // update project according to config.xml changes.
         return updateProjectAccordingTo(self._config, self.locations);
     })
     .then(function () {
-        copyImages(cordovaProject.projectConfig, self.root);
+        copyImages(cordovaProject, self.locations);
+        // CB-5421 Add BOM to all html, js, css files
+        // to ensure app can pass Windows Store Certification
+        addBOMSignature(self.locations.www);
     })
     .then(function () {
-        self.events.emit('verbose', 'Updated project successfully');
+        events.emit('verbose', 'Prepared windows project successfully');
+    });
+};
+
+module.exports.clean = function (options) {
+    // A cordovaProject isn't passed into the clean() function, because it might have
+    // been called from the platform shell script rather than the CLI. Check for the
+    // noPrepare option passed in by the non-CLI clean script. If that's present, or if
+    // there's no config.xml found at the project root, then don't clean prepared files.
+    var projectRoot = path.resolve(this.root, '../..');
+    var projectConfigFile = path.join(projectRoot, 'config.xml');
+    if ((options && options.noPrepare) || !fs.existsSync(projectConfigFile) ||
+            !fs.existsSync(this.locations.configXml)) {
+        return Q();
+    }
+
+    var projectConfig = new ConfigParser(this.locations.configXml);
+
+    var self = this;
+    return Q().then(function () {
+        cleanWww(projectRoot, self.locations);
+        cleanImages(projectRoot, projectConfig);
     });
 };
 
@@ -434,7 +498,7 @@ module.exports.prepare = function (cordovaProject) {
 function addBOMSignature(directory) {
     shell.ls('-R', directory)
     .forEach(function (file) {
-        if (!file.match(/\.(js|html|css|json)$/i)) {
+        if (!file.match(/\.(js|htm|html|css|json)$/i)) {
             return;
         }
 
@@ -450,8 +514,6 @@ function addBOMSignature(directory) {
         }
     });
 }
-
-module.exports.addBOMSignature = addBOMSignature;
 
 /**
  * Updates config files in project based on app's config.xml and config munge,
@@ -476,7 +538,7 @@ function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
     // Otherwise save whatever is there as defaults so it can be
     // restored or copy project config into platform if none exists.
     if (fs.existsSync(defaultConfig)) {
-        events.emit('verbose', 'Generating config.xml from defaults for platform "windows"');
+        events.emit('verbose', 'Generating platform-specific config.xml from defaults for windows at ' + ownConfig);
         shell.cp('-f', defaultConfig, ownConfig);
     } else if (fs.existsSync(ownConfig)) {
         shell.cp('-f', ownConfig, defaultConfig);
@@ -488,17 +550,21 @@ function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
     // in project (including project's config)
     configMunger.reapply_global_munge().save_all();
 
+    events.emit('verbose', 'Merging project\'s config.xml into platform-specific windows config.xml');
     // Merge changes from app's config.xml into platform's one
     var config = new ConfigParser(ownConfig);
     xmlHelpers.mergeXml(sourceConfig.doc.getroot(),
         config.doc.getroot(), 'windows', /*clobber=*/true);
-    // CB-6976 Windows Universal Apps. For smooth transition and to prevent mass api failures
-    // we allow using windows8 tag for new windows platform
-    xmlHelpers.mergeXml(sourceConfig.doc.getroot(),
-        config.doc.getroot(), 'windows8', /*clobber=*/true);
 
     config.write();
     return config;
+}
+
+/**
+ * Logs all file operations via the verbose event stream, indented.
+ */
+function logFileOp(message) {
+    events.emit('verbose', '  ' + message);
 }
 
 /**
@@ -510,27 +576,36 @@ function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
  * @param   {Object}  destinations      An object that contains destination
  *   paths for www files.
  */
-function updateWwwFrom(cordovaProject, destinations) {
-
-    shell.rm('-rf', destinations.www);
-    shell.mkdir('-p', destinations.www);
-    // Copy source files from project's www directory
-    shell.cp('-rf', path.join(cordovaProject.locations.www, '*'), destinations.www);
-    // Override www sources by files in 'platform_www' directory
-    shell.cp('-rf', path.join(destinations.platformWww, '*'), destinations.www);
+function updateWww(cordovaProject, destinations) {
+    var sourceDirs = [
+        path.relative(cordovaProject.root, cordovaProject.locations.www),
+        path.relative(cordovaProject.root, destinations.platformWww)
+    ];
 
     // If project contains 'merges' for our platform, use them as another overrides
-    // CB-6976 Windows Universal Apps. For smooth transition from 'windows8' platform
-    // we allow using 'windows8' merges for new 'windows' platform
-    ['windows8', 'windows'].forEach(function (platform) {
-        var mergesPath = path.join(cordovaProject.root, 'merges', platform);
-        // if no 'merges' directory found, no further actions needed
-        if (!fs.existsSync(mergesPath)) return;
+    var merges_path = path.join(cordovaProject.root, 'merges', 'windows');
+    if (fs.existsSync(merges_path)) {
+        events.emit('verbose', 'Found "merges/windows" folder. Copying its contents into the windows project.');
+        sourceDirs.push(path.join('merges', 'windows'));
+    }
 
-        events.emit('verbose', 'Found "merges" for ' + platform + ' platform. Copying over existing "www" files.');
-        var overrides = path.join(mergesPath, '*');
-        shell.cp('-rf', overrides, destinations.www);
-    });
+    var targetDir = path.relative(cordovaProject.root, destinations.www);
+    events.emit(
+        'verbose', 'Merging and updating files from [' + sourceDirs.join(', ') + '] to ' + targetDir);
+    FileUpdater.mergeAndUpdateDir(
+        sourceDirs, targetDir, { rootDir: cordovaProject.root }, logFileOp);
+}
+
+/**
+ * Cleans all files from the platform 'www' directory.
+ */
+function cleanWww(projectRoot, locations) {
+    var targetDir = path.relative(projectRoot, locations.www);
+    events.emit('verbose', 'Cleaning ' + targetDir);
+
+    // No source paths are specified, so mergeAndUpdateDir() will clear the target directory.
+    FileUpdater.mergeAndUpdateDir(
+        [], targetDir, { rootDir: projectRoot, all: true }, logFileOp);
 }
 
 /**
@@ -542,12 +617,12 @@ function updateWwwFrom(cordovaProject, destinations) {
  */
 function updateProjectAccordingTo(projectConfig, locations) {
     // Apply appxmanifest changes
-    [MANIFEST_WINDOWS, MANIFEST_WINDOWS8, MANIFEST_WINDOWS10, MANIFEST_PHONE]
+    [MANIFEST_WINDOWS, MANIFEST_WINDOWS10, MANIFEST_PHONE]
     .forEach(function(manifestFile) {
         updateManifestFile(projectConfig, path.join(locations.root, manifestFile));
     });
 
     if (process.platform === 'win32') {
-        applyUAPVersionToProject(path.join(locations.root, PROJECT_WINDOWS10), getUAPVersions());
+        applyUAPVersionToProject(path.join(locations.root, PROJECT_WINDOWS10), getUAPVersions(projectConfig));
     }
 }
