@@ -58,5 +58,6 @@ Made with :yum: from Leipzig
 [vs]: https://www.visualstudio.com
 [readme]: https://github.com/katzer/cordova-plugin-badge/blob/master/README.md
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
+[appplant]: www.appplant.de
 
 
