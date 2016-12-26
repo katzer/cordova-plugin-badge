@@ -80,8 +80,8 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).props" />
   <PropertyGroup>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <UapDefaultAssetScale>100</UapDefaultAssetScale>
   </PropertyGroup>
@@ -104,5 +104,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <Target AfterTargets="ResolveAssemblyReferences" BeforeTargets="AfterResolveReferences" Condition="'$(Platform)' == 'AnyCPU'" Name="DetectMangedWinMDWithAnyCpu">
     <Error Condition="'%(_ResolveAssemblyReferenceResolvedFiles.WinMDFile)' == 'true' AND '%(_ResolveAssemblyReferenceResolvedFiles.WinMDFileType)' == 'Managed'" Text="The following component requires .NET Native compilation which is not available when targeting 'Windows10' and 'AnyCPU'. Consider changing the targeted processor architecture to one of the following: 'x86, x64, ARM' (if you are using command line this could be done by adding '--archs' parameter, for example: 'cordova build windows --archs=x64'). %(_ResolveAssemblyReferenceResolvedFiles.Identity)" />
-    </Target>
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>node "$(ProjectDir)\\cordova\\prebuild-10.js"</PreBuildEvent>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
 </Project>

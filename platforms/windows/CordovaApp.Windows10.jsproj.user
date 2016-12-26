@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>WindowsPhoneEmulatorDebugger</DebuggerFlavor>
+    <WindowsPhoneEmulatorID>D862BD94-08EA-4741-859D-CCA5FE3071ED;Mobile Emulator 10.0.14393.0 1080p 6 inch 2GB</WindowsPhoneEmulatorID>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ReferenceCachePath>C:\Users\katze\AppData\Local\Temp\knyu1yo5_CordovaApp.Windows10_refcache</ReferenceCachePath>
+  </PropertyGroup>
+</Project>

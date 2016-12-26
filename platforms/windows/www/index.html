@@ -1,222 +1,86 @@
 ﻿<!DOCTYPE html>
 <!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->
 <html>
     <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <meta name="msapplication-tap-highlight" content="no" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>Badge Plugin</title>
-
-        <style type="text/css">
-        .button {
-            -moz-box-shadow:inset 0px 1px 0px 0px #caefab;
-            -webkit-box-shadow:inset 0px 1px 0px 0px #caefab;
-            box-shadow:inset 0px 1px 0px 0px #caefab;
-            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );
-            background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );
-            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811');
-            background-color:#77d42a;
-            -webkit-border-top-left-radius:10px;
-            -moz-border-radius-topleft:10px;
-            border-top-left-radius:10px;
-            -webkit-border-top-right-radius:10px;
-            -moz-border-radius-topright:10px;
-            border-top-right-radius:10px;
-            -webkit-border-bottom-right-radius:10px;
-            -moz-border-radius-bottomright:10px;
-            border-bottom-right-radius:10px;
-            -webkit-border-bottom-left-radius:10px;
-            -moz-border-radius-bottomleft:10px;
-            border-bottom-left-radius:10px;
-            text-indent:0px;
-            border:1px solid #268a16;
-            display:inline-block;
-            color:#306108;
-            font-family:Arial;
-            font-size:15px;
-            font-weight:bold;
-            font-style:normal;
-            min-height:30px;
-            max-height:42px;
-            line-height:30px;
-            width:100%;
-            margin:10px 0 0 0;
-            text-transform:none;
-            text-decoration:none;
-            text-align:center;
-            text-shadow:1px 1px 0px #aade7c;
-        }
-        .button:active {
-            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );
-            background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );
-            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');
-            background-color:#5cb811;
-        }
-        .button .hint {
-            font-size:10px;
-            position:relative;
-            top:-15px;
-        }
-        </style>
     </head>
     <body>
-        <div>
-            <div class="app">
-                <h1>Badge Example</h1>
-                <div id="deviceready" class="blink">
-                    <p class="event listening">Connecting to Device</p>
-                    <p class="event received">Device is Ready</p>
-                </div>
+        <div class="app">
+            <h1>Badge Example</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
             </div>
+        </div>
 
+        <div class="container-list">
             <!-- permission -->
-            <h2 class="section" style="padding-top:115px;">Permission (iOS8)</h2>
+            <h2 class="section">Permission</h2>
             <div class="container">
-                <div onclick="hasPermission()">Granted?<br/><span>hasPermission()</span></div>
-                <div onclick="registerPermission()">Register<br/><span>registerPermission()</span></div>
+                <a id="check" href="#" class="button grey">Check</a>
+                <a id="grant" href="#" class="button grey">Grant</a>
             </div>
 
             <!-- set -->
             <h2 class="section">Set</h2>
             <div class="container">
-                <div onclick="setBadge(false)">Set 10<br/><span>set()</span></div>
-                <div onclick="setBadge(true)">Set random<br/><span>set()</span></div>
+                <a id="fix" href="#" class="button orange">10</a>
+                <a id="inc" href="#" class="button">Increase</a>
             </div>
             <div class="container">
-                <div onclick="increaseBadge()">Increase<br/><span>increase()</span></div>
-                <div onclick="decreaseBadge()">Decrease<br/><span>decrease()</span></div>
+                <a id="rand" href="#" class="button orange">Random</a>
+                <a id="dec"  href="#" class="button">Decrease</a>
             </div>
 
             <!-- get -->
             <h2 class="section">Get</h2>
             <div class="container">
-                <div onclick="getBadge()">Get<br/><span>get()</span></div>
+                <a id="get" href="#" class="button orange">Get</a>
             </div>
 
             <!-- clear -->
             <h2 class="section">Clear</h2>
             <div class="container">
-                <div onclick="clearBadge()">Clear<br/><span>clear()</span></div>
+                <a id="clear" href="#" class="button orange">Clear</a>
             </div>
 
             <!-- configure -->
-            <h2 class="section">Configuration</h2>
+            <h2 class="section">Config</h2>
             <div class="container">
-                <div onclick="switchAutoClear()">Toggle <i>autoClear</i><br/><span>configure()</span></div>
+                <a id="toggle" href="#" class="button grey">Toggle <i>autoClear</i></a>
             </div>
 
-            <!-- copyright -->
             <div class="copyright">
-                © 2013-2016 appPlant GmbH
+                © 2016 appPlant<br/>
+                Made with <g-emoji alias="yum" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f60b.png">😋</g-emoji> from Leipzig
             </div>
         </div>
 
+        <script type="text/javascript" src="/www/WinJS/js/base.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-
-        <script type="text/javascript">
-            var dialog;
-
-            showToast = function (text) {
-                setTimeout(function () {
-                    if (window.Windows !== undefined) {
-                        showWinDialog(text);
-                    } else
-                    if (window.plugins && window.plugins.toast) {
-                        window.plugins.toast.showShortBottom(String(text));
-                    }
-                    else {
-                        alert(text);
-                    }
-                }, 100);
-            };
-
-            showWinDialog = function (text) {
-                if (dialog) {
-                    dialog.content = text;
-                    return;
-                }
-
-                dialog = new Windows.UI.Popups.MessageDialog(text);
-
-                dialog.showAsync().done(function () {
-                    dialog = null;
-                });
-            };
-        </script>
-
-        <script type="text/javascript">
-
-            clearBadge = function () {
-                cordova.plugins.notification.badge.clear(showToast);
-            };
-
-            setBadge = function (rand) {
-                var number = rand ? Math.round(Math.random()*100) : 10;
-                cordova.plugins.notification.badge.set(number, showToast);
-            };
-
-            getBadge = function () {
-                cordova.plugins.notification.badge.get(showToast);
-            };
-
-            increaseBadge = function () {
-                cordova.plugins.notification.badge.increase(1, showToast);
-            };
-
-            decreaseBadge = function () {
-                cordova.plugins.notification.badge.decrease(1, showToast);
-            };
-
-            hasPermission = function () {
-                cordova.plugins.notification.badge.hasPermission(showToast);
-            };
-
-            registerPermission = function () {
-                cordova.plugins.notification.badge.registerPermission(showToast);
-            };
-
-            switchAutoClear = function () {
-                cordova.plugins.notification.badge.configure({
-                    autoClear: !cordova.plugins.notification.badge._config.autoClear
-                });
-
-                showToast('Set autoClear to \n' + cordova.plugins.notification.badge._config.autoClear);
-            };
-
-            changeTitle = function () {
-                var title = cordova.plugins.notification.badge._config.title + '_new';
-
-                cordova.plugins.notification.badge.configure({
-                    title: title
-                });
-
-                showToast('Set title to \n"' + title + '"');
-            };
-        </script>
     </body>
 </html>

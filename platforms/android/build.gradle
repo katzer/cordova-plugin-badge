@@ -30,7 +30,7 @@ buildscript {
     // http://tools.android.com/tech-docs/new-build-system/version-compatibility
     // and https://issues.apache.org/jira/browse/CB-8143
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -43,7 +43,7 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '2.14.1'
 }
 
 // Configuration properties. Set these via environment variables, build-extras.gradle, or gradle.properties.
@@ -165,7 +165,7 @@ android {
     }
 
     defaultConfig {
-        versionCode cdvVersionCode ?: Integer.parseInt("" + privateHelpers.extractIntFromManifest("versionCode"))
+        versionCode cdvVersionCode ?: new BigInteger("" + privateHelpers.extractIntFromManifest("versionCode"))
         applicationId privateHelpers.extractStringFromManifest("package")
 
         if (cdvMinSdkVersion != null) {
@@ -177,8 +177,8 @@ android {
       abortOnError false;
     }
 
-    compileSdkVersion 23
-    buildToolsVersion '24.0.2'
+    compileSdkVersion cdvCompileSdkVersion
+    buildToolsVersion cdvBuildToolsVersion
 
     if (Boolean.valueOf(cdvBuildMultipleApks)) {
         productFlavors {
@@ -219,8 +219,8 @@ android {
     */
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
     }
 
     if (cdvReleaseSigningPropertiesFile) {
@@ -243,15 +243,13 @@ android {
     if (cdvDebugSigningPropertiesFile) {
         addSigningProps(cdvDebugSigningPropertiesFile, signingConfigs.debug)
     }
-    dexOptions {
-    }
 }
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
+    compile fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
-    debugCompile project(path: "CordovaLib", configuration: "debug")
-    releaseCompile project(path: "CordovaLib", configuration: "release")
+    debugCompile(project(path: "CordovaLib", configuration: "debug"))
+    releaseCompile(project(path: "CordovaLib", configuration: "release"))
     // SUB-PROJECT DEPENDENCIES END
 }
 

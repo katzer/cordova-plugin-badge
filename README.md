@@ -1,76 +1,62 @@
 
-[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
-[![npm version](https://badge.fury.io/js/de.appplant.cordova.plugin.badge.svg)](http://badge.fury.io/js/de.appplant.cordova.plugin.badge)
-[![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
+Cordova Badge Plugin - Sample App
+=================================
 
-Cordova Badge Plugin - Example
-==============================
+<img height="430px" align="right" src="images/overview.png">
 
 [Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows Phone.
 
 ## Instructions
-[Download][zip] or clone the _example_ branch and run the following command:
+Clone the _example_ branch:
 
-```bash
-cordova build [android|browser|ios|windows|wp8]
-cordova run   [android|browser|ios|windows|wp8]
-```
+    git clone -b example https://github.com/katzer/cordova-plugin-badge.git
 
-These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. Its also possible to open the project with [Xcode][xcode], [Android Studio][as] or [Visual Studio][vs].
+And then execute:
 
-<p align="center">
-    <img src="images/overview.png"></img>
-</p>
+    cordova run [android|browser|ios|windows|wp8]
 
-A click on the _"Set 10 as badge number"_ button will display the badge number on the home screen or notification center on Android.
+These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. It is also possible to open the project with [Android Studio][studio], [Xcode][xcode] or [Visual Studio][vs].
+
+A click on the _RAND_ button will display a random number on the home screen where the app icon is located.
 
 ```javascript
-cordova.plugins.notification.badge.set(10);
+cordova.plugins.notification.badge.set(NUMBER);
 ```
 
 Please read the plugin's [README][readme] for further requirements and informations.
 
-### iOS8 Permission
-Since iOS8 to use of badge noficiations the user has to grant the permission before trying to set a badge number. Use the _"Prompt for permission"_ to prompt the use to grant the permission. Note that the OS will only prompt the user only once! Later the user needs to configure the settings manually.
+<img height="150px" align="right" src="images/permission.png">
 
-<p align="center">
-    <img src="images/permission.png"></img>
-</p>
+### Permissions
+
+Since iOS8 to use of badge noficiations the user has to grant the permission before trying to set a badge number. Use the _"Prompt for permission"_ to prompt the use to grant the permission. Note that the OS will prompt the user only once! Later the user needs to configure the settings manually.
 
 
 ## Screenshots
 
 <p align="center">
-    <img height="270px" src="images/wp8.png"></img>
+    <img width="31.8%" src="images/ios.png"></img>
     &nbsp;
-    <img height="270px" src="images/android.png"></img>
+    <img width="31.8%" src="images/android.png"></img>
+    &nbsp;
+    <img width="31.8%" src="images/windows.png"></img>
 </p>
-<p align="center">
-    <img height="165px" src="images/ios.png"></img>
-</p>
-
-
-## Supporting
-Your support is needed. If you use the plugin please support us in order to ensure further development and send us a drop through the donation button.
-
-Thank you!
-
-[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
 
 
 ## License
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2016 appPlant GmbH, Inc. All rights reserved
+Made with :yum: from Leipzig
+
+© 2016 [appPlant GmbH][appplant]
 
 
 [cordova]: https://cordova.apache.org
-[readme]: https://github.com/katzer/cordova-plugin-badge/blob/master/README.md
-[zip]: https://github.com/katzer/cordova-plugin-badge/archive/example.zip
+[studio]: https://developer.android.com/sdk/installing/studio.html
 [xcode]: https://developer.apple.com/xcode/
-[as]: https://developer.android.com/sdk/installing/studio.html
 [vs]: https://www.visualstudio.com
+[readme]: https://github.com/katzer/cordova-plugin-badge/blob/master/README.md
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
 
 

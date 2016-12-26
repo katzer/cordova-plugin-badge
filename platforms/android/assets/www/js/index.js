@@ -34,6 +34,15 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        document.getElementById('check').onclick = app.check;
+        document.getElementById('grant').onclick = app.grant;
+        document.getElementById('clear').onclick = app.clear;
+        document.getElementById('inc').onclick   = app.inc;
+        document.getElementById('dec').onclick   = app.dec;
+        document.getElementById('get').onclick   = app.get;
+        document.getElementById('fix').onclick   = app.fix;
+        document.getElementById('rand').onclick  = app.rand;
+        document.getElementById('toggle').onclick  = app.toggle;
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -45,7 +54,70 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+    },
+    // Check for permission
+    check: function () {
+        cordova.plugins.notification.badge.hasPermission(alert);
+    },
+    // Grant permission
+    grant: function () {
+        cordova.plugins.notification.badge.registerPermission(alert);
+    },
+    // Clear badge
+    clear: function () {
+        cordova.plugins.notification.badge.clear(alert);
+    },
+    // Increase badge by 1
+    inc: function () {
+        cordova.plugins.notification.badge.increase(1, alert);
+    },
+    // Decrease badge by 1
+    dec: function () {
+        cordova.plugins.notification.badge.decrease(1, alert);
+    },
+    // Get badge number
+    get: function () {
+        cordova.plugins.notification.badge.get(alert);
+    },
+    // Set fix badge number
+    fix: function () {
+        cordova.plugins.notification.badge.set(10, alert);
+    },
+    // Set rand badge number
+    rand: function () {
+        var num = Math.round(Math.random()*100);
+        cordova.plugins.notification.badge.set(num, alert);
+    },
+    // Toggle autoclear flag
+    toggle: function () {
+        var config = cordova.plugins.notification.badge._config;
+
+        cordova.plugins.notification.badge.configure({
+            autoClear: !config.autoClear
+        });
+
+        alert('Set autoClear to \n' + config.autoClear);
     }
+
 };
+
+alert = function(msg) { window.plugins.toast.showShortBottom(String(msg)); };
+
+if (window.hasOwnProperty('Windows')) {
+    dialog = null;
+
+    alert = function(msg) {
+        if (dialog) {
+            dialog.content = msg;
+            return;
+        }
+
+        dialog = new Windows.UI.Popups.MessageDialog(msg);
+
+        dialog.showAsync().done(function () {
+            dialog = null;
+        });
+    };
+}
 
 app.initialize();
