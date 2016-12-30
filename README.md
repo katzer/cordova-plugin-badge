@@ -82,7 +82,7 @@ Find out more informations [here][wiki_samples] in our wiki.
 
 ## Quirks
 
-On Android not all launchers support badges. In order for us to set badges we use [ShortcutBadger][shortcut_badger] in order to set the badge. Check out their website to see which launchers are supported.
+On Android not all launchers support badges. In order to set badges we use [ShortcutBadger][shortcut_badger]. Check out their website to see which launchers are supported.
 
 If you're using PhoneGap Build please make sure you specify gradle as your Android build tool in config.xml:
 

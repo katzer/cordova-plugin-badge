@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015 by appPlant UG. All rights reserved.
+ * Copyright (c) 2014-2015 by appPlant GmbH. All rights reserved.
  *
  * @APPPLANT_LICENSE_HEADER_START@
  *
