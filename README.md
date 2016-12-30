@@ -1,9 +1,9 @@
 
-[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
-[![npm version](https://badge.fury.io/js/cordova-plugin-badge.svg)](https://badge.fury.io/js/cordova-plugin-badge)
-[![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
+<p align="left">
+    <b><a href="https://github.com/katzer/cordova-plugin-badge/blob/example/README.md">SAMPLE APP</a> :point_right:</b>
+</p>
 
-Cordova Badge Plugin
+Cordova Badge Plugin [![npm version](https://badge.fury.io/js/cordova-plugin-badge.svg)](https://badge.fury.io/js/cordova-plugin-badge) [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
 ====================
 
 The essential purpose of badge numbers is to enable an application to inform its users that it has something for them — for example, unread messages — when the application isn’t running in the foreground.
@@ -91,14 +91,6 @@ If you're using PhoneGap Build please make sure you specify gradle as your Andro
 ```
 
 
-## Supporting
-Your support is needed. If you use the plugin please support us in order to ensure further development and send us a drop through the donation button.
-
-Thank you!
-
-[![PayPayl](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FF6GG425KEQ3E "Donate once-off to this project using Paypal")
-
-
 ## Contributing
 
 1. Fork it
@@ -112,7 +104,9 @@ Thank you!
 
 This software is released under the [Apache 2.0 License][apache2_license].
 
-© 2013-2016 appPlant GmbH, Inc. All rights reserved
+Made with :yum: from Leipzig
+
+© 2016 [appPlant GmbH][appplant]
 
 
 [cordova]: https://cordova.apache.org
@@ -125,3 +119,4 @@ This software is released under the [Apache 2.0 License][apache2_license].
 [wiki_samples]: https://github.com/katzer/cordova-plugin-badge/wiki/07.-Samples
 [wiki_changelog]: https://github.com/katzer/cordova-plugin-badge/wiki/08.-Changelog
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
+[appplant]: www.appplant.de
