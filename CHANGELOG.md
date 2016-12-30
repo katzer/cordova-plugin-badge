@@ -1,4 +1,8 @@
 ## ChangeLog
+#### Version 0.7.4 (30.12.2016)
+- Upgrade ShortcutBadger to v1.1.11
+- Support for ZUK
+- Improved support for Samsung devices
 
 #### Version 0.7.3 (22.09.2016)
 - Upgrade ShortcutBadger to v1.1.8

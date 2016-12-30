@@ -26,7 +26,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="de.appplant.cordova.plugin.badge-tests"
-        version="0.7.0dev">
+        version="0.7.4">
 
     <name>Cordova Badge Plugin Tests</name>
     <license>Apache 2.0</license>

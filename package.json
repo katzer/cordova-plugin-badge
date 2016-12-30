@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-badge",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Shows the count of unread messages as a badge on the app icon",
   "repository": {
     "type": "git",
@@ -9,6 +9,7 @@
   "keywords": [
       "appplant",
       "badge",
+      "shortcutbadger",
       "cordova",
       "ecosystem:cordova"
   ],
