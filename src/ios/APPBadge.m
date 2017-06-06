@@ -22,15 +22,8 @@
  */
 
 #import "APPBadge.h"
-#import "UIApplication+APPBadge.h"
-#import "AppDelegate+APPAppEvent.h"
 
-@interface APPBadge ()
-
-// Needed when calling `registerPermission`
-@property (nonatomic, retain) CDVInvokedUrlCommand* command;
-
-@end
+@import UserNotifications;
 
 @implementation APPBadge
 
@@ -98,11 +91,20 @@
 - (void) hasPermission:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        BOOL hasPermission = [self.app hasPermissionToDisplayBadges];
+        UNUserNotificationCenter *center =
+        UNUserNotificationCenter.currentNotificationCenter;
 
-        [self sendPluginResult:CDVCommandStatus_OK
-                 messageAsBool:hasPermission
-                    callbackId:command.callbackId];
+        [center getNotificationSettingsWithCompletionHandler:
+         ^(UNNotificationSettings* settings) {
+             BOOL authorized =
+             settings.authorizationStatus == UNAuthorizationStatusAuthorized;
+             BOOL enabled =
+             settings.badgeSetting == UNNotificationSettingEnabled;
+
+             [self sendPluginResult:CDVCommandStatus_OK
+                      messageAsBool:authorized && enabled
+                         callbackId:command.callbackId];
+        }];
     }];
 }
 
@@ -114,32 +116,19 @@
  */
 - (void) registerPermission:(CDVInvokedUrlCommand *)command
 {
-    if (![[UIApplication sharedApplication]
-         respondsToSelector:@selector(registerUserNotificationSettings:)])
-    {
-        return [self hasPermission:command];
-    }
-
-    _command = command;
-
     [self.commandDelegate runInBackground:^{
-        [self.app registerPermissionToDisplayBadges];
+        UNUserNotificationCenter *center =
+        UNUserNotificationCenter.currentNotificationCenter;
+
+        UNAuthorizationOptions options = UNAuthorizationOptionBadge;
+
+        [center requestAuthorizationWithOptions:options
+                              completionHandler:^(BOOL granted, NSError* e) {
+                                  [self sendPluginResult:CDVCommandStatus_OK
+                                           messageAsBool:granted
+                                              callbackId:command.callbackId];
+        }];
     }];
-}
-
-#pragma mark -
-#pragma mark Delegates
-
-/**
- * Called on otification settings registration is completed.
- */
-- (void) didRegisterUserNotificationSettings:(UIUserNotificationSettings*)settings
-{
-    if (_command)
-    {
-        [self hasPermission:_command];
-        _command = NULL;
-    }
 }
 
 #pragma mark -
