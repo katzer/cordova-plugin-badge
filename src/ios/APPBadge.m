@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,8 +13,6 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
 #import "APPBadge.h"
@@ -31,10 +25,9 @@
 #pragma mark Interface
 
 /**
- * Clears the badge of the app icon.
- *
+ * Clear the badge number.
  */
-- (void) clearBadge:(CDVInvokedUrlCommand *)command
+- (void) clear:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         [self.app setApplicationIconBadgeNumber:0];
@@ -46,12 +39,9 @@
 }
 
 /**
- * Sets the badge of the app icon.
- *
- * @param badge
- *      The badge to be set
+ * Set the badge number.
  */
-- (void) setBadge:(CDVInvokedUrlCommand *)command
+- (void) set:(CDVInvokedUrlCommand *)command
 {
     NSArray* args = [command arguments];
     int number    = [[args objectAtIndex:0] intValue];
@@ -66,12 +56,9 @@
 }
 
 /**
- * Gets the badge of the app icon.
- *
- * @param callback
- *      The function to be exec as the callback
+ * Get the badge number.
  */
-- (void) getBadge:(CDVInvokedUrlCommand *)command
+- (void) get:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         long badge = [self.app applicationIconBadgeNumber];
@@ -83,12 +70,9 @@
 }
 
 /**
- * Informs if the app has the permission to show badges.
- *
- * @param callback
- *      The function to be exec as the callback
+ * Check permission to show badges.
  */
-- (void) hasPermission:(CDVInvokedUrlCommand *)command
+- (void) check:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         UNUserNotificationCenter *center =
@@ -109,12 +93,9 @@
 }
 
 /**
- * Register permission to show badges.
- *
- * @param callback
- *      The function to be exec as the callback
+ * Request permission to show badges.
  */
-- (void) registerPermission:(CDVInvokedUrlCommand *)command
+- (void) request:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         UNUserNotificationCenter *center =

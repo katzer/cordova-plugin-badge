@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,49 +13,38 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
-
-/**
- * Instance of the Favico.js libary.
- * @type {Favico}
- */
+// Instance of the Favico.js libary
 exports.favico = new cordova.plugins.notification.badge.Favico({
     animation: 'none'
 });
 
-/**
- * Holds the current badge number value.
- * @type {Number}
- */
+// Holds the current badge number value
 exports.badgeNumber = 0;
-
 
 /**
  * Clears the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.clearBadge = function (success, error) {
+exports.clear = function (success, error) {
     exports.setBadge(success, error, [0]);
 };
 
 /**
  * Sets the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- * @param {Number} badge
- *      The new badge number
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      badge   The badge number
+ *
+ * @return [ Void ]
  */
-exports.setBadge = function (success, error, args) {
+exports.set = function (success, error, args) {
     var badge = args[0];
 
     exports.badgeNumber = badge;
@@ -71,38 +56,13 @@ exports.setBadge = function (success, error, args) {
 /**
  * Gets the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.getBadge = function (success, error) {
+exports.get = function (success, error) {
     success(exports.badgeNumber);
 };
-
-/**
- * Informs if the app has the permission to show badges.
- *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- */
-exports.hasPermission = function (success, error) {
-    success(true);
-};
-
-/**
- * Register permission to show badges if not already granted.
- *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- */
-exports.registerPermission = function (success, error) {
-    success(true);
-};
-
 
 cordova.commandProxy.add('Badge', exports);

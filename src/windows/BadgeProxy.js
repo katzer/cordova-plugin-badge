@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,32 +13,29 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
-
 
 /**
- * Clears the badge of the app icon.
+ * Clear the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.clearBadge = function (success, error) {
+exports.clear = function (success, error) {
     exports.setBadge(success, error, [0]);
 };
 
 /**
- * Gets the badge of the app icon.
+ * Get the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.getBadge = function (success, error) {
+exports.get = function (success, error) {
     var app  = WinJS.Application,
         file = exports._cordova_badge_number;
 
@@ -58,40 +51,15 @@ exports.getBadge = function (success, error) {
 };
 
 /**
- * Informs if the app has the permission to show badges.
+ * Set the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- */
-exports.hasPermission = function (success, error) {
-    success(true);
-};
-
-/**
- * Register permission to show badges if not already granted.
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      badge   The badge number
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @return [ Void ]
  */
-exports.registerPermission = function (success, error) {
-    exports.hasPermission(success, error);
-};
-
-/**
- * Sets the badge of the app icon.
- *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- * @param {Number} badge
- *      The new badge number
- */
-exports.setBadge = function (success, error, args) {
+exports.set = function (success, error, args) {
     var notifications = Windows.UI.Notifications,
         badge         = args[0],
         type          = notifications.BadgeTemplateType.badgeNumber,
@@ -110,14 +78,8 @@ exports.setBadge = function (success, error, args) {
     success(badge);
 };
 
-
-/********
- * UTIL *
- ********/
-
 /**
  * Path to file that containes the badge number.
- * @type {String}
  */
 exports._cordova_badge_number = 'cordova_badge_number';
 
@@ -125,14 +87,12 @@ exports._cordova_badge_number = 'cordova_badge_number';
  * Persist the badge of the app icon so that `getBadge` is able to return the
  * badge number back to the client.
  *
- * @param  {Number|String} badge
- * The badge number to save for.
+ * @param [ Int ] badge The badge number
  *
- * @return void
+ * @return [ Void ]
  */
 exports._saveBadge = function (badge) {
     WinJS.Application.local.writeText(exports._cordova_badge_number, badge);
 };
-
 
 cordova.commandProxy.add('Badge', exports);

@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2014-2015 by appPlant GmbH. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,8 +13,6 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
 package de.appplant.cordova.plugin.badge;
@@ -37,16 +31,13 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  */
 class BadgeImpl {
 
-    /**
-     * The name for the shared preferences key
-     */
+    // The name for the shared preferences key
     private static final String KEY = "badge";
 
     /**
-     * Clears the badge of the app icon.
+     * Clear the badge number.
      *
-     * @param ctx
-     * The application context.
+     * @param ctx The application context.
      */
     void clearBadge (Context ctx) {
         saveBadge(0, ctx);
@@ -54,12 +45,10 @@ class BadgeImpl {
     }
 
     /**
-     * Retrieves the badge of the app icon.
+     * Get the badge number.
      *
-     * @param ctx
-     * The application context.
-     * @param callback
-     * The function to be exec as the callback.
+     * @param ctx      The application context.
+     * @param callback The function to be exec as the callback.
      */
     void getBadge (CallbackContext callback, Context ctx) {
         SharedPreferences settings = getSharedPreferences(ctx);
@@ -72,12 +61,10 @@ class BadgeImpl {
     }
 
     /**
-     * Sets the badge of the app icon.
+     * Set the badge number.
      *
-     * @param args
-     * The new badge number
-     * @param ctx
-     * The application context
+     * @param args The number to set as the badge number.
+     * @param ctx  The application context
      */
     void setBadge (JSONArray args, Context ctx) {
         int badge = args.optInt(0);
@@ -90,28 +77,14 @@ class BadgeImpl {
      * Persist the badge of the app icon so that `getBadge` is able to return
      * the badge number back to the client.
      *
-     * @param badge
-     * The badge of the app icon.
-     * @param ctx
-     * The application context.
+     * @param badge The badge number to persist.
+     * @param ctx   The application context.
      */
     private void saveBadge (int badge, Context ctx) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
 
         editor.putInt(KEY, badge);
         editor.apply();
-    }
-
-    /**
-     * Informs if the app has the permission to show badges.
-     *
-     * @param callback
-     * The function to be exec as the callback
-     */
-    void hasPermission (final CallbackContext callback) {
-        PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-
-        callback.sendPluginResult(result);
     }
 
     /**

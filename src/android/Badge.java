@@ -1,8 +1,4 @@
 /*
- * Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,8 +13,6 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
 package de.appplant.cordova.plugin.badge;
@@ -33,9 +27,7 @@ import org.json.JSONException;
 
 public class Badge extends CordovaPlugin {
 
-    /**
-     * Implementation of the badge interface methods.
-     */
+    // Implementation of the badge interface methods
     private final BadgeImpl badgeImpl = new BadgeImpl();
 
     /**
@@ -46,8 +38,7 @@ public class Badge extends CordovaPlugin {
      * @param callback The callback context used when
      *                 calling back into JavaScript.
      *
-     * @return
-     *      Returning false results in a "MethodNotFound" error.
+     * @return Returning false results in a "MethodNotFound" error.
      *
      * @throws JSONException
      */
@@ -55,27 +46,17 @@ public class Badge extends CordovaPlugin {
     public boolean execute (String action, JSONArray args, CallbackContext callback)
             throws JSONException {
 
-        if (action.equalsIgnoreCase("clearBadge")) {
+        if (action.equalsIgnoreCase("clear")) {
             clearBadge(callback);
             return true;
         }
 
-        if (action.equalsIgnoreCase("getBadge")) {
+        if (action.equalsIgnoreCase("get")) {
             getBadge(callback);
             return true;
         }
 
-        if (action.equalsIgnoreCase("hasPermission")) {
-            hasPermission(callback);
-            return true;
-        }
-
-        if (action.equalsIgnoreCase("registerPermission")) {
-            hasPermission(callback);
-            return true;
-        }
-
-        if (action.equalsIgnoreCase("setBadge")) {
+        if (action.equalsIgnoreCase("set")) {
             setBadge(args, callback);
             return true;
         }
@@ -84,10 +65,9 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
-     * Clears the badge of the app icon.
+     * Clear the badge number.
      *
-     * @param callback
-     *      The function to be exec as the callback
+     * @param callback The function to be exec as the callback
      */
     private void clearBadge (final CallbackContext callback) {
         cordova.getThreadPool().execute(new Runnable() {
@@ -100,10 +80,9 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
-     * Retrieves the badge of the app icon.
+     * Get the badge number.
      *
-     * @param callback
-     *      The function to be exec as the callback
+     * @param callback The function to be exec as the callback.
      */
     private void getBadge (final CallbackContext callback) {
         cordova.getThreadPool().execute(new Runnable() {
@@ -115,27 +94,10 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
-     * Informs if the app has the permission to show badges.
+     * Set the badge number.
      *
-     * @param callback
-     *      The function to be exec as the callback
-     */
-    private void hasPermission (final CallbackContext callback) {
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                badgeImpl.hasPermission(callback);
-            }
-        });
-    }
-
-    /**
-     * Sets the badge of the app icon.
-     *
-     * @param args
-     *      The new badge number
-     * @param callback
-     *      The function to be exec as the callback
+     * @param args     The number to set as the badge number.
+     * @param callback The function to be exec as the callback.
      */
     private void setBadge (final JSONArray args,
                            final CallbackContext callback) {
