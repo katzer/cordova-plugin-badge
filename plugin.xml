@@ -67,19 +67,6 @@
         <source-file src="src/ios/APPBadge.m" />
     </platform>
 
-    <!-- wp8 -->
-    <platform name="wp8">
-
-        <config-file target="config.xml" parent="/*">
-            <feature name="Badge">
-                <param name="wp-package" value="Badge"/>
-            </feature>
-        </config-file>
-
-        <source-file src="src/wp8/Badge.cs" />
-
-    </platform>
-
     <!-- android -->
     <platform name="android">
 

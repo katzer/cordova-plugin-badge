@@ -24,7 +24,6 @@ The current 0.7 branch does support the following platforms:
 - __Browser__
 - __iOS__
 - __Windows__
-- __WP8__ and __WP8.1 Silverlight__ (deprecated)
 
 Find out more informations [here][wiki_platforms] in our wiki.
 
