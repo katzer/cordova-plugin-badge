@@ -1,4 +1,15 @@
 ## ChangeLog
+#### Version 0.8.0 (07.06.2017)
+- Support for OSX platform
+- Updated code to work properly with iOS@10
+- Dropped supported for iOS@9
+- Upgrade ShortcutBadger to v1.1.17
+- Allow specifying ShortcutBadger version via gradle property
+- Config settings like `autoClear` are not persisted
+- Small enhancements and bug fixes
+- Removed platform support for WP8
+- Removed old namespace `plugin.notification.badge`
+
 #### Version 0.7.4 (30.12.2016)
 - Upgrade ShortcutBadger to v1.1.11
 - Support for ZUK
