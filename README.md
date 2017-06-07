@@ -13,7 +13,7 @@ Clone the _example_ branch:
 
 And then execute:
 
-    cordova run [android|browser|ios|windows|wp8]
+    cordova run [android|browser|ios|windows]
 
 These will lunch the simulator or any plugged in device and start the example application as seen below in the screenshots. It is also possible to open the project with [Android Studio][studio], [Xcode][xcode] or [Visual Studio][vs].
 
@@ -49,7 +49,7 @@ This software is released under the [Apache 2.0 License][apache2_license].
 
 Made with :yum: from Leipzig
 
-© 2016 [appPlant GmbH][appplant]
+© 2013 [appPlant GmbH][appplant]
 
 
 [cordova]: https://cordova.apache.org
