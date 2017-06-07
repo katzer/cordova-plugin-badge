@@ -1,9 +1,5 @@
 ﻿cordova.define("cordova-plugin-badge.Badge.Proxy", function(require, exports, module) {
 /*
- * Copyright (c) 2013-2016 by appPlant UG. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -18,81 +14,48 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
+var appData    = Windows.Storage.ApplicationData.current,
+    CONFIG_KEY = 'APPBadgeConfigKey',
+    BADGE_KEY  = 'cordova_badge_number';
 
 /**
- * Clears the badge of the app icon.
+ * Clear the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.clearBadge = function (success, error) {
-    exports.setBadge(success, error, [0]);
+exports.clear = function (success, error) {
+    exports.set(success, error, [0]);
 };
 
 /**
- * Gets the badge of the app icon.
+ * Get the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.getBadge = function (success, error) {
-    var app  = WinJS.Application,
-        file = exports._cordova_badge_number;
+exports.get = function (success, error) {
+    var badge = appData.localSettings.values[BADGE_KEY];
 
-    app.local.exists(file).then(function (exists) {
-        if (exists) {
-            app.local.readText(file).then(function (badge) {
-                success(isNaN(badge) ? badge : Number(badge));
-            });
-        } else {
-            success(0);
-        }
-    });
+    success(badge || 0);
 };
 
 /**
- * Informs if the app has the permission to show badges.
+ * Set the badge number.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- */
-exports.hasPermission = function (success, error) {
-    success(true);
-};
-
-/**
- * Register permission to show badges if not already granted.
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      badge   The badge number
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @return [ Void ]
  */
-exports.registerPermission = function (success, error) {
-    exports.hasPermission(success, error);
-};
-
-/**
- * Sets the badge of the app icon.
- *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- * @param {Number} badge
- *      The new badge number
- */
-exports.setBadge = function (success, error, args) {
+exports.set = function (success, error, args) {
     var notifications = Windows.UI.Notifications,
         badge         = args[0],
         type          = notifications.BadgeTemplateType.badgeNumber,
@@ -106,35 +69,53 @@ exports.setBadge = function (success, error, args) {
         .createBadgeUpdaterForApplication()
         .update(notification);
 
-    exports._saveBadge(badge);
+    exports.saveBadge(badge);
 
     success(badge);
 };
 
+/**
+ * Save the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      config  The config map
+ *
+ * @return [ Void ]
+ */
+exports.save = function (success, error, args) {
+    var config = args[0] || null,
+        json   = JSON.stringify(config);
 
-/********
- * UTIL *
- ********/
+    appData.localSettings.values[CONFIG_KEY] = json;
+};
 
 /**
- * Path to file that containes the badge number.
- * @type {String}
+ * Load the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports._cordova_badge_number = 'cordova_badge_number';
+exports.load = function (success, error) {
+    var json   = appData.localSettings.values[CONFIG_KEY],
+        config = JSON.parse(json || null);
+
+    success(config);
+};
 
 /**
  * Persist the badge of the app icon so that `getBadge` is able to return the
  * badge number back to the client.
  *
- * @param  {Number|String} badge
- * The badge number to save for.
+ * @param [ Int ] badge The badge number
  *
- * @return void
+ * @return [ Void ]
  */
-exports._saveBadge = function (badge) {
-    WinJS.Application.local.writeText(exports._cordova_badge_number, badge);
+exports.saveBadge = function (badge) {
+    appData.localSettings.values[BADGE_KEY] = badge;
 };
-
 
 cordova.commandProxy.add('Badge', exports);
 

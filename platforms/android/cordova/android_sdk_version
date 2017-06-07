@@ -19,10 +19,10 @@
        under the License.
 */
 
-var android_sdk_version = require('./lib/android_sdk_version');
+var android_sdk = require('./lib/android_sdk');
 
-android_sdk_version.run().done(null, function(err) {
-    console.log(err);
+android_sdk.print_newest_available_sdk_target().done(null, function(err) {
+    console.error(err);
     process.exit(2);
 });
 

@@ -2,115 +2,118 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Machine>VIRT-WIN10</Machine>
-    <WindowsUser>katze</WindowsUser>
+    <WindowsUser>katzer</WindowsUser>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetOsVersion>10.0</TargetOsVersion>
     <TargetOsDescription>Windows 10.0</TargetOsDescription>
     <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
     <PackageArchitecture>neutral</PackageArchitecture>
-    <PackageIdentityName>a0f18e70-cb56-11e6-b30c-a90a796157fe</PackageIdentityName>
+    <PackageIdentityName>f9cfb3f0-4b5d-11e7-ada5-6db431c9d1ef</PackageIdentityName>
     <PackageIdentityPublisher>CN=%24username%24</PackageIdentityPublisher>
-    <IntermediateOutputPath>Y:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\</IntermediateOutputPath>
+    <IntermediateOutputPath>Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\</IntermediateOutputPath>
     <RemoteDeploymentType></RemoteDeploymentType>
     <PackageRegistrationPath></PackageRegistrationPath>
     <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="Y:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\AppxManifest.xml">
+    <AppXManifest Include="Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\SplashScreen.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\SplashScreen.scale-100.png">
       <PackagePath>images\SplashScreen.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square150x150Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square150x150Logo.scale-100.png">
       <PackagePath>images\Square150x150Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square30x30Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square30x30Logo.scale-100.png">
       <PackagePath>images\Square30x30Logo.scale-100.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square310x310Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square310x310Logo.scale-100.png">
       <PackagePath>images\Square310x310Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square44x44Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square44x44Logo.scale-100.png">
       <PackagePath>images\Square44x44Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square70x70Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square70x70Logo.scale-100.png">
       <PackagePath>images\Square70x70Logo.scale-100.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Square71x71Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Square71x71Logo.scale-100.png">
       <PackagePath>images\Square71x71Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\StoreLogo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\StoreLogo.scale-100.png">
       <PackagePath>images\StoreLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\images\Wide310x150Logo.scale-100.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\images\Wide310x150Logo.scale-100.png">
       <PackagePath>images\Wide310x150Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\img\logo.png">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\img\logo.png">
       <PackagePath>www\img\logo.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\.DS_Store">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\.DS_Store">
       <PackagePath>www\.DS_Store</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\confighelper.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\confighelper.js">
       <PackagePath>www\cordova-js-src\confighelper.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\exec.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\exec.js">
       <PackagePath>www\cordova-js-src\exec.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\platform.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\platform.js">
       <PackagePath>www\cordova-js-src\platform.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\splashscreen.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova-js-src\splashscreen.js">
       <PackagePath>www\cordova-js-src\splashscreen.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova.js">
       <PackagePath>www\cordova.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\cordova_plugins.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\cordova_plugins.js">
       <PackagePath>www\cordova_plugins.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\js\index.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\js\index.js">
       <PackagePath>www\js\index.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-badge\src\windows\BadgeProxy.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-badge\src\windows\BadgeProxy.js">
       <PackagePath>www\plugins\cordova-plugin-badge\src\windows\BadgeProxy.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-badge\www\badge.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-badge\www\badge.js">
       <PackagePath>www\plugins\cordova-plugin-badge\www\badge.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-x-toast\test\tests.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-x-toast\src\windows\toastProxy.js">
+      <PackagePath>www\plugins\cordova-plugin-x-toast\src\windows\toastProxy.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-x-toast\test\tests.js">
       <PackagePath>www\plugins\cordova-plugin-x-toast\test\tests.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-x-toast\www\Toast.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\plugins\cordova-plugin-x-toast\www\Toast.js">
       <PackagePath>www\plugins\cordova-plugin-x-toast\www\Toast.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\WinJS\js\base.js">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\WinJS\js\base.js">
       <PackagePath>www\WinJS\js\base.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\css\index.css">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\css\index.css">
       <PackagePath>www\css\index.css</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\css\splashscreen.css">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\css\splashscreen.css">
       <PackagePath>www\css\splashscreen.css</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\www\index.html">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\www\index.html">
       <PackagePath>www\index.html</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\config.xml">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\config.xml">
       <PackagePath>config.xml</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="Y:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\ReverseMap\resources.pri">
+    <AppxPackagedFile Include="Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\ReverseMap\resources.pri">
       <PackagePath>resources.pri</PackagePath>
     </AppxPackagedFile>
   </ItemGroup>

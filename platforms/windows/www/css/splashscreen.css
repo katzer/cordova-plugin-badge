@@ -35,8 +35,24 @@
     display: none;
 }
 
+#extendedSplashImageHelper {
+    vertical-align: middle;
+    display: inline-block;
+    height: 100%;
+}
+
 #extendedSplashImage {
     position: absolute;
+    left: 0px;
+    max-height: 100%;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+#extendedSplashImage.phone {
+    position: relative;
+    margin: 0 auto;
+    display: inline-block;
 }
 
 /* ProgressRing */
@@ -62,12 +78,20 @@
     width: 100%;
     top: calc(100% - 140px);
     text-align: center;
+    display: block;
 }
 
 .win-ring.win-medium.extended-splash-progress-wp10 {
     position: absolute;
     top: calc(82.5% - 20px);
     left: calc(50% - 20px);
+}
+
+.win-ring.win-medium.extended-splash-progress-desktop {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
 }
 
 #extendedSplashProgress.hidden {

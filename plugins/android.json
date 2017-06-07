@@ -14,9 +14,5 @@
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        }
-    }
+    "dependent_plugins": {}
 }

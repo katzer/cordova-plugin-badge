@@ -1,0 +1,24 @@
+{
+    "name": "de.appplant.cordova.plugin.badge.example",
+    "version": "0.6.0",
+    "displayName": "BadgeExample",
+    "cordova": {
+        "platforms": [
+            "android",
+            "browser",
+            "ios",
+            "windows"
+        ],
+        "plugins": {
+            "cordova-plugin-x-toast": {},
+            "cordova-plugin-badge": {}
+        }
+    },
+    "dependencies": {
+        "cordova-android": "^6.2.3",
+        "cordova-browser": "^4.1.0",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-x-toast": "^2.6.0",
+        "cordova-windows": "^5.0.0"
+    }
+}

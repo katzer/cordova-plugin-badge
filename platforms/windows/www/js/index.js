@@ -61,7 +61,7 @@ var app = {
     },
     // Grant permission
     grant: function () {
-        cordova.plugins.notification.badge.registerPermission(alert);
+        cordova.plugins.notification.badge.requestPermission(alert);
     },
     // Clear badge
     clear: function () {
@@ -101,23 +101,38 @@ var app = {
 
 };
 
-alert = function(msg) { window.plugins.toast.showShortBottom(String(msg)); };
+var dialog;
+
+showToast = function (text) {
+    setTimeout(function () {
+        if (window.Windows !== undefined) {
+            showWinDialog(text);
+        } else
+        if (window.plugins && window.plugins.toast) {
+            window.plugins.toast.showShortBottom(String(text));
+        }
+        else {
+            alert(text);
+        }
+    }, 500);
+};
+
+showWinDialog = function (text) {
+
+    if (dialog) {
+        dialog.content = text;
+        return;
+    }
+
+    dialog = new Windows.UI.Popups.MessageDialog(text);
+
+    dialog.showAsync().done(function () {
+        dialog = null;
+    });
+};
 
 if (window.hasOwnProperty('Windows')) {
-    dialog = null;
-
-    alert = function(msg) {
-        if (dialog) {
-            dialog.content = msg;
-            return;
-        }
-
-        dialog = new Windows.UI.Popups.MessageDialog(msg);
-
-        dialog.showAsync().done(function () {
-            dialog = null;
-        });
-    };
+    alert = function (msg) { new Windows.UI.Popups.MessageDialog(msg).showAsync(); };
 }
 
 app.initialize();

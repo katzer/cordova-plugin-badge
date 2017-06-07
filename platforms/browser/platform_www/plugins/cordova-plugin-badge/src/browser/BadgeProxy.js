@@ -1,8 +1,4 @@
 cordova.define("cordova-plugin-badge.Badge.Proxy", function(require, exports, module) { /*
- * Copyright (c) 2013-2016 by appPlant UG. All rights reserved.
- *
- * @APPPLANT_LICENSE_HEADER_START@
- *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
  * Version 2.0 (the 'License'). You may not use this file except in
@@ -17,93 +13,104 @@ cordova.define("cordova-plugin-badge.Badge.Proxy", function(require, exports, mo
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- *
- * @APPPLANT_LICENSE_HEADER_END@
  */
 
-
-/**
- * Instance of the Favico.js libary.
- * @type {Favico}
- */
+// Instance of the Favico.js libary
 exports.favico = new cordova.plugins.notification.badge.Favico({
     animation: 'none'
 });
 
-/**
- * Holds the current badge number value.
- * @type {Number}
- */
-exports.badgeNumber = 0;
-
+// Holds the current badge number
+var BADGE_KEY  = 'cordova_badge_number';
+// Holds the saved badge config
+var CONFIG_KEY = 'APPBadgeConfigKey';
 
 /**
  * Clears the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- */
-exports.clearBadge = function (success, error) {
-    exports.setBadge(success, error, [0]);
-};
-
-/**
- * Sets the badge of the app icon.
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
- * @param {Number} badge
- *      The new badge number
+ * @return [ Void ]
  */
-exports.setBadge = function (success, error, args) {
-    var badge = args[0];
-
-    exports.badgeNumber = badge;
-
-    exports.favico.badge(badge);
-    success(badge);
+exports.clear = function (success, error) {
+    exports.set(success, error, [0]);
 };
 
 /**
  * Gets the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
  */
-exports.getBadge = function (success, error) {
-    success(exports.badgeNumber);
+exports.get = function (success, error) {
+    var badge = localStorage[BADGE_KEY];
+
+    success(badge || 0);
 };
 
 /**
- * Informs if the app has the permission to show badges.
+ * Sets the badge of the app icon.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      badge   The badge number
+ *
+ * @return [ Void ]
  */
-exports.hasPermission = function (success, error) {
-    success(true);
+exports.set = function (success, error, args) {
+    var badge = args[0];
+
+    exports.saveBadge(badge);
+    exports.favico.badge(badge);
+
+    success(badge);
 };
 
 /**
- * Register permission to show badges if not already granted.
+ * Save the badge config.
  *
- * @param {Function} success
- *      Success callback
- * @param {Function} error
- *      Error callback
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      config  The config map
+ *
+ * @return [ Void ]
  */
-exports.registerPermission = function (success, error) {
-    success(true);
+exports.save = function (success, error, args) {
+    var config = args[0] || null,
+        json   = JSON.stringify(config);
+
+    localStorage[CONFIG_KEY] = json;
 };
 
+/**
+ * Load the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
+ */
+exports.load = function (success, error) {
+    var json   = localStorage[CONFIG_KEY],
+        config = JSON.parse(json || null);
+
+    success(config);
+};
+
+/**
+ * Persist the badge of the app icon so that `getBadge` is able to return the
+ * badge number back to the client.
+ *
+ * @param [ Int ] badge The badge number
+ *
+ * @return [ Void ]
+ */
+exports.saveBadge = function (badge) {
+    localStorage[BADGE_KEY] = badge;
+};
 
 cordova.commandProxy.add('Badge', exports);
 

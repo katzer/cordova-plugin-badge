@@ -1,7 +1,6 @@
 {
-    "wp8": "latest",
     "ios": "latest",
     "android": "latest",
-    "browser": "4.1.0",
-    "windows": "latest"
+    "windows": "latest",
+    "browser": "latest"
 }

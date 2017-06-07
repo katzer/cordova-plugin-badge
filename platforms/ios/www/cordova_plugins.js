@@ -18,7 +18,6 @@ module.exports = [
         "file": "plugins/cordova-plugin-badge/www/badge.js",
         "pluginId": "cordova-plugin-badge",
         "clobbers": [
-            "plugin.notification.badge",
             "cordova.plugins.notification.badge"
         ]
     }
@@ -26,9 +25,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-x-toast": "2.5.2",
-    "cordova-plugin-app-event": "1.2.0",
-    "cordova-plugin-badge": "0.7.3"
+    "cordova-plugin-x-toast": "2.6.0",
+    "cordova-plugin-badge": "0.7.4"
 };
 // BOTTOM OF METADATA
 });

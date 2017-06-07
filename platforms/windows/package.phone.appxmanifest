@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
     <Identity Name="de.appplant.cordova.plugin.badge.example" Publisher="CN=$username$" Version="0.6.0.0" />
-    <mp:PhoneIdentity PhoneProductId="a0f18e70-cb56-11e6-b30c-a90a796157fe" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
+    <mp:PhoneIdentity PhoneProductId="f9cfb3f0-4b5d-11e7-ada5-6db431c9d1ef" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
     <Properties>
         <DisplayName>BadgeExample</DisplayName>
         <PublisherDisplayName>Sebastián Katzer</PublisherDisplayName>

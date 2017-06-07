@@ -25,9 +25,6 @@
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
-        "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
-        },
         "cordova-plugin-badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
@@ -52,14 +49,12 @@
             "file": "plugins/cordova-plugin-badge/www/badge.js",
             "pluginId": "cordova-plugin-badge",
             "clobbers": [
-                "plugin.notification.badge",
                 "cordova.plugins.notification.badge"
             ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-x-toast": "2.5.2",
-        "cordova-plugin-app-event": "1.2.0",
-        "cordova-plugin-badge": "0.7.3"
+        "cordova-plugin-x-toast": "2.6.0",
+        "cordova-plugin-badge": "0.7.4"
     }
 }

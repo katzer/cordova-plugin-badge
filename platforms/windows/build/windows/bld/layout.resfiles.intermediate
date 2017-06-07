@@ -22,6 +22,7 @@ www\index.html
 www\js\index.js
 www\plugins\cordova-plugin-badge\src\windows\BadgeProxy.js
 www\plugins\cordova-plugin-badge\www\badge.js
+www\plugins\cordova-plugin-x-toast\src\windows\toastProxy.js
 www\plugins\cordova-plugin-x-toast\test\tests.js
 www\plugins\cordova-plugin-x-toast\www\Toast.js
 www\WinJS\js\base.js

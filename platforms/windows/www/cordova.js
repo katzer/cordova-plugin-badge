@@ -1,5 +1,5 @@
 ﻿// Platform: windows
-// 53ea1913735222d326e65326e03391405df3cd4e
+// 7c5fcc5a5adfbf3fb8ceaf36fbdd4bd970bd9c20
 /*
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -19,7 +19,7 @@
  under the License.
 */
 ;(function() {
-var PLATFORM_VERSION_BUILD_LABEL = '4.4.3';
+var PLATFORM_VERSION_BUILD_LABEL = '5.0.0';
 // file: src/scripts/require.js
 
 /*jshint -W079 */
@@ -844,26 +844,47 @@ module.exports = channel;
 // file: f:/coho/cordova-windows/cordova-js-src/confighelper.js
 define("cordova/confighelper", function(require, exports, module) {
 
-// config.xml wrapper (non-node ConfigParser analogue)
-var config;
-function Config(xhr) {
-    function loadPreferences(xhr) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(xhr.responseText, "application/xml");
+// config.xml and AppxManifest.xml wrapper (non-node ConfigParser analogue)
+var configCache = {};
+var utils = require("cordova/utils");
 
-        var preferences = doc.getElementsByTagName("preference");
-        return Array.prototype.slice.call(preferences);
-    }
+var isPhone = (cordova.platformId == 'windows') && WinJS.Utilities.isPhone;
+var isWin10UWP = navigator.appVersion.indexOf('MSAppHost/3.0') !== -1;
+var splashScreenTagName = isWin10UWP ? "SplashScreen" : (isPhone ? "m3:SplashScreen" : "m2:SplashScreen");
 
-    this.xhr = xhr;
-    this.preferences = loadPreferences(this.xhr);
+function XmlFile(text) {
+    this.text = text;
 }
 
-function readConfig(success, error) {
+XmlFile.prototype.loadTags = function (tagName) {
+    var parser;
+    if (!this.doc) {
+        parser = new DOMParser();
+        this.doc = parser.parseFromString(this.text, "application/xml");
+    }
+
+    var tags = this.doc.getElementsByTagName(tagName);
+    return Array.prototype.slice.call(tags);
+}
+
+function Config(text) {
+    XmlFile.apply(this, arguments);
+    this.preferences = this.loadTags("preference");
+}
+
+function Manifest(text) {
+    XmlFile.apply(this, arguments);
+    this.splashScreen = this.loadTags(splashScreenTagName)[0];
+}
+
+utils.extend(Config, XmlFile);
+utils.extend(Manifest, XmlFile);
+
+function requestFile(filePath, success, error) {
     var xhr;
 
-    if (typeof config != 'undefined') {
-        success(config);
+    if (typeof configCache[filePath] != 'undefined') {
+        success(configCache[filePath]);
     }
 
     function fail(msg) {
@@ -877,11 +898,11 @@ function readConfig(success, error) {
     var xhrStatusChangeHandler = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200 || xhr.status == 304 || xhr.status == 0 /* file:// */) {
-                config = new Config(xhr);
-                success(config);
+                configCache[filePath] = xhr.responseText;
+                success(xhr.responseText);
             }
             else {
-                fail('[Windows][cordova.js][xhrStatusChangeHandler] Could not XHR config.xml: ' + xhr.statusText);
+                fail('[Windows][cordova.js][xhrStatusChangeHandler] Could not XHR ' + filePath + ': ' + xhr.statusText);
             }
         }
     };
@@ -890,18 +911,30 @@ function readConfig(success, error) {
     xhr.addEventListener("load", xhrStatusChangeHandler);
 
     try {
-        xhr.open("get", "/config.xml", true);
+        xhr.open("get", filePath, true);
         xhr.send();
     } catch (e) {
-        fail('[Windows][cordova.js][readConfig] Could not XHR config.xml: ' + JSON.stringify(e));
+        fail('[Windows][cordova.js][xhrFile] Could not XHR ' + filePath + ': ' + JSON.stringify(e));
     }
+}
+
+function readConfig(success, error) {
+    requestFile("/config.xml", function (contents) {
+        success(new Config(contents));
+    }, error);
+}
+
+function readManifest(success, error) {
+    requestFile("/AppxManifest.xml", function (contents) {
+        success(new Manifest(contents));
+    }, error);
 }
 
 /**
  * Reads a preference value from config.xml.
  * Returns preference value or undefined if it does not exist.
  * @param {String} preferenceName Preference name to read */
-Config.prototype.getPreferenceValue = function getPreferenceValue(preferenceName) {
+Config.prototype.getPreferenceValue = function (preferenceName) {
     var preferenceItem = this.preferences && this.preferences.filter(function (item) {
         return item.attributes['name'].value === preferenceName;
     });
@@ -911,7 +944,15 @@ Config.prototype.getPreferenceValue = function getPreferenceValue(preferenceName
     }
 }
 
+/**
+ * Reads SplashScreen image path
+ */
+Manifest.prototype.getSplashScreenImagePath = function () {
+    return this.splashScreen.attributes['Image'].value;
+}
+
 exports.readConfig = readConfig;
+exports.readManifest = readManifest;
 
 });
 
@@ -1517,7 +1558,6 @@ module.exports = {
             channel = cordova.require('cordova/channel'),
             platform = require('cordova/platform'),
             modulemapper = require('cordova/modulemapper'),
-            configHelper = require('cordova/confighelper'),
             utils = require('cordova/utils');
 
         modulemapper.clobbers('cordova/exec/proxy', 'cordova.commandProxy');
@@ -1531,7 +1571,8 @@ module.exports = {
 
         var onWinJSReady = function () {
             var app = WinJS.Application,
-                splashscreen = require('cordova/splashscreen');
+                splashscreen = require('cordova/splashscreen'),
+                configHelper = require('cordova/confighelper');
 
             modulemapper.clobbers('cordova/splashscreen', 'navigator.splashscreen');
 
@@ -1568,8 +1609,14 @@ module.exports = {
                     return;
                 }
 
-                e.setPromise(makePromise(configHelper.readConfig).then(function (config) {
-                    splashscreen.firstShow(config, e);
+                var manifest;
+
+                e.setPromise(makePromise(configHelper.readManifest).then(function (manifestTmp) {
+                    manifest = manifestTmp;
+                    return makePromise(configHelper.readConfig);
+                })
+                .then(function (config) {
+                    splashscreen.firstShow(config, manifest, e);
                 }).then(function () {
                     // Avoids splashimage flicker on Windows Phone 8.1/10
                     return WinJS.Promise.timeout();
@@ -1578,13 +1625,22 @@ module.exports = {
                 }));
             };
 
-            app.addEventListener("checkpoint", checkpointHandler);
-            app.addEventListener("activated", activationHandler, false);
-            Windows.UI.WebUI.WebUIApplication.addEventListener("resuming", resumingHandler, false);
+            // CB-12193 CoreWindow and some WinRT APIs are not available in webview
+            var isCoreWindowAvailable = false;
+            try {
+                Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+                isCoreWindowAvailable = true;
+            } catch (e) { }
 
-            injectBackButtonHandler();
+            if (isCoreWindowAvailable) {
+                app.addEventListener("checkpoint", checkpointHandler);
+                app.addEventListener("activated", activationHandler, false);
+                Windows.UI.WebUI.WebUIApplication.addEventListener("resuming", resumingHandler, false);
 
-            app.start();
+                injectBackButtonHandler();
+
+                app.start();
+            }
         };
 
         function appendScript(scriptElem, loadedCb) {
@@ -1828,18 +1884,21 @@ exports.load = function(callback) {
 // file: f:/coho/cordova-windows/cordova-js-src/splashscreen.js
 define("cordova/splashscreen", function(require, exports, module) {
 
-var isPhone = (cordova.platformId == 'windows') && WinJS.Utilities.isPhone;
 var isWp81 = navigator.appVersion.indexOf("Windows Phone 8.1") !== -1;
 var isWp10 = navigator.appVersion.indexOf("Windows Phone 10") !== -1;
+var isPhoneDevice = isWp81 || isWp10;
 var isWin10UWP = navigator.appVersion.indexOf('MSAppHost/3.0') !== -1;
 var isHosted = window.location.protocol.indexOf('http') === 0;
 var isMsAppxWeb = window.location.protocol.indexOf('ms-appx-web') === 0;
 
 var schema = (isHosted || isWin10UWP && isMsAppxWeb) ? 'ms-appx-web' : 'ms-appx';
-var fileName = isPhone ? 'splashscreenphone.png' : 'splashscreen.png';
+var fileName = isWp81 ? 'splashscreenphone.png' : 'splashscreen.png';
 var splashImageSrc = schema + ':///images/' + fileName;
 
-var splashElement = null, extendedSplashImage = null, extendedSplashProgress = null;
+var splashElement = null,
+    extendedSplashImage = null,
+    extendedSplashProgress = null,
+    extendedSplashImageHelper = null;
 
 //// <Config and initialization>
 var DEFAULT_SPLASHSCREEN_DURATION = 3000, // in milliseconds
@@ -1849,6 +1908,8 @@ var DEFAULT_SPLASHSCREEN_DURATION = 3000, // in milliseconds
     PROGRESSRING_BOTTOM_MARGIN = 10; // needed for windows 10 min height window
 
 var bgColor = "#464646",
+    titleInitialBgColor,
+    titleBgColor,
     autoHideSplashScreen = true,
     splashScreenDelay = DEFAULT_SPLASHSCREEN_DURATION,
     fadeSplashScreen = true,
@@ -1867,14 +1928,24 @@ function readBoolFromCfg(preferenceName, defaultValue, cfg) {
     }
 }
 
-function readPreferencesFromCfg(cfg) {
+function readPreferencesFromCfg(cfg, manifest) {
     try {
+        // Update splashscreen image path to match application manifest
+        splashImageSrc = schema + ':///' + manifest.getSplashScreenImagePath().replace(/\\/g, '/');
+
         bgColor = cfg.getPreferenceValue('SplashScreenBackgroundColor') || bgColor;
         bgColor = bgColor.replace('0x', '#').replace('0X', '#');
         if (bgColor.length > 7) {
             // Remove aplha
             bgColor = bgColor.slice(0, 1) + bgColor.slice(3, bgColor.length);
         }
+
+        titleBgColor = {
+            a: 255,
+            r: parseInt(bgColor.slice(1, 3), 16),
+            g: parseInt(bgColor.slice(3, 5), 16),
+            b: parseInt(bgColor.slice(5, 7), 16)
+        };
 
         autoHideSplashScreen = readBoolFromCfg('AutoHideSplashScreen', autoHideSplashScreen, cfg);
         splashScreenDelay = cfg.getPreferenceValue('SplashScreenDelay') || splashScreenDelay;
@@ -1896,23 +1967,8 @@ function isPortrait() {
     return window.innerHeight > window.innerWidth;
 }
 
-// Shift down the image to be vertical centered
-function centerY() {
-    if (isPortrait()) {
-        if (window.screen.deviceYDPI === 172) { // 720p 4.7"
-            extendedSplashImage.style.transform = "translateY(22px)";
-        } else if (window.screen.deviceYDPI === 230) { // 1080p 5.5"
-            extendedSplashImage.style.transform = "translateY(25px)";
-        } else if (window.screen.deviceYDPI === 211) { // 1080p 6"
-            extendedSplashImage.style.transform = "translateY(27px)";
-        }
-    } else {
-        extendedSplashImage.style.transform = "";
-    }
-}
-
-function init(config) {
-    readPreferencesFromCfg(config);
+function init(config, manifest) {
+    readPreferencesFromCfg(config, manifest);
 
     var splashscreenStyles = document.createElement("link");
     splashscreenStyles.rel = 'stylesheet';
@@ -1931,6 +1987,9 @@ function init(config) {
     splashElement.classList.add('hidden');
     splashElement.style.backgroundColor = bgColor;
 
+    extendedSplashImageHelper = document.createElement('span');
+    extendedSplashImageHelper.id = 'extendedSplashImageHelper';
+
     extendedSplashImage = document.createElement('img');
     extendedSplashImage.id = 'extendedSplashImage';
     extendedSplashImage.alt = 'Splash screen image';
@@ -1939,8 +1998,6 @@ function init(config) {
     var draggableAttr = document.createAttribute('draggable');
     draggableAttr.value = 'false';
     extendedSplashImage.attributes.setNamedItem(draggableAttr);
-
-    extendedSplashImage.style.left = '0px';
 
     // This helps prevent flickering by making the system wait until your image has been rendered 
     // before it switches to your extended splash screen.
@@ -1954,29 +2011,18 @@ function init(config) {
     extendedSplashProgress.classList.add('win-medium');
     extendedSplashProgress.classList.add('win-ring');
 
-    if (isWp81 || isWp10) {
-        extendedSplashImage.style.maxWidth = "100%";
-        extendedSplashImage.style.maxHeight = "100%";
-        extendedSplashImage.src = splashImageSrc;
-        // center horizontally
-        extendedSplashImage.style.margin = "0 auto";
-        extendedSplashImage.style.display = "block";
-        // center vertically
-        extendedSplashImage.style.position = "relative";
-        extendedSplashImage.style.top = "50%";
+    extendedSplashImage.src = splashImageSrc;
 
-        // Workaround for intial splashimage jump
-        if (isWp10) {
-            extendedSplashImage.style.transform = "translateY(-50%)";
-        } else {
-            centerY();
-        }
+    if (isPhoneDevice) {
+        extendedSplashImage.classList.add('phone');
     }
 
     if (isWp81) {
         extendedSplashProgress.classList.add('extended-splash-progress-phone');
     } else if (isWp10) {   
         extendedSplashProgress.classList.add('extended-splash-progress-wp10');
+    } else {
+        extendedSplashProgress.classList.add('extended-splash-progress-desktop');
     }
 
     if (!showSplashScreenSpinner) {
@@ -1986,6 +2032,7 @@ function init(config) {
         extendedSplashProgress.style.color = splashScreenSpinnerColor;
     }
 
+    splashElement.appendChild(extendedSplashImageHelper);
     splashElement.appendChild(extendedSplashImage);
     splashElement.appendChild(extendedSplashProgress);
 
@@ -2009,14 +2056,53 @@ function enableUserInteraction() {
     document.body.style['-ms-content-zooming'] = origZooming;
 }
 
+// Enter fullscreen mode
+function enterFullScreen() {
+    if (Windows.UI.ViewManagement.ApplicationViewBoundsMode) { // else crash on 8.1
+        var view = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+        view.setDesiredBoundsMode(Windows.UI.ViewManagement.ApplicationViewBoundsMode.useCoreWindow);
+        view.suppressSystemOverlays = true;
+    }
+}
+
+// Exit fullscreen mode
+function exitFullScreen() {
+    if (Windows.UI.ViewManagement.ApplicationViewBoundsMode) { // else crash on 8.1
+        var view = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+        view.setDesiredBoundsMode(Windows.UI.ViewManagement.ApplicationViewBoundsMode.useVisible);
+        view.suppressSystemOverlays = false;
+    }
+}
+
+// Make title bg color match splashscreen bg color
+function colorizeTitleBar() {
+    var appView = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+    if (appView.titleBar) {
+        titleInitialBgColor = appView.titleBar.backgroundColor;
+
+        appView.titleBar.backgroundColor = titleBgColor;
+        appView.titleBar.buttonBackgroundColor = titleBgColor;
+    }
+}
+
+// Revert title bg color
+function revertTitleBarColor() {
+    var appView = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+    if (appView.titleBar) {
+        appView.titleBar.backgroundColor = titleInitialBgColor;
+        appView.titleBar.buttonBackgroundColor = titleInitialBgColor;
+    }
+}
+
 // Displays the extended splash screen. Pass the splash screen object retrieved during activation.
 function show() {
+    enterFullScreen();
+    colorizeTitleBar();
     disableUserInteraction();
-
     positionControls();
 
     // Once the extended splash screen is setup, apply the CSS style that will make the extended splash screen visible.
-    WinJS.Utilities.removeClass(extendedSplashScreen, 'hidden');
+    WinJS.Utilities.removeClass(splashElement, 'hidden');
 }
 
 function positionControls() {
@@ -2033,13 +2119,13 @@ function positionControls() {
     }
 
     // Position the extended splash screen image in the same location as the system splash screen image.
-    if (isPhone) {
+    if (isPhoneDevice) {
         extendedSplashImage.style.top = 0;
         extendedSplashImage.style.left = 0;
-        centerY();
     } else {
-        extendedSplashImage.style.top = splash.imageLocation.y + 'px';
+        // Avoiding subtle image shift on desktop
         extendedSplashImage.style.left = splash.imageLocation.x + 'px';
+        extendedSplashImage.style.top = splash.imageLocation.y + 'px';
     }
 
     if (!isWp81) {
@@ -2059,7 +2145,7 @@ function updateImageLocation() {
 
 // Checks whether the extended splash screen is visible and returns a boolean.
 function isVisible() {
-    return !(WinJS.Utilities.hasClass(extendedSplashScreen, 'hidden'));
+    return !(WinJS.Utilities.hasClass(splashElement, 'hidden'));
 }
 
 function fadeOut(el, duration, finishCb) {
@@ -2079,13 +2165,25 @@ function fadeOut(el, duration, finishCb) {
 function hide() {
     if (isVisible()) {
         var hideFinishCb = function () {
-            WinJS.Utilities.addClass(extendedSplashScreen, 'hidden');
-            extendedSplashScreen.style.opacity = 1;
+            WinJS.Utilities.addClass(splashElement, 'hidden');
+            splashElement.style.opacity = 1;
             enableUserInteraction();
+            exitFullScreen();
+        }
+
+        // Color reversion before fading is over looks better:
+        revertTitleBarColor();
+
+        // https://issues.apache.org/jira/browse/CB-11751
+        // This can occur when we directly replace whole document.body f.e. in a router.
+        // Note that you should disable the splashscreen in this case or update a container element instead.
+        if (document.getElementById(splashElement.id) == null) {
+            hideFinishCb();
+            return;
         }
 
         if (fadeSplashScreen) {
-            fadeOut(extendedSplashScreen, fadeSplashScreenDuration, hideFinishCb);
+            fadeOut(splashElement, fadeSplashScreenDuration, hideFinishCb);
         } else {
             hideFinishCb();
         }
@@ -2130,8 +2228,8 @@ function onResize() {
 //// </Events>
 
 module.exports = {
-    firstShow: function (config, activatedEventArgs) {
-        init(config);
+    firstShow: function (config, manifest, activatedEventArgs) {
+        init(config, manifest);
         activated(activatedEventArgs);
 
         if (!isVisible() && (splashScreenDelay > 0 || !autoHideSplashScreen)) {
