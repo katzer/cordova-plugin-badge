@@ -1,7 +1,7 @@
 
 <p align="left"><b><a href="https://github.com/katzer/cordova-plugin-badge/tree/example">SAMPLE APP</a> :point_right:</b></p>
 
-# Cordova Badge Plugin <br> [![npm version](https://badge.fury.io/js/cordova-plugin-badge.svg)](https://badge.fury.io/js/cordova-plugin-badge) [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge)
+# Cordova Badge Plugin <br> [![npm version](https://badge.fury.io/js/cordova-plugin-badge.svg)](https://badge.fury.io/js/cordova-plugin-badge) [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge) [![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L3HKQCD9UA35A "Donate once-off to this project using Paypal")
 
 [Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows.
 
