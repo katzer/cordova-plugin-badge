@@ -17,7 +17,8 @@
 
 var exec    = require('cordova/exec'),
     channel = require('cordova/channel'),
-    isIOS   = navigator.userAgent.toLowerCase().includes('applewebkit');
+    ua      = navigator.userAgent.toLowerCase(),
+    isIOS   = ua.includes('ipad') || ua.includes('iphone');
 
 /**
  * Clears the badge number.
