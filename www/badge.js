@@ -199,3 +199,8 @@ channel.onCordovaReady.subscribe(function () {
 channel.onResume.subscribe(function () {
     if (exports._config.autoClear) { exports.clear(); }
 });
+
+// Clear badge on app resume if autoClear is set to true
+channel.onActivated.subscribe(function () {
+    if (exports._config.autoClear) { exports.clear(); }
+});
