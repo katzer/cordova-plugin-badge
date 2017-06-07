@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-var appData   = Windows.Storage.ApplicationData.current,
-    BADGE_KEY = 'cordova_badge_number';
+var appData    = Windows.Storage.ApplicationData.current,
+    CONFIG_KEY = 'APPBadgeConfigKey',
+    BADGE_KEY  = 'cordova_badge_number';
 
 /**
  * Clear the badge number.
@@ -70,6 +71,37 @@ exports.set = function (success, error, args) {
     exports.saveBadge(badge);
 
     success(badge);
+};
+
+/**
+ * Save the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      config  The config map
+ *
+ * @return [ Void ]
+ */
+exports.save = function (success, error, args) {
+    var config = args[0],
+        json   = JSON.stringify(config);
+
+    appData.localSettings.values[CONFIG_KEY] = json;
+};
+
+/**
+ * Load the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
+ */
+exports.load = function (success, error) {
+    var json   = appData.localSettings.values[CONFIG_KEY],
+        config = JSON.parse(json);
+
+    success(config);
 };
 
 /**
