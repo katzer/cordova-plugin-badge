@@ -18,8 +18,7 @@
 var exec      = require('cordova/exec'),
     channel   = require('cordova/channel'),
     ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.includes('ipad') || ua.includes('iphone'),
-    isAndroid = !window.Windows && ua.includes('android');
+    isIOS     = ua.includes('ipad') || ua.includes('iphone');
 
 /**
  * Clears the badge number.
@@ -140,9 +139,7 @@ exports.configure = function (config) {
         }
     }
 
-    if (isAndroid) {
-        this.exec('save-config', this._config);
-    }
+    this.exec('save', this._config);
 
     return this._config;
 };
@@ -192,8 +189,8 @@ exports.exec = function (action, args, callback, scope) {
 
 // Clear badge on app start if autoClear is set to true
 channel.onCordovaReady.subscribe(function () {
-    exports.exec('load-config', null, function (config) {
-        this._config = config;
+    exports.exec('load', null, function (config) {
+        if (config) { this._config = config; }
         if (this._config.autoClear) { this.clear(); }
     }, exports);
 });

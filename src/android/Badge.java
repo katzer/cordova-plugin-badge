@@ -44,12 +44,12 @@ public class Badge extends CordovaPlugin {
     public boolean execute (String action, JSONArray args, CallbackContext callback)
             throws JSONException {
 
-        if (action.equalsIgnoreCase("load-config")) {
+        if (action.equalsIgnoreCase("load")) {
             loadConfig(callback);
             return true;
         }
 
-        if (action.equalsIgnoreCase("save-config")) {
+        if (action.equalsIgnoreCase("save")) {
             saveConfig(args.getJSONObject(0));
             return true;
         }

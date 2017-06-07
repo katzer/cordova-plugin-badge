@@ -21,8 +21,38 @@
 
 @implementation APPBadge
 
+static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
+
 #pragma mark -
 #pragma mark Interface
+
+/**
+ * Load the badge config.
+ */
+- (void) load:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *config = [self.settings objectForKey:kAPPBadgeConfigKey];
+
+        CDVPluginResult* result;
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsDictionary:config];
+
+        [self.commandDelegate sendPluginResult:result
+                                    callbackId:command.callbackId];
+    }];
+}
+
+/**
+ * Save the badge config.
+ */
+- (void) save:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        [self.settings setObject:[command argumentAtIndex:0]
+                          forKey:kAPPBadgeConfigKey];
+    }];
+}
 
 /**
  * Clear the badge number.
@@ -121,6 +151,14 @@
 - (UIApplication*) app
 {
     return [UIApplication sharedApplication];
+}
+
+/**
+ * Short hand for standard user defaults instance.
+ */
+- (NSUserDefaults*) settings
+{
+    return [NSUserDefaults standardUserDefaults];
 }
 
 /**

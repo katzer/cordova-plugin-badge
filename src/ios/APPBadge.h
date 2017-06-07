@@ -20,6 +20,10 @@
 
 @interface APPBadge : CDVPlugin
 
+// Load the badge config
+- (void) load:(CDVInvokedUrlCommand *)command;
+// Save the badge config
+- (void) save:(CDVInvokedUrlCommand *)command;
 // Clear the badge number
 - (void) clear:(CDVInvokedUrlCommand *)command;
 // Set the badge number
