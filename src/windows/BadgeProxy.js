@@ -24,7 +24,7 @@
  * @return [ Void ]
  */
 exports.clear = function (success, error) {
-    exports.setBadge(success, error, [0]);
+    exports.set(success, error, [0]);
 };
 
 /**
