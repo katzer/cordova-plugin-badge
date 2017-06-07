@@ -14,10 +14,10 @@
       "ecosystem:cordova"
   ],
   "platforms": [
-      "ios",
-      "wp8",
       "android",
       "browser",
+      "ios",
+      "osx",
       "windows"
   ],
   "engines": [
