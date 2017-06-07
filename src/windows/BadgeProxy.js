@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+var appData   = Windows.Storage.ApplicationData.current,
+    BADGE_KEY = 'cordova_badge_number';
+
 /**
  * Clear the badge number.
  *
@@ -36,18 +39,9 @@ exports.clear = function (success, error) {
  * @return [ Void ]
  */
 exports.get = function (success, error) {
-    var app  = WinJS.Application,
-        file = exports._cordova_badge_number;
+    var badge = appData.localSettings.values[BADGE_KEY];
 
-    app.local.exists(file).then(function (exists) {
-        if (exists) {
-            app.local.readText(file).then(function (badge) {
-                success(isNaN(badge) ? badge : Number(badge));
-            });
-        } else {
-            success(0);
-        }
-    });
+    success(badge || 0);
 };
 
 /**
@@ -73,15 +67,10 @@ exports.set = function (success, error, args) {
         .createBadgeUpdaterForApplication()
         .update(notification);
 
-    exports._saveBadge(badge);
+    exports.saveBadge(badge);
 
     success(badge);
 };
-
-/**
- * Path to file that containes the badge number.
- */
-exports._cordova_badge_number = 'cordova_badge_number';
 
 /**
  * Persist the badge of the app icon so that `getBadge` is able to return the
@@ -91,8 +80,8 @@ exports._cordova_badge_number = 'cordova_badge_number';
  *
  * @return [ Void ]
  */
-exports._saveBadge = function (badge) {
-    WinJS.Application.local.writeText(exports._cordova_badge_number, badge);
+exports.saveBadge = function (badge) {
+    appData.localSettings.values[BADGE_KEY] = badge;
 };
 
 cordova.commandProxy.add('Badge', exports);
