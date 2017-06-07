@@ -20,8 +20,10 @@ exports.favico = new cordova.plugins.notification.badge.Favico({
     animation: 'none'
 });
 
-// Holds the current badge number value
-exports.badgeNumber = 0;
+// Holds the current badge number
+var BADGE_KEY  = 'cordova_badge_number';
+// Holds the saved badge config
+var CONFIG_KEY = 'APPBadgeConfigKey';
 
 /**
  * Clears the badge of the app icon.
@@ -32,7 +34,21 @@ exports.badgeNumber = 0;
  * @return [ Void ]
  */
 exports.clear = function (success, error) {
-    exports.setBadge(success, error, [0]);
+    exports.set(success, error, [0]);
+};
+
+/**
+ * Gets the badge of the app icon.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ *
+ * @return [ Void ]
+ */
+exports.get = function (success, error) {
+    var badge = localStorage[BADGE_KEY];
+
+    success(badge || 0);
 };
 
 /**
@@ -47,22 +63,53 @@ exports.clear = function (success, error) {
 exports.set = function (success, error, args) {
     var badge = args[0];
 
-    exports.badgeNumber = badge;
-
+    exports.saveBadge(badge);
     exports.favico.badge(badge);
+
     success(badge);
 };
 
 /**
- * Gets the badge of the app icon.
+ * Save the badge config.
+ *
+ * @param [ Function ] success Success callback
+ * @param [ Function ] error   Error callback
+ * @param [ Int ]      config  The config map
+ *
+ * @return [ Void ]
+ */
+exports.save = function (success, error, args) {
+    var config = args[0] || null,
+        json   = JSON.stringify(config);
+
+    localStorage[CONFIG_KEY] = json;
+};
+
+/**
+ * Load the badge config.
  *
  * @param [ Function ] success Success callback
  * @param [ Function ] error   Error callback
  *
  * @return [ Void ]
  */
-exports.get = function (success, error) {
-    success(exports.badgeNumber);
+exports.load = function (success, error) {
+    var json   = localStorage[CONFIG_KEY],
+        config = JSON.parse(json || null);
+
+    success(config);
+};
+
+/**
+ * Persist the badge of the app icon so that `getBadge` is able to return the
+ * badge number back to the client.
+ *
+ * @param [ Int ] badge The badge number
+ *
+ * @return [ Void ]
+ */
+exports.saveBadge = function (badge) {
+    localStorage[BADGE_KEY] = badge;
 };
 
 cordova.commandProxy.add('Badge', exports);
