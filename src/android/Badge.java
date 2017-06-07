@@ -23,7 +23,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.json.JSONObject;
 
 public class Badge extends CordovaPlugin {
 
@@ -39,12 +39,20 @@ public class Badge extends CordovaPlugin {
      *                 calling back into JavaScript.
      *
      * @return Returning false results in a "MethodNotFound" error.
-     *
-     * @throws JSONException
      */
     @Override
     public boolean execute (String action, JSONArray args, CallbackContext callback)
             throws JSONException {
+
+        if (action.equalsIgnoreCase("load-config")) {
+            loadConfig(callback);
+            return true;
+        }
+
+        if (action.equalsIgnoreCase("save-config")) {
+            saveConfig(args.getJSONObject(0));
+            return true;
+        }
 
         if (action.equalsIgnoreCase("clear")) {
             clearBadge(callback);
@@ -65,9 +73,37 @@ public class Badge extends CordovaPlugin {
     }
 
     /**
+     * Load the persisted plugin config.
+     *
+     * @param callback The function to be exec as the callback.
+     */
+    private void loadConfig(final CallbackContext callback) {
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                badgeImpl.loadConfig(callback, getContext());
+            }
+        });
+    }
+
+    /**
+     * Persist the plugin config.
+     *
+     * @param config The config map to persist.
+     */
+    private void saveConfig(final JSONObject config) {
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                badgeImpl.saveConfig(config, getContext());
+            }
+        });
+    }
+
+    /**
      * Clear the badge number.
      *
-     * @param callback The function to be exec as the callback
+     * @param callback The function to be exec as the callback.
      */
     private void clearBadge (final CallbackContext callback) {
         cordova.getThreadPool().execute(new Runnable() {

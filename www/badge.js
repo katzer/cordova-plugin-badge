@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-var exec    = require('cordova/exec'),
-    channel = require('cordova/channel'),
-    ua      = navigator.userAgent.toLowerCase(),
-    isIOS   = ua.includes('ipad') || ua.includes('iphone');
+var exec      = require('cordova/exec'),
+    channel   = require('cordova/channel'),
+    ua        = navigator.userAgent.toLowerCase(),
+    isIOS     = ua.includes('ipad') || ua.includes('iphone'),
+    isAndroid = !window.Windows && ua.includes('android');
 
 /**
  * Clears the badge number.
@@ -139,6 +140,10 @@ exports.configure = function (config) {
         }
     }
 
+    if (isAndroid) {
+        this.exec('save-config', this._config);
+    }
+
     return this._config;
 };
 
@@ -187,7 +192,10 @@ exports.exec = function (action, args, callback, scope) {
 
 // Clear badge on app start if autoClear is set to true
 channel.onCordovaReady.subscribe(function () {
-    if (exports._config.autoClear) { exports.clear(); }
+    exports.exec('load-config', null, function (config) {
+        this._config = config;
+        if (this._config.autoClear) { this.clear(); }
+    }, exports);
 });
 
 // Clear badge on app resume if autoClear is set to true
