@@ -29,9 +29,5 @@
 - (void) set:(CDVInvokedUrlCommand *)command;
 // Get the badge number
 - (void) get:(CDVInvokedUrlCommand *)command;
-// Check permission to show badges
-- (void) check:(CDVInvokedUrlCommand *)command;
-// Request permission to show badges
-- (void) request:(CDVInvokedUrlCommand *)command;
 
 @end

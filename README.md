@@ -8,6 +8,7 @@
 <img height="150px" align="right" hspace="19" vspace="12" src="http://4.bp.blogspot.com/-GBwBSN92DvU/UB8Kut7Oz0I/AAAAAAAAJKs/mJgBmj1RKqU/s1600/whatsapp+wp8+10.png"></img>
 
 ### How they appear to the user
+
 Users see notifications in the following ways:
 - Badging the app’s icon
 
@@ -17,6 +18,7 @@ Users see notifications in the following ways:
 - __Android / Amazon FireOS__ (via [ShortcutBadger][shortcut_badger])
 - __Browser__
 - __iOS__
+- __OSX__
 - __Windows__
 
 
