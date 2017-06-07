@@ -83,7 +83,7 @@ exports.set = function (success, error, args) {
  * @return [ Void ]
  */
 exports.save = function (success, error, args) {
-    var config = args[0],
+    var config = args[0] || null,
         json   = JSON.stringify(config);
 
     appData.localSettings.values[CONFIG_KEY] = json;
@@ -99,7 +99,7 @@ exports.save = function (success, error, args) {
  */
 exports.load = function (success, error) {
     var json   = appData.localSettings.values[CONFIG_KEY],
-        config = JSON.parse(json);
+        config = JSON.parse(json || null);
 
     success(config);
 };
