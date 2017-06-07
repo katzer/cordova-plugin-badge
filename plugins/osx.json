@@ -1,0 +1,18 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+        }
+    },
+    "dependent_plugins": {}
+}

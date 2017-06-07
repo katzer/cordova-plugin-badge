@@ -1,0 +1,10 @@
+.DS_Store
+.*.sw?
+*.cso
+tmp
+*.mode1v3
+*.pbxuser
+xcuserdata
+*.xcworkspace
+console.log
+/node_modules

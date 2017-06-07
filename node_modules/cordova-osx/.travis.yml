@@ -1,0 +1,5 @@
+language: objective-c
+sudo: false
+install:
+- npm install
+script: "npm test"

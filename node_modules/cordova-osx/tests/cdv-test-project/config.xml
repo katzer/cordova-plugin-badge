@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.apache.cordova.test" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>HelloCordova</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+        This project is used for testing adding the OSX platform.
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+
+    <!-- icons for test (note that we use the same file for all sizes) -->
+    <platform name="osx">
+        <icon src="res/test-64x64.png" width="16" height="16" />
+        <icon src="res/test-64x64.png" width="32" height="32" />
+        <icon src="res/test-64x64.png" width="64" height="64" />
+        <icon src="res/test-64x64.png" width="128" height="128" />
+        <icon src="res/test-64x64.png" width="256" height="256" />
+        <icon src="res/test-64x64.png" width="512" height="512" />
+    </platform>
+
+</widget>

@@ -1,0 +1,11 @@
+# yes, not .gitignore
+gitignore
+
+# licenses for both below are in the cordova-osx LICENSE file
+NSData+Base64.h
+NSData+Base64.m
+
+# AppIcon.appiconset
+Contents.json
+
+cdv-test-project

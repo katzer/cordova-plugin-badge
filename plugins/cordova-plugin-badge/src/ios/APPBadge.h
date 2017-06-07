@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
 @interface APPBadge : CDVPlugin

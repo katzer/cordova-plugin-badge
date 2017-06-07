@@ -62,9 +62,20 @@
         <source-file src="src/ios/APPBadge.m" />
     </platform>
 
+    <!-- osx -->
+    <platform name="osx">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Badge">
+                <param name="osx-package" value="APPBadge"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/osx/APPBadge.h" />
+        <source-file src="src/osx/APPBadge.m" />
+    </platform>
+
     <!-- android -->
     <platform name="android">
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
@@ -80,12 +91,10 @@
         <source-file
             src="src/android/BadgeImpl.java"
             target-dir="src/de/appplant/cordova/plugin/badge" />
-
     </platform>
 
     <!-- browser -->
     <platform name="browser">
-
         <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="browser-package" value="Badge"/>
@@ -99,16 +108,13 @@
         <js-module src="src/browser/BadgeProxy.js" name="Badge.Proxy">
             <runs />
         </js-module>
-
     </platform>
 
     <!-- windows -->
     <platform name="windows">
-
         <js-module src="src/windows/BadgeProxy.js" name="Badge.Proxy" >
             <runs />
         </js-module>
-
     </platform>
 
 </plugin>
