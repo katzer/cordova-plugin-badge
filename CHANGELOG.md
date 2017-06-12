@@ -1,4 +1,7 @@
 ## ChangeLog
+#### Version 0.8.1 (12.06.2017)
+- Fixed issue with Android 4.x, see #95, #97
+
 #### Version 0.8.0 (07.06.2017)
 - Support for OSX platform
 - Updated code to work properly with iOS@10
