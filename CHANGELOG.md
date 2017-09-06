@@ -1,4 +1,9 @@
 ## ChangeLog
+
+#### Version 0.8.2 (06.09.2017)
+- Fix package.json to work with latest cordova and npm
+- Upgrade ShortcutBadger to v1.1.18
+
 #### Version 0.8.1 (12.06.2017)
 - Fixed issue with Android 4.x, see #95, #97
 
