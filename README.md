@@ -139,7 +139,7 @@ To specify a custom version of _ShortcutBadger_ follow this [guide][gradle-guide
 
 ```gradle
 // In <your-project>/platforms/android/build-extras.gradle
-ext.appShortcutBadgerVersion = '1.1.17'
+ext.appShortcutBadgerVersion = '1.1.18'
 ```
 
 
