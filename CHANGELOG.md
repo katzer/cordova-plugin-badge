@@ -1,5 +1,8 @@
 ## ChangeLog
 
+#### Version 0.8.3 (27.09.2017)
+- Fix threading warnings with iOS 11
+
 #### Version 0.8.2 (06.09.2017)
 - Fix package.json to work with latest cordova and npm
 - Upgrade ShortcutBadger to v1.1.18
