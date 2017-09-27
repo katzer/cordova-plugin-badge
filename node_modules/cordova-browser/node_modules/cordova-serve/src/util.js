@@ -17,8 +17,8 @@
  under the License.
  */
 
-var fs   = require('fs'),
-    path = require('path');
+var fs = require('fs');
+var path = require('path');
 
 // Some helpful utility stuff copied from cordova-lib. This is a bit nicer than taking a dependency on cordova-lib just
 // to get this minimal stuff. Hopefully we won't need the platform stuff (finding platform www_dir) once it is moved
@@ -41,12 +41,12 @@ var platforms = {
  * @param {string=} dir - the directory to start from (we check this directory then work up), or CWD if none specified.
  * @returns {string} - the Cordova project's root directory, or null if not found.
  */
-function cordovaProjectRoot(dir) {
+function cordovaProjectRoot (dir) {
     if (!dir) {
         // Prefer PWD over cwd so that symlinked dirs within your PWD work correctly.
         var pwd = process.env.PWD;
         var cwd = process.cwd();
-        if (pwd && pwd != cwd && pwd != 'undefined') {
+        if (pwd && pwd !== cwd && pwd !== 'undefined') {
             return cordovaProjectRoot(pwd) || cordovaProjectRoot(cwd);
         }
         return cordovaProjectRoot(cwd);
@@ -63,7 +63,7 @@ function cordovaProjectRoot(dir) {
         }
         var parentDir = path.normalize(path.join(dir, '..'));
         // Detect fs root.
-        if (parentDir == dir) {
+        if (parentDir === dir) {
             return bestReturnValueSoFar;
         }
         dir = parentDir;
@@ -71,15 +71,15 @@ function cordovaProjectRoot(dir) {
     return null;
 }
 
-function getPlatformWwwRoot(cordovaProjectRoot, platformName) {
+function getPlatformWwwRoot (cordovaProjectRoot, platformName) {
     var platform = platforms[platformName];
     if (!platform) {
-        throw new Error ('Unrecognized platform: ' + platformName);
+        throw new Error('Unrecognized platform: ' + platformName);
     }
     return path.join(cordovaProjectRoot, 'platforms', platformName, platform.www_dir);
 }
 
-function isRootDir(dir) {
+function isRootDir (dir) {
     if (fs.existsSync(path.join(dir, 'www'))) {
         if (fs.existsSync(path.join(dir, 'config.xml'))) {
             // For sure is.

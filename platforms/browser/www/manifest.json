@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "BadgeExample",
+  "short_name": "BadgeExample",
+  "version": "de.appplant.cordova.plugin.badge.example",
+  "description": "Cordova plugin to access and modify the badge number",
+  "author": "Sebastián Katzer",
+  "icons": [],
+  "start_url": "index.html"
+}

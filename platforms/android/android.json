@@ -9,11 +9,11 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -22,15 +22,23 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-x-toast": {
+        "cordova-plugin-badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
-        "cordova-plugin-badge": {
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
     "dependent_plugins": {},
     "modules": [
+        {
+            "id": "cordova-plugin-badge.Badge",
+            "file": "plugins/cordova-plugin-badge/www/badge.js",
+            "pluginId": "cordova-plugin-badge",
+            "clobbers": [
+                "cordova.plugins.notification.badge"
+            ]
+        },
         {
             "id": "cordova-plugin-x-toast.Toast",
             "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
@@ -43,18 +51,10 @@
             "id": "cordova-plugin-x-toast.tests",
             "file": "plugins/cordova-plugin-x-toast/test/tests.js",
             "pluginId": "cordova-plugin-x-toast"
-        },
-        {
-            "id": "cordova-plugin-badge.Badge",
-            "file": "plugins/cordova-plugin-badge/www/badge.js",
-            "pluginId": "cordova-plugin-badge",
-            "clobbers": [
-                "cordova.plugins.notification.badge"
-            ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-x-toast": "2.6.0",
-        "cordova-plugin-badge": "0.7.4"
+        "cordova-plugin-badge": "0.8.3",
+        "cordova-plugin-x-toast": "2.6.0"
     }
 }

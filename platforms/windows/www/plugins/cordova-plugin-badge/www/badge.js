@@ -19,7 +19,7 @@
 var exec      = require('cordova/exec'),
     channel   = require('cordova/channel'),
     ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.includes('ipad') || ua.includes('iphone');
+    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1;
 
 /**
  * Clears the badge number.

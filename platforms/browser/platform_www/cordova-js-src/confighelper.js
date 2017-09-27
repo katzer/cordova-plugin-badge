@@ -61,14 +61,9 @@ function readConfig(success, error) {
         }
     };
 
-    if ("ActiveXObject" in window) {
-        // Needed for XHR-ing via file:// protocol in IE
-        xhr = new window.ActiveXObject("MSXML2.XMLHTTP");
-        xhr.onreadystatechange = xhrStatusChangeHandler;
-    } else {
-        xhr = new XMLHttpRequest();
-        xhr.addEventListener("load", xhrStatusChangeHandler);
-    }
+    xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", xhrStatusChangeHandler);
+
 
     try {
         xhr.open("get", "/config.xml", true);

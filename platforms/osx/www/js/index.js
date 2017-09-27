@@ -34,15 +34,15 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        document.getElementById('check').onclick = app.check;
-        document.getElementById('grant').onclick = app.grant;
-        document.getElementById('clear').onclick = app.clear;
-        document.getElementById('inc').onclick   = app.inc;
-        document.getElementById('dec').onclick   = app.dec;
-        document.getElementById('get').onclick   = app.get;
-        document.getElementById('fix').onclick   = app.fix;
-        document.getElementById('rand').onclick  = app.rand;
-        document.getElementById('toggle').onclick  = app.toggle;
+        document.getElementById('check').onclick  = app.check;
+        document.getElementById('grant').onclick  = app.grant;
+        document.getElementById('clear').onclick  = app.clear;
+        document.getElementById('inc').onclick    = app.inc;
+        document.getElementById('dec').onclick    = app.dec;
+        document.getElementById('get').onclick    = app.get;
+        document.getElementById('fix').onclick    = app.fix;
+        document.getElementById('rand').onclick   = app.rand;
+        document.getElementById('toggle').onclick = app.toggle;
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -57,36 +57,36 @@ var app = {
     },
     // Check for permission
     check: function () {
-        cordova.plugins.notification.badge.hasPermission(alert);
+        cordova.plugins.notification.badge.hasPermission(showToast);
     },
     // Grant permission
     grant: function () {
-        cordova.plugins.notification.badge.requestPermission(alert);
+        cordova.plugins.notification.badge.requestPermission(showToast);
     },
     // Clear badge
     clear: function () {
-        cordova.plugins.notification.badge.clear(alert);
+        cordova.plugins.notification.badge.clear(showToast);
     },
     // Increase badge by 1
     inc: function () {
-        cordova.plugins.notification.badge.increase(1, alert);
+        cordova.plugins.notification.badge.increase(1, showToast);
     },
     // Decrease badge by 1
     dec: function () {
-        cordova.plugins.notification.badge.decrease(1, alert);
+        cordova.plugins.notification.badge.decrease(1, showToast);
     },
     // Get badge number
     get: function () {
-        cordova.plugins.notification.badge.get(alert);
+        cordova.plugins.notification.badge.get(showToast);
     },
     // Set fix badge number
     fix: function () {
-        cordova.plugins.notification.badge.set(10, alert);
+        cordova.plugins.notification.badge.set(10, showToast);
     },
     // Set rand badge number
     rand: function () {
         var num = Math.round(Math.random()*100);
-        cordova.plugins.notification.badge.set(num, alert);
+        cordova.plugins.notification.badge.set(num, showToast);
     },
     // Toggle autoclear flag
     toggle: function () {
@@ -96,7 +96,7 @@ var app = {
             autoClear: !config.autoClear
         });
 
-        alert('Set autoClear to \n' + config.autoClear);
+        showToast('Set autoClear to \n' + config.autoClear);
     }
 
 };
@@ -104,11 +104,13 @@ var app = {
 var dialog;
 
 showToast = function (text) {
+    var isMac = navigator.userAgent.toLowerCase().includes('macintosh');
+
     setTimeout(function () {
         if (window.Windows !== undefined) {
             showWinDialog(text);
         } else
-        if (window.plugins && window.plugins.toast) {
+        if (!isMac && window.plugins && window.plugins.toast) {
             window.plugins.toast.showShortBottom(String(text));
         }
         else {
@@ -118,7 +120,6 @@ showToast = function (text) {
 };
 
 showWinDialog = function (text) {
-
     if (dialog) {
         dialog.content = text;
         return;
@@ -132,7 +133,7 @@ showWinDialog = function (text) {
 };
 
 if (window.hasOwnProperty('Windows')) {
-    alert = function (msg) { new Windows.UI.Popups.MessageDialog(msg).showAsync(); };
+    alert = showWinDialog;
 }
 
 app.initialize();

@@ -17,40 +17,39 @@
        under the License.
 */
 
-var Q      = require('q'),
-    create = require('./create'),
-    fs     = require('fs'),
-    shell = require('shelljs');
+var Q = require('q');
+var create = require('./create');
+var fs = require('fs');
+var shell = require('shelljs');
 
 module.exports.help = function () {
-    console.log("WARNING : Make sure to back up your project before updating!");
-    console.log("Usage: update PathToProject ");
-    console.log("    PathToProject : The path the project you would like to update.");
-    console.log("examples:");
-    console.log("    update C:\\Users\\anonymous\\Desktop\\MyProject");
+    console.log('WARNING : Make sure to back up your project before updating!');
+    console.log('Usage: update PathToProject ');
+    console.log('    PathToProject : The path the project you would like to update.');
+    console.log('examples:');
+    console.log('    update C:\\Users\\anonymous\\Desktop\\MyProject');
 };
 
 module.exports.run = function (argv) {
     var projectPath = argv[2];
     if (!fs.existsSync(projectPath)) {
         // if specified project path is not valid then reject promise
-        Q.reject("Browser platform does not exist here: " + projectPath);
+        Q.reject('Browser platform does not exist here: ' + projectPath);
     }
     return Q().then(function () {
-        console.log("Removing existing browser platform.");
+        console.log('Removing existing browser platform.');
         shellfatal(shell.rm, '-rf', projectPath);
         create.createProject(projectPath);
     });
 };
 
-function shellfatal(shellFunc) {
+function shellfatal (shellFunc) {
     var slicedArgs = Array.prototype.slice.call(arguments, 1);
     var returnVal = null;
     try {
         shell.config.fatal = true;
         returnVal = shellFunc.apply(shell, slicedArgs);
-    }   
-    finally {
+    } finally {
         shell.config.fatal = false;
     }
     return returnVal;

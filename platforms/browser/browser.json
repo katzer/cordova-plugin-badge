@@ -18,28 +18,15 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-x-toast": {
+        "cordova-plugin-badge": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         },
-        "cordova-plugin-badge": {
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
         }
     },
     "dependent_plugins": {},
     "modules": [
-        {
-            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
-            "id": "cordova-plugin-x-toast.Toast",
-            "pluginId": "cordova-plugin-x-toast",
-            "clobbers": [
-                "window.plugins.toast"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-            "id": "cordova-plugin-x-toast.tests",
-            "pluginId": "cordova-plugin-x-toast"
-        },
         {
             "file": "plugins/cordova-plugin-badge/www/badge.js",
             "id": "cordova-plugin-badge.Badge",
@@ -61,10 +48,23 @@
             "id": "cordova-plugin-badge.Badge.Proxy",
             "pluginId": "cordova-plugin-badge",
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "pluginId": "cordova-plugin-x-toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests",
+            "pluginId": "cordova-plugin-x-toast"
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-x-toast": "2.6.0",
-        "cordova-plugin-badge": "0.7.4"
+        "cordova-plugin-badge": "0.8.3",
+        "cordova-plugin-x-toast": "2.6.0"
     }
 }

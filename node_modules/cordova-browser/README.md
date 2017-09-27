@@ -19,29 +19,26 @@
 #
 -->
 
-[![Build Status](https://travis-ci.org/apache/cordova-browser.svg)](https://travis-ci.org/apache/cordova-browser)
+[![Build status](https://travis-ci.org/apache/cordova-browser.svg?branch=master )](https://travis-ci.org/apache/cordova-browser.svg?branch=master )
+[![Build Status](https://ci.appveyor.com/api/projects/status/4oan2jjn7nlgfay3/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/4oan2jjn7nlgfay3/branch/master?svg=true)
 
 # Cordova Browser
 
-Target modern web browsers to build Cordova based applications. 
+Target modern web browsers to build Apache Cordova based applications.
 
 # Goals
 
-- Browser targeted deployment 
+- Browser targeted deployment
 - Surfacing native platform incompatibilities from the open web platform
-- Simplest possible reference implementation for future platform targets
-- Optimizing cordova.js 
 
-# TODO
+# PWA support
 
-`bin/create`
-`bin/update`
-`bin/check_reqs`
-`bin/templates/scripts/cordova/build`
-`bin/templates/scripts/cordova/clean`
-`bin/templates/scripts/cordova/log`
-`bin/templates/scripts/cordova/emulate`
-`bin/templates/scripts/cordova/run`
-`bin/templates/scripts/cordova/version`
-`bin/templates/www`
+## cordova-browser now includes support for progressive web apps (PWAs)
+
+- if your project supplies a `manifest.json` in the `www/` dir, it will be used
+    - a `manifest.json` will be generated otherwise
+- if your js code registers a service worker, it will also be used
+    - a generic cordova service worker will be installed that simply caches all files in the `www` dir.
+    - cache version is autoincremented for every build
+
 

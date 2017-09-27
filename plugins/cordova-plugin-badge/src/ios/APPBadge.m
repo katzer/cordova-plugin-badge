@@ -59,13 +59,13 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
  */
 - (void) clear:(CDVInvokedUrlCommand *)command
 {
-    [self.commandDelegate runInBackground:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self.app setApplicationIconBadgeNumber:0];
 
         [self sendPluginResult:CDVCommandStatus_OK
                  messageAsLong:0
                     callbackId:command.callbackId];
-    }];
+    });
 }
 
 /**
@@ -76,13 +76,13 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
     NSArray* args = [command arguments];
     int number    = [[args objectAtIndex:0] intValue];
 
-    [self.commandDelegate runInBackground:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self.app setApplicationIconBadgeNumber:number];
 
         [self sendPluginResult:CDVCommandStatus_OK
                  messageAsLong:number
                     callbackId:command.callbackId];
-    }];
+    });
 }
 
 /**
@@ -90,13 +90,13 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
  */
 - (void) get:(CDVInvokedUrlCommand *)command
 {
-    [self.commandDelegate runInBackground:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         long badge = [self.app applicationIconBadgeNumber];
 
         [self sendPluginResult:CDVCommandStatus_OK
                  messageAsLong:badge
                     callbackId:command.callbackId];
-    }];
+    });
 }
 
 /**
