@@ -18,7 +18,11 @@
 var exec      = require('cordova/exec'),
     channel   = require('cordova/channel'),
     ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1;
+    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
+    isMac     = ua.indexOf('macintosh') > -1,
+    isWin     = window.Windows !== undefined,
+    isWinPC   = isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop'),
+    isDesktop = isMac || isWinPC;
 
 /**
  * Clears the badge number.
@@ -204,3 +208,15 @@ channel.onResume.subscribe(function () {
 channel.onActivated.subscribe(function () {
     if (exports._config.autoClear) { exports.clear(); }
 });
+
+if (isDesktop) {
+    // Clear badge on app resume if autoClear is set to true
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden && exports._config.autoClear) { exports.clear(); }
+    }, false);
+
+    // Clear badge on app resume if autoClear is set to true
+    window.addEventListener('focus', function () {
+        if (exports._config.autoClear) { exports.clear(); }
+    }, false);
+}

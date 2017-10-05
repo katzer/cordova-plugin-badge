@@ -1,5 +1,8 @@
 ## ChangeLog
 
+#### Version 0.8.4 (not yet released)
+- Fix _autoClear_ for desktop platforms
+
 #### Version 0.8.3 (27.09.2017)
 - Fix threading warnings with iOS 11
 
