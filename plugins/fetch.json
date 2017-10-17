@@ -1,50 +1,50 @@
 {
-    "de.appplant.cordova.plugin.local-notifications": {
-        "source": {
-            "type": "registry",
-            "id": "de.appplant.cordova.plugin.local-notifications"
-        }
-    },
-    "org.apache.cordova.device": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.device"
-        }
-    },
-    "de.appplant.cordova.plugin.local-notification": {
-        "source": {
-            "type": "local",
-            "path": "/Users/sebastian/Documents/github/cordova-plugin-local-notifications"
-        }
-    },
-    "de.appplant.cordova.common.RegisterUserNotificationSettings": {
-        "source": {
-            "type": "registry",
-            "id": "de.appplant.cordova.common.registerusernotificationsettinGS"
-        }
-    },
-    "cordova-plugin-app-event": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-app-event@>=1.2.0"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-badge": {
-        "source": {
-            "type": "local",
-            "path": "/Users/sebastian/Documents/github/cordova-plugin-badge"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-x-toast": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-x-toast"
-        },
-        "is_top_level": true,
-        "variables": {}
+  "de.appplant.cordova.plugin.local-notifications": {
+    "source": {
+      "type": "registry",
+      "id": "de.appplant.cordova.plugin.local-notifications"
     }
+  },
+  "org.apache.cordova.device": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.device"
+    }
+  },
+  "de.appplant.cordova.plugin.local-notification": {
+    "source": {
+      "type": "local",
+      "path": "/Users/sebastian/Documents/github/cordova-plugin-local-notifications"
+    }
+  },
+  "de.appplant.cordova.common.RegisterUserNotificationSettings": {
+    "source": {
+      "type": "registry",
+      "id": "de.appplant.cordova.common.registerusernotificationsettinGS"
+    }
+  },
+  "cordova-plugin-app-event": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-app-event@>=1.2.0"
+    },
+    "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-plugin-x-toast": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-x-toast"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-badge": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-badge@latest"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

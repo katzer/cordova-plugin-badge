@@ -1,18 +1,18 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-x-toast": {
+      "PACKAGE_NAME": "BadgeExample"
     },
-    "config_munge": {
-        "files": {}
-    },
-    "installed_plugins": {
-        "cordova-plugin-badge": {
-            "PACKAGE_NAME": "BadgeExample"
-        },
-        "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "BadgeExample"
-        }
-    },
-    "dependent_plugins": {}
+    "cordova-plugin-badge": {
+      "PACKAGE_NAME": "BadgeExample"
+    }
+  },
+  "dependent_plugins": {}
 }

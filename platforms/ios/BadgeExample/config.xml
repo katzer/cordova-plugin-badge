@@ -19,11 +19,11 @@
         <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="Badge">
-        <param name="ios-package" value="APPBadge" />
-    </feature>
     <feature name="Toast">
         <param name="ios-package" value="Toast" />
+    </feature>
+    <feature name="Badge">
+        <param name="ios-package" value="APPBadge" />
     </feature>
     <name>BadgeExample</name>
     <description>

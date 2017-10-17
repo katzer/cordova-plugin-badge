@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package IgnorableNamespaces="uap mp" xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
     <Identity Name="de.appplant.cordova.plugin.badge.example" Publisher="CN=$username$" Version="0.6.0.0" />
-    <mp:PhoneIdentity PhoneProductId="f9cfb3f0-4b5d-11e7-ada5-6db431c9d1ef" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+    <mp:PhoneIdentity PhoneProductId="533a4580-a938-11e7-a408-a9bf0abd109c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
     <Properties>
         <DisplayName>BadgeExample</DisplayName>
         <PublisherDisplayName>Sebastián Katzer</PublisherDisplayName>

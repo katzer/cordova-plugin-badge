@@ -18,7 +18,14 @@ cordova.define("cordova-plugin-badge.Badge", function(require, exports, module) 
 var exec      = require('cordova/exec'),
     channel   = require('cordova/channel'),
     ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1;
+    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
+    isMac     = ua.indexOf('macintosh') > -1,
+    isWin     = window.Windows !== undefined,
+    isWinPC   = isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop'),
+    isDesktop = isMac || isWinPC;
+
+// Default settings
+exports._config = { indicator: 'badge', autoClear: false };
 
 /**
  * Clears the badge number.
@@ -133,19 +140,22 @@ exports.requestPermission = function (callback, scope) {
  * @return [ Hash ] The merged config settings.
  */
 exports.configure = function (config) {
-    for (var key in config) {
-        if (this._config.hasOwnProperty(key)) {
-            this._config[key] = config[key];
-        }
-    }
-
+    this.mergeConfig(config);
     this.exec('save', this._config);
 
     return this._config;
 };
 
-// Default settings
-exports._config = { autoClear: false };
+/**
+ * Merge the config values with the current ones.
+ *
+ * @param [ Hash ] object Optional config settings.
+ *
+ * @return [ Hash ] The merged config settings.
+ */
+exports.mergeConfig = function (config) {
+    return Object.assign(this._config, config);
+};
 
 /**
  * Create callback, which will be executed within a specific scope.
@@ -162,6 +172,17 @@ exports.createCallbackFn = function (callbackFn, scope) {
     return function () {
         callbackFn.apply(scope || this, arguments);
     };
+};
+
+/**
+ * Clear the badge if autoClear is on and the indicator type is badge.
+ *
+ * @return [ Void ]
+ */
+exports.clearIf = function () {
+    if (this._config.autoClear && this._config.indicator == 'badge') {
+        this.clear();
+    }
 };
 
 /**
@@ -190,19 +211,31 @@ exports.exec = function (action, args, callback, scope) {
 // Clear badge on app start if autoClear is set to true
 channel.onCordovaReady.subscribe(function () {
     exports.exec('load', null, function (config) {
-        if (config) { this._config = config; }
-        if (this._config.autoClear) { this.clear(); }
+        this.mergeConfig(config);
+        this.clearIf();
     }, exports);
 });
 
 // Clear badge on app resume if autoClear is set to true
 channel.onResume.subscribe(function () {
-    if (exports._config.autoClear) { exports.clear(); }
+    exports.clearIf();
 });
 
 // Clear badge on app resume if autoClear is set to true
 channel.onActivated.subscribe(function () {
-    if (exports._config.autoClear) { exports.clear(); }
+    exports.clearIf();
 });
+
+if (isDesktop) {
+    // Clear badge on app resume if autoClear is set to true
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) { exports.clearIf(); }
+    }, false);
+
+    // Clear badge on app resume if autoClear is set to true
+    window.addEventListener('focus', function () {
+        exports.clearIf();
+    }, false);
+}
 
 });

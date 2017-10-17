@@ -156,17 +156,12 @@ h1 {
     filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=2,Color=#33000000,Positive=true);
 }
 
-.button:nth-child(odd) {
-    margin-right: 7px;
-}
-
 .button:nth-child(even) {
-    margin-left: 7px;
+    margin: 0 7px;
 }
 
 .button:first-child:last-child {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin: 0 0;
 }
 
 .button.orange {

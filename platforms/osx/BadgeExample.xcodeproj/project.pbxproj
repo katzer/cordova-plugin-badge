@@ -16,7 +16,9 @@
 		70BD686718FFB06500A1EFCF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686518FFB06500A1EFCF /* WebKit.framework */; };
 		70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686A18FFB0BF00A1EFCF /* AppDelegate.m */; };
 		70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686C18FFB0BF00A1EFCF /* MainViewController.m */; };
-		C420284593A747BEB474BB66 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = A56862E2559D4C8F80482000 /* APPBadge.m */; };
+		05F530A02A0C4DA1BB49AD44 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = EFA304AD039845AD8C1D8242 /* APPBadge.m */; };
+		3720C24133B646FB822738CF /* DockCircularProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = F7C478ED838D4F829CF62935 /* DockCircularProgressBar.mm */; };
+		CA8287495B3E451CA6039616 /* DockDownloadProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = B83BB314F00C4CD898BE6C02 /* DockDownloadProgressBar.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,8 +79,12 @@
 		70BD686B18FFB0BF00A1EFCF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		70BD686C18FFB0BF00A1EFCF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		70DAA8D91908785C00AF3749 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		A56862E2559D4C8F80482000 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		C9287964EEF54859AED36646 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		EFA304AD039845AD8C1D8242 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		F7C478ED838D4F829CF62935 /* DockCircularProgressBar.mm */ = {isa = PBXFileReference; name = "DockCircularProgressBar.mm"; path = "cordova-plugin-badge/DockCircularProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B83BB314F00C4CD898BE6C02 /* DockDownloadProgressBar.mm */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.mm"; path = "cordova-plugin-badge/DockDownloadProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A89274A84832430FA2677B96 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		2395FA9D274C4C9DAD0CC796 /* DockCircularProgressBar.h */ = {isa = PBXFileReference; name = "DockCircularProgressBar.h"; path = "cordova-plugin-badge/DockCircularProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		3F6F6A9B37F147AE9FC9406B /* DockDownloadProgressBar.h */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.h"; path = "cordova-plugin-badge/DockDownloadProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,8 +105,12 @@
 		7069FBC31905A1F9000B48E1 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				A56862E2559D4C8F80482000 /* APPBadge.m */,
-				C9287964EEF54859AED36646 /* APPBadge.h */,
+				EFA304AD039845AD8C1D8242 /* APPBadge.m */,
+				F7C478ED838D4F829CF62935 /* DockCircularProgressBar.mm */,
+				B83BB314F00C4CD898BE6C02 /* DockDownloadProgressBar.mm */,
+				A89274A84832430FA2677B96 /* APPBadge.h */,
+				2395FA9D274C4C9DAD0CC796 /* DockCircularProgressBar.h */,
+				3F6F6A9B37F147AE9FC9406B /* DockDownloadProgressBar.h */,
 			);
 			name = Plugins;
 			path = "BadgeExample/Plugins";
@@ -311,7 +321,9 @@
 				70BD683318FFB02D00A1EFCF /* main.m in Sources */,
 				70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */,
 				70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */,
-				C420284593A747BEB474BB66 /* APPBadge.m in Sources */,
+				05F530A02A0C4DA1BB49AD44 /* APPBadge.m in Sources */,
+				3720C24133B646FB822738CF /* DockCircularProgressBar.mm in Resources */,
+				CA8287495B3E451CA6039616 /* DockDownloadProgressBar.mm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

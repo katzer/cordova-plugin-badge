@@ -1,6 +1,10 @@
-Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\ReverseMap\resources.pri
-Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\AppxManifest.xml
-Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\AnyCPU\win10\CordovaApp.Windows10.build.appxrecipe
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\ARM\win10\ReverseMap\resources.pri
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\ARM\win10\AppxManifest.xml
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\ARM\win10\CordovaApp.Windows10.build.appxrecipe
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\x64\win10\ReverseMap\resources.pri
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\x64\win10\AppxManifest.xml
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\Debug\x64\win10\CordovaApp.Windows10.build.appxrecipe
+Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\CordovaApp.Windows10.jsproj.CoreCompileInputs.cache
 Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\ResourceHandlingTask.state
 Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\priconfig.xml
 Z:\Documents\github\cordova-example-badge\platforms\windows\build\windows\bld\priconfig.xml.intermediate

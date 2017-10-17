@@ -34,15 +34,18 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        document.getElementById('check').onclick  = app.check;
-        document.getElementById('grant').onclick  = app.grant;
-        document.getElementById('clear').onclick  = app.clear;
-        document.getElementById('inc').onclick    = app.inc;
-        document.getElementById('dec').onclick    = app.dec;
-        document.getElementById('get').onclick    = app.get;
-        document.getElementById('fix').onclick    = app.fix;
-        document.getElementById('rand').onclick   = app.rand;
-        document.getElementById('toggle').onclick = app.toggle;
+        document.getElementById('check').onclick    = app.check;
+        document.getElementById('grant').onclick    = app.grant;
+        document.getElementById('clear').onclick    = app.clear;
+        document.getElementById('inc').onclick      = app.inc;
+        document.getElementById('dec').onclick      = app.dec;
+        document.getElementById('get').onclick      = app.get;
+        document.getElementById('fix').onclick      = app.fix;
+        document.getElementById('rand').onclick     = app.rand;
+        document.getElementById('toggle').onclick   = app.toggle;
+        document.getElementById('badge').onclick    = app.badge;
+        document.getElementById('download').onclick = app.download;
+        document.getElementById('circular').onclick = app.circular;
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -97,6 +100,24 @@ var app = {
         });
 
         showToast('Set autoClear to \n' + config.autoClear);
+    },
+    // Set indicator to download
+    download: function () {
+        cordova.plugins.notification.badge.configure({
+            indicator: 'download'
+        });
+    },
+    // Set indicator to circular
+    circular: function () {
+        cordova.plugins.notification.badge.configure({
+            indicator: 'circular'
+        });
+    },
+    // Set indicator to badge
+    badge: function () {
+        cordova.plugins.notification.badge.configure({
+            indicator: 'badge'
+        });
     }
 
 };
@@ -124,6 +145,9 @@ showWinDialog = function (text) {
         dialog.content = text;
         return;
     }
+
+    if (Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes("Desktop"))
+        return;
 
     dialog = new Windows.UI.Popups.MessageDialog(text);
 

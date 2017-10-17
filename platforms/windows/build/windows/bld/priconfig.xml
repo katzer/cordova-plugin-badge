@@ -2,7 +2,7 @@
 <resources targetOsVersion="10.0.0" majorVersion="1">
   <index root="\" startIndexAt="build\windows\bld\layout.resfiles">
     <default>
-      <qualifier name="Language" value="de-DE" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="100" />
       <qualifier name="HomeRegion" value="001" />
@@ -17,7 +17,7 @@
   </index>
   <index root="\" startIndexAt="build\windows\bld\resources.resfiles">
     <default>
-      <qualifier name="Language" value="de-DE" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="100" />
       <qualifier name="HomeRegion" value="001" />
@@ -34,7 +34,7 @@
   </index>
   <index root="\" startIndexAt="build\windows\bld\pri.resfiles">
     <default>
-      <qualifier name="Language" value="de-DE" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="100" />
       <qualifier name="HomeRegion" value="001" />
@@ -50,7 +50,7 @@
   </index>
   <index root="build\windows\bld" startIndexAt="embed.resfiles">
     <default>
-      <qualifier name="Language" value="de-DE" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="100" />
       <qualifier name="HomeRegion" value="001" />

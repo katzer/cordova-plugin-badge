@@ -1,26 +1,27 @@
 {
-    "name": "de.appplant.cordova.plugin.badge.example",
-    "version": "0.6.0",
-    "displayName": "BadgeExample",
-    "cordova": {
-        "platforms": [
-            "android",
-            "browser",
-            "ios",
-            "osx",
-            "windows"
-        ],
-        "plugins": {
-            "cordova-plugin-badge": {},
-            "cordova-plugin-x-toast": {}
-        }
-    },
-    "dependencies": {
-        "cordova-android": "^6.2.3",
-        "cordova-browser": "^5.0.0",
-        "cordova-ios": "^4.5.1",
-        "cordova-osx": "^4.0.1",
-        "cordova-plugin-x-toast": "^2.6.0",
-        "cordova-windows": "^5.0.0"
+  "name": "de.appplant.cordova.plugin.badge.example",
+  "version": "0.6.0",
+  "displayName": "BadgeExample",
+  "cordova": {
+    "platforms": [
+      "android",
+      "browser",
+      "ios",
+      "windows",
+      "osx"
+    ],
+    "plugins": {
+      "cordova-plugin-x-toast": {},
+      "cordova-plugin-badge": {}
     }
+  },
+  "dependencies": {
+    "cordova-android": "^6.2.3",
+    "cordova-browser": "^5.0.0",
+    "cordova-ios": "^4.5.1",
+    "cordova-osx": "^4.0.1",
+    "cordova-plugin-badge": "^0.8.4",
+    "cordova-plugin-x-toast": "^2.6.0",
+    "cordova-windows": "^5.0.0"
+  }
 }
