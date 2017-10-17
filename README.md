@@ -104,6 +104,12 @@ To clear the badge number automatically if the user taps the app icon:
 cordova.plugins.notification.badge.configure({ autoClear: true });
 ```
 
+OSX supports additional indicators. Next to `badge` these are `download` and `circular`.
+
+```js
+cordova.plugins.notification.badge.configure({ indicator: 'circular' });
+```
+
 
 ## Permissions
 

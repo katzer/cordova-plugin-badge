@@ -72,6 +72,12 @@
 
         <header-file src="src/osx/APPBadge.h" />
         <source-file src="src/osx/APPBadge.m" />
+
+        <header-file src="src/osx/DockCircularProgressBar.h" />
+        <source-file src="src/osx/DockCircularProgressBar.mm" />
+
+        <header-file src="src/osx/DockDownloadProgressBar.h" />
+        <source-file src="src/osx/DockDownloadProgressBar.mm" />
     </platform>
 
     <!-- android -->

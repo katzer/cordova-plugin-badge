@@ -1,7 +1,9 @@
 ## ChangeLog
 
 #### Version 0.8.4 (not yet released)
-- Fix _autoClear_ for desktop platforms
+- Fix _autoClear_ for desktop platforms.
+- Support for _download_ and _circular_ indicator on OSX.
+  <br>Based on https://github.com/hokein/DockProgressBar
 
 #### Version 0.8.3 (27.09.2017)
 - Fix threading warnings with iOS 11

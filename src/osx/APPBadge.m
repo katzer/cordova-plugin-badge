@@ -16,10 +16,14 @@
  */
 
 #import "APPBadge.h"
+#import "DockCircularProgressBar.h"
+#import "DockDownloadProgressBar.h"
 
 @implementation APPBadge
 
 static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
+
+enum APPBadgeIndicator { kAPPBadgeIndicatorBadge, kAPPBadgeIndicatorCircular, kAPPBadgeIndicatorDownload };
 
 #pragma mark -
 #pragma mark Interface
@@ -30,11 +34,9 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 - (void) load:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        NSDictionary *config = [self.settings objectForKey:kAPPBadgeConfigKey];
-
         CDVPluginResult* result;
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsDictionary:config];
+                                   messageAsDictionary:self.config];
 
         [self.commandDelegate sendPluginResult:result
                                     callbackId:command.callbackId];
@@ -46,9 +48,15 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
  */
 - (void) save:(CDVInvokedUrlCommand *)command
 {
+    int badge = self.badgeValue;
+
     [self.commandDelegate runInBackground:^{
         [self.settings setObject:[command argumentAtIndex:0]
                           forKey:kAPPBadgeConfigKey];
+        
+        if (badge != 0) {
+            [self setBadgeValue:badge];
+        }
     }];
 }
 
@@ -58,12 +66,16 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 - (void) clear:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        [self.dock setBadgeLabel:@""];
-
         [self sendPluginResult:CDVCommandStatus_OK
                  messageAsLong:0
                     callbackId:command.callbackId];
     }];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dock.badgeLabel = @"";
+        [self.cbar clear];
+        [self.dbar clear];
+    });
 }
 
 /**
@@ -74,12 +86,12 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
     NSArray* args = [command arguments];
     int number    = [[args objectAtIndex:0] intValue];
 
-    if (number == 0)
+    if (number == 0) {
         return [self clear:command];
+    }
     
     [self.commandDelegate runInBackground:^{
-        [self.dock setBadgeLabel:@(number).stringValue];
-
+        [self setBadgeValue:number];
         [self sendPluginResult:CDVCommandStatus_OK
                  messageAsLong:number
                     callbackId:command.callbackId];
@@ -91,25 +103,96 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
  */
 - (void) get:(CDVInvokedUrlCommand *)command
 {
-    [self.commandDelegate runInBackground:^{
-        NSString *label = [self.dock badgeLabel];
-        int badge       = label.intValue;
-
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self sendPluginResult:CDVCommandStatus_OK
-                 messageAsLong:badge
+                 messageAsLong:self.badgeValue
                     callbackId:command.callbackId];
-    }];
+    });
+}
+
+#pragma mark -
+#pragma mark Core
+
+/**
+ * Set the badge value.
+ *
+ * @param [ Int ] value The value to set.
+ *
+ * @return [ Void ]
+ */
+- (void) setBadgeValue:(int)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        switch (self.indicator) {
+            case kAPPBadgeIndicatorCircular:
+                self.dock.badgeLabel = @"";
+                [self.dbar clear];
+                [self.cbar setProgress:value/100.0];
+                [self.cbar setShowPercent:YES];
+                [self.cbar updateProgressBar];
+                break;
+                
+            case kAPPBadgeIndicatorDownload:
+                self.dock.badgeLabel = @"";
+                [self.cbar clear];
+                [self.dbar setProgress:value/100.0];
+                [self.dbar updateProgressBar];
+                break;
+                
+            default:
+                [self.cbar clear];
+                [self.dbar clear];
+                self.dock.badgeLabel = @(value).stringValue;
+        }
+    });
+}
+
+/**
+ * Get the badge value.
+ *
+ * @return [ Int ]
+ */
+- (int) badgeValue
+{
+    switch (self.indicator) {
+        case kAPPBadgeIndicatorCircular:
+            return rint(100 * self.cbar.doubleValue);
+            break;
+            
+        case kAPPBadgeIndicatorDownload:
+            return rint(100 * self.dbar.doubleValue);
+            break;
+            
+        default:
+            return [self.dock badgeLabel].intValue;
+    }
 }
 
 #pragma mark -
 #pragma mark Helper
 
 /**
- * Short hand for shared application instance.
+ * Short hand for shared dock instance.
  */
 - (NSDockTile*) dock
 {
     return [NSApp dockTile];
+}
+
+/**
+ * Short hand for shared circular progress bar.
+ */
+- (DockCircularProgressBar*) cbar
+{
+    return [DockCircularProgressBar sharedDockCircularProgressBar];
+}
+
+/**
+ * Short hand for shared circular progress bar.
+ */
+- (DockDownloadProgressBar*) dbar
+{
+    return [DockDownloadProgressBar sharedDockDownloadProgressBar];
 }
 
 /**
@@ -118,6 +201,32 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 - (NSUserDefaults*) settings
 {
     return [NSUserDefaults standardUserDefaults];
+}
+
+/**
+ * The saved config properties.
+ */
+- (NSDictionary*) config
+{
+    return [self.settings objectForKey:kAPPBadgeConfigKey];
+}
+
+/**
+ * The indicator type.
+ *
+ * @return [ NSString* ]
+ */
+- (enum APPBadgeIndicator) indicator
+{
+    NSString* indicator = [self.config objectForKey:@"indicator"];
+    
+    if ([indicator isEqualToString:@"circular"])
+        return kAPPBadgeIndicatorCircular;
+    
+    if ([indicator isEqualToString:@"download"])
+        return kAPPBadgeIndicatorDownload;
+        
+    return kAPPBadgeIndicatorBadge;
 }
 
 /**
