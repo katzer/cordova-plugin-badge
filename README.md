@@ -10,7 +10,9 @@
 ### How they appear to the user
 
 Users see notifications in the following ways:
+
 - Badging the app’s icon
+- Progress indicator (OSX based on https://github.com/hokein/DockProgressBar)
 
 
 ### Supported Platforms
