@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.8.4 (not yet released)
+#### Version 0.8.4 (17.10.2017)
 - Fix _autoClear_ for desktop platforms.
 - Support for _download_ and _circular_ indicator on OSX.
   <br>Based on https://github.com/hokein/DockProgressBar
