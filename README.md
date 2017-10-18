@@ -18,10 +18,10 @@ Users see notifications in the following ways:
 ### Supported Platforms
 
 - __Android / Amazon FireOS__ (via [ShortcutBadger][shortcut_badger])
-- __Browser__
+- __Browser__ (via [favico.js][favico_js])
 - __iOS__
 - __OSX__
-- __Windows__
+- __Windows__ (Phone and Desktop)
 
 
 ## Installation
@@ -64,6 +64,14 @@ A callback is optional and will be invoked with the current badge number.
 cordova.plugins.notification.badge.set(10);
 ```
 
+<p align="center">
+    <img height="150px" src="images/ios.png">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img height="150px" src="images/android.png">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img height="150px" src="images/windows.png">
+</p>
+
 There's built-in support to increase the badge number:
 
 ```js
@@ -75,8 +83,8 @@ cordova.plugins.notification.badge.increase(1, function (badge) {
 To decrease the badge number:
 
 ```js
-cordova.plugins.notification.badge.decrease(20, function (badge) {
-    // badge is now 0
+cordova.plugins.notification.badge.decrease(2, function (badge) {
+    // badge is now 9 (11 - 2)
 });
 ```
 
@@ -106,11 +114,19 @@ To clear the badge number automatically if the user taps the app icon:
 cordova.plugins.notification.badge.configure({ autoClear: true });
 ```
 
-OSX supports additional indicators. Next to `badge` these are `download` and `circular`.
+OSX supports additional indicators. Other than to `badge` these are `circular` and `download`.
 
 ```js
 cordova.plugins.notification.badge.configure({ indicator: 'circular' });
 ```
+
+<p align="center">
+    <img src="images/osx-badge.png">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="images/osx-circular.png">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="images/osx-download.png">
+</p>
 
 
 ## Permissions
@@ -124,7 +140,11 @@ cordova.plugins.notification.badge.requestPermission(function (granted) {
 });
 ```
 
-Or to check if they have been granted already:
+<p align="center">
+    <img height="200px" src="images/ios-permission.png">
+</p>
+
+To check if they have been granted already:
 
 ```javascript
 cordova.plugins.notification.badge.hasPermission(function (granted) {
@@ -171,6 +191,7 @@ Made with :yum: from Leipzig
 
 [cordova]: https://cordova.apache.org
 [shortcut_badger]: https://github.com/leolin310148/ShortcutBadger
+[favico_js]: http://lab.ejci.net/favico.js/
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [npm]: https://www.npmjs.com/package/cordova-plugin-badge
 [gradle-guide]: https://cordova.apache.org/docs/en/latest/guide/platforms/android/#configuring-gradle
