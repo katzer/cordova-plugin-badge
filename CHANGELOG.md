@@ -2,6 +2,7 @@
 
 #### Version 0.8.5 (not yet released)
 - Upgrade ShortcutBadger to v1.1.19
+- BadgeImpl class can now be used from other Android plugins. 
 
 #### Version 0.8.4 (17.10.2017)
 - Fix _autoClear_ for desktop platforms.
