@@ -1,5 +1,8 @@
 ## ChangeLog
 
+#### Version 0.8.5 (not yet released)
+- Upgrade ShortcutBadger to v1.1.19
+
 #### Version 0.8.4 (17.10.2017)
 - Fix _autoClear_ for desktop platforms.
 - Support for _download_ and _circular_ indicator on OSX.
