@@ -21,14 +21,24 @@ import android.content.Context;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static org.apache.cordova.PluginResult.Status.OK;
+
 public class Badge extends CordovaPlugin {
 
     // Implementation of the badge interface methods
-    private final BadgeImpl badgeImpl = new BadgeImpl();
+    private BadgeImpl impl;
+
+    /**
+     * Called after plugin construction and fields have been initialized.
+     */
+    protected void pluginInitialize() {
+        impl = new BadgeImpl(getContext());
+    }
 
     /**
      * Executes the request.
@@ -81,7 +91,8 @@ public class Badge extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                badgeImpl.loadConfig(callback, getContext());
+                JSONObject cfg = impl.loadConfig();
+                sendPluginResult(callback, cfg);
             }
         });
     }
@@ -95,7 +106,7 @@ public class Badge extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                badgeImpl.saveConfig(config, getContext());
+                impl.saveConfig(config);
             }
         });
     }
@@ -109,8 +120,9 @@ public class Badge extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                badgeImpl.clearBadge(getContext());
-                badgeImpl.getBadge(callback, getContext());
+                impl.clearBadge();
+                int badge = impl.getBadge();
+                sendPluginResult(callback, badge);
             }
         });
     }
@@ -124,7 +136,8 @@ public class Badge extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                badgeImpl.getBadge(callback, getContext());
+                int badge = impl.getBadge();
+                sendPluginResult(callback, badge);
             }
         });
     }
@@ -141,11 +154,34 @@ public class Badge extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                badgeImpl.clearBadge(getContext());
-                badgeImpl.setBadge(args, getContext());
-                badgeImpl.getBadge(callback, getContext());
+                impl.clearBadge();
+                impl.setBadge(args.optInt(0));
+                int badge = impl.getBadge();
+                sendPluginResult(callback, badge);
             }
         });
+    }
+
+    /**
+     * Send badge number has the plugin result back to the JS caller.
+     *
+     * @param callback The callback to invoke.
+     * @param badge    The badge number to pass with.
+     */
+    private void sendPluginResult(CallbackContext callback, int badge) {
+        PluginResult result = new PluginResult(OK, badge);
+        callback.sendPluginResult(result);
+    }
+
+    /**
+     * Send badge number has the plugin result back to the JS caller.
+     *
+     * @param callback The callback to invoke.
+     * @param obj      The object to pass with.
+     */
+    private void sendPluginResult(CallbackContext callback, JSONObject obj) {
+        PluginResult result = new PluginResult(OK, obj);
+        callback.sendPluginResult(result);
     }
 
     /**

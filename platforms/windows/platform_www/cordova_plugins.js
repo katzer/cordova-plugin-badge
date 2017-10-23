@@ -40,7 +40,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cordova-plugin-x-toast": "2.6.0",
-    "cordova-plugin-badge": "0.8.4"
+    "cordova-plugin-badge": "0.8.5"
 };
 // BOTTOM OF METADATA
 });

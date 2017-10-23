@@ -1,17 +1,17 @@
 {
-  "_from": "cordova-plugin-badge@latest",
-  "_id": "cordova-plugin-badge@0.8.4",
+  "_from": "cordova-plugin-badge",
+  "_id": "cordova-plugin-badge@0.8.5",
   "_inBundle": false,
-  "_integrity": "sha512-OPzdcRk+gMrcQikJZXRC0iTYmomM7ubGMczlmsGgscSzsfjtPTG9RxiaHBD+EP6TFhRMFS0tKSxXE0MKr9VJvg==",
+  "_integrity": "sha512-kEa/hvNriry86UeHF1FNDGzRknn51iDpimdlL1GLcqxQLaLUs2MSXapf1u788g3gYcDfjCxszxe8c0msx1Ri4Q==",
   "_location": "/cordova-plugin-badge",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-badge@latest",
+    "raw": "cordova-plugin-badge",
     "name": "cordova-plugin-badge",
     "escapedName": "cordova-plugin-badge",
-    "rawSpec": "latest",
+    "rawSpec": "",
     "saveSpec": null,
     "fetchSpec": "latest"
   },
@@ -19,9 +19,9 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-badge/-/cordova-plugin-badge-0.8.4.tgz",
-  "_shasum": "80a8582e18b630a9f82cf25d1b61fdb7437b7776",
-  "_spec": "cordova-plugin-badge@latest",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-badge/-/cordova-plugin-badge-0.8.5.tgz",
+  "_shasum": "b136470779ddcb9f84008b29b1255852d1fb71a8",
+  "_spec": "cordova-plugin-badge",
   "_where": "/Users/sebastian/Documents/github/cordova-example-badge",
   "author": {
     "name": "Sebastián Katzer"
@@ -78,5 +78,5 @@
     "type": "git",
     "url": "git+https://github.com/katzer/cordova-plugin-badge.git"
   },
-  "version": "0.8.4"
+  "version": "0.8.5"
 }

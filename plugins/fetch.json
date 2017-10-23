@@ -42,7 +42,7 @@
   "cordova-plugin-badge": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-badge@latest"
+      "id": "cordova-plugin-badge"
     },
     "is_top_level": true,
     "variables": {}
