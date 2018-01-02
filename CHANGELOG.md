@@ -1,5 +1,8 @@
 ## ChangeLog
 
+#### Version 0.8.6 (not yet released)
+- Added polyfill for Object.assign to fix issue on Android.
+
 #### Version 0.8.5 (23.10.2017)
 - Upgrade ShortcutBadger to v1.1.19
 - BadgeImpl class can now be used from other Android plugins. 
