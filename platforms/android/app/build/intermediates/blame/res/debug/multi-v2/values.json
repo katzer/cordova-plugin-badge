@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "map": [
+                {
+                    "source": "/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/res/values/strings.xml",
+                    "from": {
+                        "startLines": "4,2,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "164,55,105",
+                        "endColumns": "63,49,58",
+                        "endOffsets": "223,100,159"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,119,169",
+                        "endColumns": "63,49,58",
+                        "endOffsets": "114,164,223"
+                    }
+                }
+            ]
+        }
+    ]
+}

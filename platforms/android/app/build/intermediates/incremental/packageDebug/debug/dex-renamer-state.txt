@@ -1,0 +1,19 @@
+#Tue Jan 02 16:32:47 CET 2018
+path.1=classes.dex
+path.0=classes.dex
+renamed.5=classes6.dex
+renamed.4=classes5.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+base.5=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/16
+base.4=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/11
+base.3=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/13
+base.2=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/12
+base.1=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/15
+base.0=/Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/build/intermediates/transforms/dexMerger/debug/14
+path.5=classes.dex
+path.4=classes.dex
+path.3=classes.dex
+path.2=classes.dex

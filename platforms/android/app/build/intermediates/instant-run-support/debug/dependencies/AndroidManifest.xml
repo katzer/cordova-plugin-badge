@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="de.appplant.cordova.plugin.badge.example"
+      android:versionCode="600"
+      android:versionName="0.6.0"
+      split="lib_dependencies_apk">
+</manifest>

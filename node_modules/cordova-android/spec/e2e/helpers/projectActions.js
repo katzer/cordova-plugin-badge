@@ -17,11 +17,11 @@
  under the License.
  */
 
-var PluginInfoProvider = require('cordova-common').PluginInfoProvider,
-    shell = require('shelljs'),
-    cp    = require('child_process'),
-    path  = require('path'),
-    util  = require('util');
+var PluginInfoProvider = require('cordova-common').PluginInfoProvider;
+var shell = require('shelljs');
+var cp = require('child_process');
+var path = require('path');
+var util = require('util');
 
 var cordova_bin = path.join(__dirname, '../../../bin');
 
@@ -45,7 +45,7 @@ module.exports.createProject = function (projectname, projectid, platformpath, c
     module.exports.removeProject(projectid);
 
     // create the project
-    var command = util.format('%s %s %s "%s"', createScriptPath, projectDirName, projectid, projectname);
+    var command = util.format('"%s" %s %s "%s"', createScriptPath, projectDirName, projectid, projectname);
     cp.exec(command, function (error, stdout, stderr) {
         if (error) {
             console.log(stdout);
@@ -69,8 +69,7 @@ module.exports.updateProject = function (projectid, platformpath, callback) {
     }
     var projectDirName = getDirName(projectid);
     var updateScriptPath = platformpath ? path.join(platformpath, 'bin/update') : path.join(cordova_bin, 'update');
-    var command = util.format('%s %s', updateScriptPath, projectDirName);
-    
+    var command = util.format('"%s" %s', updateScriptPath, projectDirName);
     cp.exec(command, function (error, stdout, stderr) {
         if (error) {
             console.log(stdout);
@@ -78,7 +77,7 @@ module.exports.updateProject = function (projectid, platformpath, callback) {
         }
         callback(error);
     });
-    
+
 };
 
 /**
@@ -115,7 +114,7 @@ module.exports.removeProject = function (projectid) {
  * @param {function} callback - function which is called (without arguments) when the plugin is added or (with error object) when error occurs
  */
 module.exports.addPlugin = function (projectid, plugindir, callback) {
-	var projectDirName = getDirName(projectid);
+    var projectDirName = getDirName(projectid);
     var pip = new PluginInfoProvider();
     var pluginInfo = pip.get(plugindir);
     var Api = require(path.join(__dirname, '../../..', projectDirName, 'cordova', 'Api.js'));
@@ -126,7 +125,7 @@ module.exports.addPlugin = function (projectid, plugindir, callback) {
     }, function (error) {
         console.error(error);
         callback(error);
-    });  
+    });
 };
 
 /**
@@ -136,7 +135,7 @@ module.exports.addPlugin = function (projectid, plugindir, callback) {
  */
 module.exports.getPlatformVersion = function (projectid, callback) {
     var command = path.join(getDirName(projectid), 'cordova/version');
-    
+
     cp.exec(command, function (error, stdout, stderr) {
         if (error) {
             console.log(stdout);
@@ -146,6 +145,6 @@ module.exports.getPlatformVersion = function (projectid, callback) {
     });
 };
 
-function getDirName(projectid) {
+function getDirName (projectid) {
     return 'test-' + projectid;
 }

@@ -9,11 +9,11 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^5.0.0" />
     <engine name="windows" spec="^5.0.0" />
     <engine name="osx" spec="latest" />
     <plugin name="cordova-plugin-x-toast" spec="~2.6.0" />
     <engine name="ios" spec="latest" />
-    <plugin name="cordova-plugin-badge" spec="^0.8.5" />
+    <engine name="android" spec="latest" />
+    <plugin name="cordova-plugin-badge" spec="^0.8.6" />
 </widget>

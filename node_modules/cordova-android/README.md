@@ -36,7 +36,7 @@ at the core, applications written with web technology: HTML, CSS and JavaScript.
 
 ## Requires
 
-- Java JDK 1.6 or greater
+- Java JDK 1.8 or greater
 - Android SDK [http://developer.android.com](http://developer.android.com)
 
 
@@ -62,3 +62,9 @@ These commands live in a generated Cordova Android project. Any interactions wit
 
 1. Create a project
 2. Import it via "Non-Android Studio Project"
+
+## Running the Native Tests
+
+The `test/` directory in this project contains an Android test project that can
+be used to run different kinds of native tests. Check out the
+[README contained therein](test/README.md) for more details!

@@ -110,7 +110,11 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         nativeToJsMessageQueue.addBridgeMode(new NativeToJsMessageQueue.OnlineEventsBridgeMode(new NativeToJsMessageQueue.OnlineEventsBridgeMode.OnlineEventsBridgeModeDelegate() {
             @Override
             public void setNetworkAvailable(boolean value) {
-                webView.setNetworkAvailable(value);
+                //sometimes this can be called after calling webview.destroy() on destroy()
+                //thus resulting in a NullPointerException
+                if(webView!=null) {
+                   webView.setNetworkAvailable(value); 
+                }
             }
             @Override
             public void runOnUiThread(Runnable r) {
@@ -210,11 +214,6 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         settings.setAppCachePath(databasePath);
         settings.setAppCacheEnabled(true);
 
-        // Enable scaling
-        // Fix for CB-12015
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-
         // Fix for CB-1405
         // Google issue 4641
         String defaultUserAgent = settings.getUserAgentString();
@@ -255,6 +254,9 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         }
     }
 
+    // Yeah, we know, which is why we makes ure that we don't do this if the bridge is
+    // below JELLYBEAN_MR1.  It'd be great if lint was just a little smarter.
+    @SuppressLint("AddJavascriptInterface")
     private static void exposeJsInterface(WebView webView, CordovaBridge bridge) {
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)) {
             LOG.i(TAG, "Disabled addJavascriptInterface() bridge since Android version is old.");

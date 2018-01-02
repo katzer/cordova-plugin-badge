@@ -1,8 +1,8 @@
 {
   "_from": "cordova-plugin-badge",
-  "_id": "cordova-plugin-badge@0.8.5",
+  "_id": "cordova-plugin-badge@0.8.6",
   "_inBundle": false,
-  "_integrity": "sha512-kEa/hvNriry86UeHF1FNDGzRknn51iDpimdlL1GLcqxQLaLUs2MSXapf1u788g3gYcDfjCxszxe8c0msx1Ri4Q==",
+  "_integrity": "sha512-7Z5c/xeBgzqblrI6wk03ozrg37A4kef25krZlrJCa6WfJefDxt2LkeoMU2AiOaPkL8inRo61o00Bqe0+nrHlrg==",
   "_location": "/cordova-plugin-badge",
   "_phantomChildren": {},
   "_requested": {
@@ -19,8 +19,8 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-badge/-/cordova-plugin-badge-0.8.5.tgz",
-  "_shasum": "b136470779ddcb9f84008b29b1255852d1fb71a8",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-badge/-/cordova-plugin-badge-0.8.6.tgz",
+  "_shasum": "4452bf6aefd66514a6ea1b893985b28c251b24c4",
   "_spec": "cordova-plugin-badge",
   "_where": "/Users/sebastian/Documents/github/cordova-example-badge",
   "author": {
@@ -78,5 +78,5 @@
     "type": "git",
     "url": "git+https://github.com/katzer/cordova-plugin-badge.git"
   },
-  "version": "0.8.5"
+  "version": "0.8.6"
 }

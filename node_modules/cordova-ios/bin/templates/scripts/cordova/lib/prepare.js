@@ -317,6 +317,7 @@ function mapIconResources (icons, iconsDir) {
         {dest: 'icon-20@2x.png', width: 40, height: 40},
         {dest: 'icon-20@3x.png', width: 60, height: 60},
         {dest: 'icon-40.png', width: 40, height: 40},
+        {dest: 'icon-40@2x.png', width: 80, height: 80},
         {dest: 'icon-50.png', width: 50, height: 50},
         {dest: 'icon-50@2x.png', width: 100, height: 100},
         {dest: 'icon-60@2x.png', width: 120, height: 120},
@@ -410,7 +411,9 @@ function mapSplashScreenResources (splashScreens, splashScreensDir) {
         {dest: 'Default-568h@2x~iphone.png', width: 640, height: 1136},
         {dest: 'Default-667h.png', width: 750, height: 1334},
         {dest: 'Default-736h.png', width: 1242, height: 2208},
-        {dest: 'Default-Landscape-736h.png', width: 2208, height: 1242}
+        {dest: 'Default-Landscape-736h.png', width: 2208, height: 1242},
+        {dest: 'Default-2436h.png', width: 1125, height: 2436},
+        {dest: 'Default-Landscape-2436h.png', width: 2436, height: 1125}
     ];
 
     var pathMap = {};
