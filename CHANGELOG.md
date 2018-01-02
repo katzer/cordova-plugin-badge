@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.8.6 (not yet released)
+#### Version 0.8.6 (02.01.2018)
 - Added polyfill for Object.assign to fix issue on Android.
 
 #### Version 0.8.5 (23.10.2017)
