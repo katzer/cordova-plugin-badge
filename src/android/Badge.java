@@ -54,32 +54,28 @@ public class Badge extends CordovaPlugin {
     public boolean execute (String action, JSONArray args, CallbackContext callback)
             throws JSONException {
 
+        boolean ret = true;
+
         if (action.equalsIgnoreCase("load")) {
             loadConfig(callback);
-            return true;
         }
-
-        if (action.equalsIgnoreCase("save")) {
+        else if (action.equalsIgnoreCase("save")) {
             saveConfig(args.getJSONObject(0));
-            return true;
         }
-
-        if (action.equalsIgnoreCase("clear")) {
+        else if (action.equalsIgnoreCase("clear")) {
             clearBadge(callback);
-            return true;
         }
-
-        if (action.equalsIgnoreCase("get")) {
+        else if (action.equalsIgnoreCase("get")) {
             getBadge(callback);
-            return true;
         }
-
-        if (action.equalsIgnoreCase("set")) {
+        else if (action.equalsIgnoreCase("set")) {
             setBadge(args, callback);
-            return true;
+        }
+        else {
+            ret = false;
         }
 
-        return false;
+        return ret;
     }
 
     /**
