@@ -48,9 +48,14 @@ public final class BadgeImpl {
      *
      * @param context The app context.
      */
-    public BadgeImpl(Context context) {
-        ctx         = context;
-        isSupported = this.checkSupport();
+    public BadgeImpl (Context context) {
+        if (this.checkSupport(context)) {
+            ctx         = context;
+            isSupported = true;
+        } else {
+            ctx         = context.getApplicationContext();
+            isSupported = this.checkSupport(ctx);
+        }
     }
 
     /**
@@ -105,7 +110,7 @@ public final class BadgeImpl {
      *
      * @param config The config map to persist.
      */
-    public void saveConfig(JSONObject config) {
+    public void saveConfig (JSONObject config) {
         SharedPreferences.Editor editor = getPrefs().edit();
 
         editor.putString(CONFIG_KEY, config.toString());
@@ -114,11 +119,15 @@ public final class BadgeImpl {
 
     /**
      * Check if the device/launcher does support badges.
+     *
+     * @param context The app context.
      */
-    private boolean checkSupport() {
-        boolean supported = ShortcutBadger.isBadgeCounterSupported(ctx);
+    private boolean checkSupport (Context context) {
+        boolean supported = ShortcutBadger.isBadgeCounterSupported(context);
 
-        ShortcutBadger.applyCount(ctx, getBadge());
+        if (supported) {
+            ShortcutBadger.applyCount(context, getBadge());
+        }
 
         return supported;
     }
