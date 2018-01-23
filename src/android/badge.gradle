@@ -23,6 +23,8 @@ if (!project.ext.has('appShortcutBadgerVersion')) {
     ext.appShortcutBadgerVersion = '1.1.21'
 }
 
-dependencies {
-    compile "me.leolin:ShortcutBadger:${appShortcutBadgerVersion}@aar"
+if (!project.ext.has('appShortcutBadgerCustom')) {
+    dependencies {
+        compile "me.leolin:ShortcutBadger:${appShortcutBadgerVersion}@aar"
+    }
 }
