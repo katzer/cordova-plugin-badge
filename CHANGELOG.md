@@ -1,5 +1,10 @@
 ## ChangeLog
 
+#### Version 0.8.7 (not yet released)
+- Added `appShortcutBadgerCustom` gradle switch.
+- Upgrades ShortcutBadger to v1.1.21
+- Added `isSupported` to check support at runtime (on Android).
+
 #### Version 0.8.6 (02.01.2018)
 - Added polyfill for Object.assign to fix issue on Android.
 

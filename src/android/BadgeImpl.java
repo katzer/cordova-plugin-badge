@@ -40,13 +40,17 @@ public final class BadgeImpl {
     // The application context
     private final Context ctx;
 
+    // if the device does support native badges
+    private final boolean isSupported;
+
     /**
      * Initializes the impl with the context of the app.
      *
      * @param context The app context.
      */
     public BadgeImpl(Context context) {
-        this.ctx = context;
+        ctx         = context;
+        isSupported = this.checkSupport();
     }
 
     /**
@@ -64,6 +68,13 @@ public final class BadgeImpl {
      */
     public int getBadge () {
         return getPrefs().getInt(BADGE_KEY, 0);
+    }
+
+    /**
+     * Check if the device/launcher does support badges.
+     */
+    public boolean isSupported() {
+        return isSupported;
     }
 
     /**
@@ -99,6 +110,17 @@ public final class BadgeImpl {
 
         editor.putString(CONFIG_KEY, config.toString());
         editor.apply();
+    }
+
+    /**
+     * Check if the device/launcher does support badges.
+     */
+    private boolean checkSupport() {
+        boolean supported = ShortcutBadger.isBadgeCounterSupported(ctx);
+
+        ShortcutBadger.applyCount(ctx, getBadge());
+
+        return supported;
     }
 
     /**
