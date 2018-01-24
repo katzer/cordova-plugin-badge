@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.8.7 (not yet released)
+#### Version 0.8.7 (24.01.2018)
 - Added `appShortcutBadgerCustom` gradle switch.
 - Upgrades ShortcutBadger to v1.1.21
 - Added `isSupported` to check support at runtime (on Android).
