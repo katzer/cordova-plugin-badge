@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
+import static me.leolin.shortcutbadger.ShortcutBadger.isBadgeCounterSupported;
+
 /**
  * Implementation of the badge interface methods.
  */
@@ -40,19 +42,30 @@ public final class BadgeImpl {
     // The application context
     private final Context ctx;
 
+    // if the device does support native badges
+    private final boolean isSupported;
+
     /**
      * Initializes the impl with the context of the app.
      *
      * @param context The app context.
      */
-    public BadgeImpl(Context context) {
-        this.ctx = context;
+    public BadgeImpl (Context context) {
+        if (isBadgeCounterSupported(context)) {
+            ctx         = context;
+            isSupported = true;
+        } else {
+            ctx         = context.getApplicationContext();
+            isSupported = isBadgeCounterSupported(ctx);
+        }
+
+        ShortcutBadger.applyCount(ctx, getBadge());
     }
 
     /**
      * Clear the badge number.
      */
-    public void clearBadge () {
+    public void clearBadge() {
         saveBadge(0);
         ShortcutBadger.removeCount(ctx);
     }
@@ -62,8 +75,15 @@ public final class BadgeImpl {
      *
      * @return The badge number
      */
-    public int getBadge () {
+    public int getBadge() {
         return getPrefs().getInt(BADGE_KEY, 0);
+    }
+
+    /**
+     * Check if the device/launcher does support badges.
+     */
+    public boolean isSupported() {
+        return isSupported;
     }
 
     /**
@@ -71,7 +91,7 @@ public final class BadgeImpl {
      *
      * @param badge The number to set as the badge number.
      */
-    public void setBadge(int badge) {
+    public void setBadge (int badge) {
         saveBadge(badge);
         ShortcutBadger.applyCount(ctx, badge);
     }
@@ -79,7 +99,7 @@ public final class BadgeImpl {
     /**
      * Get the persisted config map.
      */
-    public JSONObject loadConfig () {
+    public JSONObject loadConfig() {
         String json = getPrefs().getString(CONFIG_KEY, "{}");
 
         try {
@@ -94,7 +114,7 @@ public final class BadgeImpl {
      *
      * @param config The config map to persist.
      */
-    public void saveConfig(JSONObject config) {
+    public void saveConfig (JSONObject config) {
         SharedPreferences.Editor editor = getPrefs().edit();
 
         editor.putString(CONFIG_KEY, config.toString());

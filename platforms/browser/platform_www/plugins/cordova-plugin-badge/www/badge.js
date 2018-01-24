@@ -21,6 +21,7 @@ var exec      = require('cordova/exec'),
     isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
     isMac     = ua.indexOf('macintosh') > -1,
     isWin     = window.Windows !== undefined,
+    isAndroid = !isWin && ua.indexOf('android') > -1,
     isWinPC   = isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop'),
     isDesktop = isMac || isWinPC;
 
@@ -98,6 +99,22 @@ exports.decrease = function (count, callback, scope) {
     this.get(function (badge) {
         this.set(Math.max(0, badge - (count || 1)), callback, scope);
     }, this);
+};
+
+/**
+ * Check support to show badges.
+ *
+ * @param [ Function ] callback The callback function to be execute later.
+ * @param [ Function ] scope    Optional scope for the callback function.
+ *
+ * @return [ Void ]
+ */
+exports.isSupported = function (callback, scope) {
+    if (isAndroid) {
+        this.exec('check', null, callback, scope);
+    } else {
+        this.createCallbackFn(callback, scope)(true);
+    }
 };
 
 /**

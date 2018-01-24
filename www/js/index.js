@@ -36,6 +36,7 @@ var app = {
         app.receivedEvent('deviceready');
         document.getElementById('check').onclick    = app.check;
         document.getElementById('grant').onclick    = app.grant;
+        document.getElementById('support').onclick  = app.support;
         document.getElementById('clear').onclick    = app.clear;
         document.getElementById('inc').onclick      = app.inc;
         document.getElementById('dec').onclick      = app.dec;
@@ -65,6 +66,10 @@ var app = {
     // Grant permission
     grant: function () {
         cordova.plugins.notification.badge.requestPermission(showToast);
+    },
+    // Check support
+    support: function () {
+        cordova.plugins.notification.badge.isSupported(showToast);
     },
     // Clear badge
     clear: function () {

@@ -160,8 +160,12 @@ h1 {
     margin: 0 7px;
 }
 
-.button:first-child:last-child {
-    margin: 0 0;
+.button:first-child {
+    margin-left: 0;
+}
+
+.button:last-child {
+    margin-right: 0;
 }
 
 .button.orange {

@@ -19,7 +19,7 @@ Users see notifications in the following ways:
 
 - __Android / Amazon FireOS__ (via [ShortcutBadger][shortcut_badger])
 - __Browser__ (via [favico.js][favico_js])
-- __iOS__
+- __iOS 10+__
 - __OSX__
 - __Windows__ (Phone and Desktop)
 
@@ -42,7 +42,7 @@ Or install the latest head version:
 
 Or install from local source:
 
-    $ cordova plugin add cordova-plugin-badge --searchpath <path>
+    $ cordova plugin add <path> --nofetch --nosave
 
 
 ## Usage

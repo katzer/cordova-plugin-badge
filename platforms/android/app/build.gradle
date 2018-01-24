@@ -223,7 +223,7 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
@@ -257,8 +257,8 @@ android {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
-    // SUB-PROJECT DEPENDENCIES START
+	implementation fileTree(include: '*.jar', dir: 'libs')
+	// SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
     // SUB-PROJECT DEPENDENCIES END
 }

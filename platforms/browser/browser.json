@@ -65,6 +65,6 @@
   ],
   "plugin_metadata": {
     "cordova-plugin-x-toast": "2.6.0",
-    "cordova-plugin-badge": "0.8.6"
+    "cordova-plugin-badge": "0.8.7"
   }
 }

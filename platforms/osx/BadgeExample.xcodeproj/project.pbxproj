@@ -16,9 +16,9 @@
 		70BD686718FFB06500A1EFCF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686518FFB06500A1EFCF /* WebKit.framework */; };
 		70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686A18FFB0BF00A1EFCF /* AppDelegate.m */; };
 		70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686C18FFB0BF00A1EFCF /* MainViewController.m */; };
-		E2CA4BD16AA34EF49CE0B398 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = D56B42838F7C4003B84EF608 /* APPBadge.m */; };
-		37413BE30AC44C899C217E56 /* DockCircularProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = ECEAF27BF92C44688482E751 /* DockCircularProgressBar.mm */; };
-		8E2ED93965984B7AAC1A728E /* DockDownloadProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = 35F72507BA124A1584DEF7C6 /* DockDownloadProgressBar.mm */; };
+		28E3164C3EBB45ACBE030018 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = E36FAEE9D06A438298EE9BFA /* APPBadge.m */; };
+		A70B5B00B96E4B70982913E7 /* DockCircularProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = 62254AE373A6483E9D8F0105 /* DockCircularProgressBar.mm */; };
+		C69CB9EEA55D41A6B84D533B /* DockDownloadProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = 2D81214731574C7CA25BA73A /* DockDownloadProgressBar.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,12 +79,12 @@
 		70BD686B18FFB0BF00A1EFCF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		70BD686C18FFB0BF00A1EFCF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		70DAA8D91908785C00AF3749 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		D56B42838F7C4003B84EF608 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		ECEAF27BF92C44688482E751 /* DockCircularProgressBar.mm */ = {isa = PBXFileReference; name = "DockCircularProgressBar.mm"; path = "cordova-plugin-badge/DockCircularProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		35F72507BA124A1584DEF7C6 /* DockDownloadProgressBar.mm */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.mm"; path = "cordova-plugin-badge/DockDownloadProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E5CA24216030403B8F9C4B3F /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		9D57276923D046FAA130E812 /* DockCircularProgressBar.h */ = {isa = PBXFileReference; name = "DockCircularProgressBar.h"; path = "cordova-plugin-badge/DockCircularProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		14C3D273103444BBB9E236A1 /* DockDownloadProgressBar.h */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.h"; path = "cordova-plugin-badge/DockDownloadProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		E36FAEE9D06A438298EE9BFA /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		62254AE373A6483E9D8F0105 /* DockCircularProgressBar.mm */ = {isa = PBXFileReference; name = "DockCircularProgressBar.mm"; path = "cordova-plugin-badge/DockCircularProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2D81214731574C7CA25BA73A /* DockDownloadProgressBar.mm */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.mm"; path = "cordova-plugin-badge/DockDownloadProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B9CD22F1C0BE4FDFBAC180AA /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9D60C6E723B34EB98A1A587D /* DockCircularProgressBar.h */ = {isa = PBXFileReference; name = "DockCircularProgressBar.h"; path = "cordova-plugin-badge/DockCircularProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		7F95AACD2FB54F5DA9FABBEA /* DockDownloadProgressBar.h */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.h"; path = "cordova-plugin-badge/DockDownloadProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,12 +105,12 @@
 		7069FBC31905A1F9000B48E1 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				D56B42838F7C4003B84EF608 /* APPBadge.m */,
-				ECEAF27BF92C44688482E751 /* DockCircularProgressBar.mm */,
-				35F72507BA124A1584DEF7C6 /* DockDownloadProgressBar.mm */,
-				E5CA24216030403B8F9C4B3F /* APPBadge.h */,
-				9D57276923D046FAA130E812 /* DockCircularProgressBar.h */,
-				14C3D273103444BBB9E236A1 /* DockDownloadProgressBar.h */,
+				E36FAEE9D06A438298EE9BFA /* APPBadge.m */,
+				62254AE373A6483E9D8F0105 /* DockCircularProgressBar.mm */,
+				2D81214731574C7CA25BA73A /* DockDownloadProgressBar.mm */,
+				B9CD22F1C0BE4FDFBAC180AA /* APPBadge.h */,
+				9D60C6E723B34EB98A1A587D /* DockCircularProgressBar.h */,
+				7F95AACD2FB54F5DA9FABBEA /* DockDownloadProgressBar.h */,
 			);
 			name = Plugins;
 			path = "BadgeExample/Plugins";
@@ -321,9 +321,9 @@
 				70BD683318FFB02D00A1EFCF /* main.m in Sources */,
 				70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */,
 				70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */,
-				E2CA4BD16AA34EF49CE0B398 /* APPBadge.m in Sources */,
-				37413BE30AC44C899C217E56 /* DockCircularProgressBar.mm in Resources */,
-				8E2ED93965984B7AAC1A728E /* DockDownloadProgressBar.mm in Resources */,
+				28E3164C3EBB45ACBE030018 /* APPBadge.m in Sources */,
+				A70B5B00B96E4B70982913E7 /* DockCircularProgressBar.mm in Resources */,
+				C69CB9EEA55D41A6B84D533B /* DockDownloadProgressBar.mm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,8 +11,7 @@
       "android"
     ],
     "plugins": {
-      "cordova-plugin-x-toast": {},
-      "cordova-plugin-badge": {}
+      "cordova-plugin-x-toast": {}
     }
   },
   "dependencies": {
@@ -20,7 +19,6 @@
     "cordova-browser": "^5.0.0",
     "cordova-ios": "^4.5.4",
     "cordova-osx": "^4.0.1",
-    "cordova-plugin-badge": "^0.8.6",
     "cordova-plugin-x-toast": "^2.6.0",
     "cordova-windows": "^5.0.0"
   }

@@ -19,7 +19,7 @@
 		2EA9BCB34AF34CCCB248EEB1 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4684FCE0498B4A30896C84B4 /* Toast+UIView.m */; };
 		6AA1515133444EC68AF3759A /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CB73E0CD72A4C9E8B0FE471 /* Toast.m */; };
 		A431C9947E0A43FA96F0944A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB5AD311CBE4484B39177A7 /* QuartzCore.framework */; };
-		68FCAA91811B425AA8DD93DF /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E260E77DAB4F6AB538C136 /* APPBadge.m */; };
+		908471A7F7484B21AE387138 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B95D91B8D94CD6B7730848 /* APPBadge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +65,8 @@
 		0DEF3822001349C9BCFAE683 /* Toast+UIView.h */ = {isa = PBXFileReference; name = "Toast+UIView.h"; path = "cordova-plugin-x-toast/Toast+UIView.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		8705BEBEF14A4F59ADB4DC63 /* Toast.h */ = {isa = PBXFileReference; name = "Toast.h"; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		3BB5AD311CBE4484B39177A7 /* QuartzCore.framework */ = {isa = PBXFileReference; name = "QuartzCore.framework"; path = "System/Library/Frameworks/QuartzCore.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		87E260E77DAB4F6AB538C136 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		0B822020562E41B78FE96F74 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		57B95D91B8D94CD6B7730848 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		295D8D7D762B4601B88FBF88 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,8 +176,8 @@
 				7CB73E0CD72A4C9E8B0FE471 /* Toast.m */,
 				0DEF3822001349C9BCFAE683 /* Toast+UIView.h */,
 				8705BEBEF14A4F59ADB4DC63 /* Toast.h */,
-				87E260E77DAB4F6AB538C136 /* APPBadge.m */,
-				0B822020562E41B78FE96F74 /* APPBadge.h */,
+				57B95D91B8D94CD6B7730848 /* APPBadge.m */,
+				295D8D7D762B4601B88FBF88 /* APPBadge.h */,
 			);
 			name = Plugins;
 			path = "BadgeExample/Plugins";
@@ -292,7 +292,7 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				2EA9BCB34AF34CCCB248EEB1 /* Toast+UIView.m in Sources */,
 				6AA1515133444EC68AF3759A /* Toast.m in Sources */,
-				68FCAA91811B425AA8DD93DF /* APPBadge.m in Sources */,
+				908471A7F7484B21AE387138 /* APPBadge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
