@@ -82,7 +82,7 @@
 
     <!-- android -->
     <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
+        <config-file target="config.xml" parent="/*">
             <feature name="Badge">
                 <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge"/>
             </feature>
