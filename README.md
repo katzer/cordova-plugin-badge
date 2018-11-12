@@ -166,8 +166,8 @@ If you're using PhoneGap Build please make sure you specify gradle as your Andro
 To specify a custom version of _ShortcutBadger_ follow this [guide][gradle-guide]. The name of the property is `appShortcutBadgerVersion`.
 
 ```gradle
-// In <your-project>/platforms/android/build-extras.gradle
-ext.appShortcutBadgerVersion = '1.1.18'
+# In <your-project>/platforms/android/gradle.properties
+appShortcutBadgerVersion=1.1.22
 ```
 
 
