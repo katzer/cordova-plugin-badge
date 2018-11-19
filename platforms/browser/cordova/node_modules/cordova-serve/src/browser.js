@@ -21,7 +21,7 @@
 
 var child_process = require('child_process');
 var fs = require('fs');
-var open = require('open');
+var open = require('opn');
 var exec = require('./exec');
 
 var NOT_INSTALLED = 'The browser target is not installed: %target%';

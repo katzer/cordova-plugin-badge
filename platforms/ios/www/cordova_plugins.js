@@ -9,11 +9,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-x-toast.tests",
-    "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-    "pluginId": "cordova-plugin-x-toast"
-  },
-  {
     "id": "cordova-plugin-badge.Badge",
     "file": "plugins/cordova-plugin-badge/www/badge.js",
     "pluginId": "cordova-plugin-badge",
@@ -25,8 +20,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "cordova-plugin-x-toast": "2.6.0",
-  "cordova-plugin-badge": "0.8.7"
+  "cordova-plugin-x-toast": "2.7.0",
+  "cordova-plugin-badge": "0.8.8"
 };
 // BOTTOM OF METADATA
 });

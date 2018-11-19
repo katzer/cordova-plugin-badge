@@ -41,8 +41,8 @@
   },
   "cordova-plugin-badge": {
     "source": {
-      "type": "local",
-      "path": "/Users/sebastian/Documents/github/cordova-example-badge/node_modules/cordova-plugin-badge"
+      "type": "registry",
+      "id": "cordova-plugin-badge@0.8.8"
     },
     "is_top_level": true,
     "variables": {}

@@ -11,7 +11,13 @@
             {
               "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
               "count": 1
-            },
+            }
+          ]
+        }
+      },
+      "config.xml": {
+        "parents": {
+          "/*": [
             {
               "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
               "count": 1
@@ -40,11 +46,6 @@
       ]
     },
     {
-      "id": "cordova-plugin-x-toast.tests",
-      "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-      "pluginId": "cordova-plugin-x-toast"
-    },
-    {
       "id": "cordova-plugin-badge.Badge",
       "file": "plugins/cordova-plugin-badge/www/badge.js",
       "pluginId": "cordova-plugin-badge",
@@ -54,7 +55,7 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-x-toast": "2.6.0",
-    "cordova-plugin-badge": "0.8.7"
+    "cordova-plugin-x-toast": "2.7.0",
+    "cordova-plugin-badge": "0.8.8"
   }
 }

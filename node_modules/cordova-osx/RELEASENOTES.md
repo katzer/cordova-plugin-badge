@@ -20,6 +20,17 @@
 -->
 ## Release Notes for Cordova (OS X) ##
  
+### 4.0.2 (Jul 29, 2018)
+* [CB-14145](https://issues.apache.org/jira/browse/CB-14145) update dependencies to resolve `npm audit` issues, pinned in 4.0.x only ([GH-50](https://github.com/apache/cordova-osx/pull/50))
+* [CB-9366](https://issues.apache.org/jira/browse/CB-9366) - log `error.stack` in `cordova.js` (update from `cordova-js@4.2.4`) in `4.0.x`
+* [CB-12895](https://issues.apache.org/jira/browse/CB-12895) - `cordova.js` updates to pass eslint from cordova-js@4.2.2
+* cordova.js updates from cordova-js@4.2.0
+  - [CB-3785](https://issues.apache.org/jira/browse/CB-3785) enable EventListener interface support
+  - [CB-3785](https://issues.apache.org/jira/browse/CB-3785) Channel.prototype.subscribe to support EventListener interface
+  - [CB-9967](https://issues.apache.org/jira/browse/CB-9967) deleted legacy platform specific files from cordova-js
+  - [CB-11522](https://issues.apache.org/jira/browse/CB-11522) [windows] Make cordova-js handle 'unknown' type
+  - [CB-11522](https://issues.apache.org/jira/browse/CB-11522) Make utils.clone handle properties gracefully
+
 ### 4.0.1 (Mar 03, 2016)
 * updated .ratignore
 * CB-10668 added node_modules directory

@@ -36,11 +36,6 @@
       ]
     },
     {
-      "id": "cordova-plugin-x-toast.tests",
-      "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-      "pluginId": "cordova-plugin-x-toast"
-    },
-    {
       "id": "cordova-plugin-x-toast.ToastProxy",
       "file": "plugins/cordova-plugin-x-toast/src/windows/toastProxy.js",
       "pluginId": "cordova-plugin-x-toast",
@@ -64,7 +59,7 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-x-toast": "2.6.0",
-    "cordova-plugin-badge": "0.8.7"
+    "cordova-plugin-x-toast": "2.7.0",
+    "cordova-plugin-badge": "0.8.8"
   }
 }

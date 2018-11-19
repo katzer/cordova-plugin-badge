@@ -159,7 +159,7 @@ Api.prototype.prepare = function (cordovaProject, options) {
     this.config.write();
 
     // Update own www dir with project's www assets and plugins' assets and js-files
-    this.parser.update_www(cordovaProject.locations.www);
+    this.parser.update_www(cordovaProject, options);
 
     // Copy or Create manifest.json
     // todo: move this to a manifest helper module

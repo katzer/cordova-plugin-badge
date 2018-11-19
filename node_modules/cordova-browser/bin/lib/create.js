@@ -83,8 +83,6 @@ module.exports.createProject = function (project_path, package_name, project_nam
     // copy manifest file to platform_www
     fs.writeFileSync(path.join(platform_www, 'manifest.json'),
         JSON.stringify(manifest, null, 2), 'utf-8');
-    // copy service worker
-    shell.cp(path.join(ROOT, 'bin/template/www', 'cordova-sw.js'), platform_www);
 
     return Promise.resolve();
 };

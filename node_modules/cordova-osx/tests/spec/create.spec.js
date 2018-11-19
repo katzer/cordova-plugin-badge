@@ -17,23 +17,26 @@
  under the License.
  */
 
-var shell = require('shelljs'),
-    spec = __dirname,
-    path = require('path'),
-    util = require('util'),
-    fs = require('fs');
+var shell = require('shelljs');
 
-    var cordova_bin = path.join(spec, '../..', 'bin');
-    var tmp = require('tmp').dirSync().name;
+var path = require('path');
+var util = require('util');
+var fs = require('fs');
 
-function initProjectPath(projectname) {
+var spec = __dirname;
+
+var cordova_bin = path.join(spec, '../..', 'bin');
+
+var tmp = require('tmp').dirSync().name;
+
+function initProjectPath (projectname) {
     // remove existing folder
     var pPath = path.join(tmp, projectname);
     shell.rm('-rf', pPath);
     return pPath;
 }
 
-function createProject(projectname, projectid) {
+function createProject (projectname, projectid) {
     var projectPath = initProjectPath(projectname);
 
     // create the project
@@ -47,7 +50,7 @@ function createProject(projectname, projectid) {
     return projectPath;
 }
 
-function createAndBuild(projectname, projectid) {
+function createAndBuild (projectname, projectid) {
     var projectPath = createProject(projectname, projectid);
 
     // build the project
@@ -60,9 +63,9 @@ function createAndBuild(projectname, projectid) {
     shell.rm('-rf', projectPath);
 }
 
-describe('create', function() {
+describe('create', function () {
 
-    it('create project with ascii+unicode name, and spaces', function() {
+    it('create project with ascii+unicode name, and spaces', function () {
         var projectname = '応応応応 hello 用用用用';
         var projectid = 'com.test.app6';
 

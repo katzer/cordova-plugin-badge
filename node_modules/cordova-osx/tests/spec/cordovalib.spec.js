@@ -17,17 +17,20 @@
  under the License.
  */
 
-var shell = require('shelljs'),
-    spec = __dirname,
-    path = require('path'),
-    util = require('util'),
-    tmp = require('tmp');
+var shell = require('shelljs');
 
-    var tests_dir = path.join(spec, '..');
+var path = require('path');
+var util = require('util');
 
-describe('cordova-lib', function() {
+var tmp = require('tmp');
 
-    it('objective-c unit tests', function() {
+var spec = __dirname;
+
+var tests_dir = path.join(spec, '..');
+
+describe('cordova-lib', function () {
+
+    it('objective-c unit tests', function () {
         var return_code = 0;
         var command;
         var artifacts_dir = tmp.dirSync().name;

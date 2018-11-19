@@ -1,8 +1,8 @@
 {
   "_from": "cordova-plugin-x-toast",
-  "_id": "cordova-plugin-x-toast@2.6.0",
+  "_id": "cordova-plugin-x-toast@2.7.0",
   "_inBundle": false,
-  "_integrity": "sha1-R3i+y2HjbIlRCRoHWFDCje2PVqU=",
+  "_integrity": "sha512-snd4KTWXvku9BHgwRFiz75fGZCtr1K/Z6KRLWmtmqKWT/6lKlMZHbPOQfXavOyV9iqotJHgzbv2BMJtLuXlRVg==",
   "_location": "/cordova-plugin-x-toast",
   "_phantomChildren": {},
   "_requested": {
@@ -19,10 +19,10 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-x-toast/-/cordova-plugin-x-toast-2.6.0.tgz",
-  "_shasum": "4778becb61e36c8951091a075850c28ded8f56a5",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-x-toast/-/cordova-plugin-x-toast-2.7.0.tgz",
+  "_shasum": "dcc3263cc33fdda956a4f872f63d12ad932f8fa5",
   "_spec": "cordova-plugin-x-toast",
-  "_where": "/Users/sebastian/Documents/github/cordova-example-badge/node_modules",
+  "_where": "/Users/sebastian/Documents/github/cordova-example-badge",
   "author": {
     "name": "Eddy Verbruggen",
     "email": "eddyverbruggen@gmail.com",
@@ -69,5 +69,5 @@
     "type": "git",
     "url": "git+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git"
   },
-  "version": "2.6.0"
+  "version": "2.7.0"
 }

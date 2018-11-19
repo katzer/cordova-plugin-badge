@@ -38,7 +38,5 @@ Target modern web browsers to build Apache Cordova based applications.
 - if your project supplies a `manifest.json` in the `www/` dir, it will be used
     - a `manifest.json` will be generated otherwise
 - if your js code registers a service worker, it will also be used
-    - a generic cordova service worker will be installed that simply caches all files in the `www` dir.
-    - cache version is autoincremented for every build
 
 

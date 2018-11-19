@@ -4,22 +4,24 @@
   "displayName": "BadgeExample",
   "cordova": {
     "platforms": [
-      "browser",
       "windows",
-      "osx",
+      "android",
       "ios",
-      "android"
+      "osx",
+      "browser"
     ],
     "plugins": {
-      "cordova-plugin-x-toast": {}
+      "cordova-plugin-x-toast": {},
+      "cordova-plugin-badge": {}
     }
   },
   "dependencies": {
-    "cordova-android": "^7.0.0",
-    "cordova-browser": "^5.0.0",
-    "cordova-ios": "^4.5.4",
-    "cordova-osx": "^4.0.1",
-    "cordova-plugin-x-toast": "^2.6.0",
+    "cordova-android": "^7.1.2",
+    "cordova-browser": "^5.0.4",
+    "cordova-ios": "^4.5.5",
+    "cordova-osx": "^4.0.2",
+    "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-x-toast": "^2.7.0",
     "cordova-windows": "^5.0.0"
   }
 }

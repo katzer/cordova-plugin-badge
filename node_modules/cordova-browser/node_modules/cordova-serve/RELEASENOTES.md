@@ -20,6 +20,12 @@
 -->
 # Cordova-serve Release Notes
 
+### 2.0.1 (Jun 06, 2018)
+* Use `opn` module instead of deprecated `open`
+* [CB-14054](https://issues.apache.org/jira/browse/CB-14054) (android) fixing `cordova-android` directory restructuring.
+* [CB-14092](https://issues.apache.org/jira/browse/CB-14092) Fixing repository url
+* [CB-13501](https://issues.apache.org/jira/browse/CB-13501) added support for node 8
+
 ### 2.0.0 (Aug 24, 2017)
 * [CB-13188](https://issues.apache.org/jira/browse/CB-13188) set serve to use default system browser if none is provided.
 * Change to `eslint` instead of `jshint`

@@ -11,7 +11,7 @@
       "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
     },
     "cordova-plugin-badge": {
-      "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
   "dependent_plugins": {}

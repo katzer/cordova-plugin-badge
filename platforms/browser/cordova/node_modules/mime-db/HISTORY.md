@@ -1,3 +1,41 @@
+1.33.0 / 2018-02-15
+===================
+
+  * Add extensions from IANA for `message/*` types
+  * Add new upstream MIME types
+  * Fix some incorrect OOXML types
+  * Remove `application/font-woff2`
+
+1.32.0 / 2017-11-29
+===================
+
+  * Add new upstream MIME types
+  * Update `text/hjson` to registered `application/hjson`
+  * Add `text/shex` with extension `.shex`
+
+1.31.0 / 2017-10-25
+===================
+
+  * Add `application/raml+yaml` with extension `.raml`
+  * Add `application/wasm` with extension `.wasm`
+  * Add new `font` type from IANA
+  * Add new upstream font extensions
+  * Add new upstream MIME types
+  * Add extensions for JPEG-2000 images
+
+1.30.0 / 2017-08-27
+===================
+
+  * Add `application/vnd.ms-outlook`
+  * Add `application/x-arj`
+  * Add extension `.mjs` to `application/javascript`
+  * Add glTF types and extensions
+  * Add new upstream MIME types
+  * Add `text/x-org`
+  * Add VirtualBox MIME types
+  * Fix `source` records for `video/*` types that are IANA
+  * Update `font/opentype` to registered `font/otf`
+
 1.29.0 / 2017-07-10
 ===================
 

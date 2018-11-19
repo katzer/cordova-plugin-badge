@@ -4,8 +4,8 @@ ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/and
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
-MERGED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:2:1-52:12
-MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:20:1-27:12
+MERGED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:2:1-52:12
+MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:20:1-27:12
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
 INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:2:1-14:12
@@ -67,7 +67,7 @@ ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/and
 		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:6:194-256
 	android:name
 		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:6:166-193
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:7:13-10:29
 	android:label
 		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:7:28-65
@@ -80,76 +80,80 @@ ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/and
 	android:name
 		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:9:27-74
 uses-sdk
-ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:5-74
-MERGED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:7:5-9:41
-MERGED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:7:5-9:41
-MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:25:5-44
-MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:25:5-44
+ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:5-47
+INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:5-47
+MERGED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:7:5-9:41
+MERGED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:7:5-9:41
+MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:25:5-44
+MERGED from [:CordovaLib] /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/CordovaLib/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:25:5-44
+INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:5-47
 	android:targetSdkVersion
-		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:42-71
+		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:15-44
 	android:minSdkVersion
-		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:15-41
+		INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml:13:5-47
+		INJECTED from /Users/sebastian/Documents/github/cordova-example-badge/platforms/android/app/src/main/AndroidManifest.xml
 uses-permission#com.sec.android.provider.badge.permission.READ
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:19:5-86
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:19:5-86
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:19:22-83
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:19:22-83
 uses-permission#com.sec.android.provider.badge.permission.WRITE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:20:5-87
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:20:5-87
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:20:22-84
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:20:22-84
 uses-permission#com.htc.launcher.permission.READ_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:23:5-81
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:23:5-81
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:23:22-78
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:23:22-78
 uses-permission#com.htc.launcher.permission.UPDATE_SHORTCUT
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:24:5-83
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:24:5-83
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:24:22-80
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:24:22-80
 uses-permission#com.sonyericsson.home.permission.BROADCAST_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:27:5-88
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:27:5-88
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:27:22-85
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:27:22-85
 uses-permission#com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:28:5-92
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:28:5-92
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:28:22-89
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:28:22-89
 uses-permission#com.anddoes.launcher.permission.UPDATE_COUNT
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:31:5-84
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:31:5-84
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:31:22-81
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:31:22-81
 uses-permission#com.majeur.launcher.permission.UPDATE_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:34:5-83
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:34:5-83
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:34:22-80
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:34:22-80
 uses-permission#com.huawei.android.launcher.permission.CHANGE_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:37:5-91
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:37:5-91
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:37:22-88
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:37:22-88
 uses-permission#com.huawei.android.launcher.permission.READ_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:38:5-92
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:38:5-92
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:38:22-89
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:38:22-89
 uses-permission#com.huawei.android.launcher.permission.WRITE_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:39:5-93
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:39:5-93
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:39:22-90
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:39:22-90
 uses-permission#android.permission.READ_APP_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:42:5-73
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:42:5-73
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:42:22-70
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:42:22-70
 uses-permission#com.oppo.launcher.permission.READ_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:45:5-82
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:45:5-82
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:45:22-79
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:45:22-79
 uses-permission#com.oppo.launcher.permission.WRITE_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:46:5-83
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:46:5-83
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:46:22-80
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:46:22-80
 uses-permission#me.everything.badger.permission.BADGE_COUNT_READ
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:49:5-88
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:49:5-88
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:49:22-85
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:49:22-85
 uses-permission#me.everything.badger.permission.BADGE_COUNT_WRITE
-ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:50:5-89
+ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:50:5-89
 	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.21] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.21.aar/5b9250a5c9cd221d814fa1226d3df4ad/AndroidManifest.xml:50:22-86
+		ADDED from [me.leolin:ShortcutBadger:1.1.22] /Users/sebastian/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.22.aar/2b2a72b3b651e29009ad7664bd86bbcd/AndroidManifest.xml:50:22-86

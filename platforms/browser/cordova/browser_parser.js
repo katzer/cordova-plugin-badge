@@ -21,6 +21,8 @@ var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
 var CordovaError = require('cordova-common').CordovaError;
+var events = require('cordova-common').events;
+var FileUpdater = require('cordova-common').FileUpdater;
 
 function dirExists (dir) {
     return fs.existsSync(dir) && fs.statSync(dir).isDirectory();
@@ -56,22 +58,35 @@ browser_parser.prototype.cordovajs_src_path = function (libDir) {
     return path.resolve(jsPath);
 };
 
+/**
+ * Logs all file operations via the verbose event stream, indented.
+ */
+function logFileOp (message) {
+    events.emit('verbose', '  ' + message);
+}
+
 // Replace the www dir with contents of platform_www and app www.
-browser_parser.prototype.update_www = function () {
-    var projectRoot = this.path; /* eslint no-unused-vars : 0 */
-    var app_www = path.join(this.path, '../../www');
+browser_parser.prototype.update_www = function (cordovaProject, opts) {
     var platform_www = path.join(this.path, 'platform_www');
     var my_www = this.www_dir();
+    // add cordova www and platform_www to sourceDirs
+    var sourceDirs = [
+        path.relative(cordovaProject.root, cordovaProject.locations.www),
+        path.relative(cordovaProject.root, platform_www)
+    ];
 
-    // Clear the www dir
-    shell.rm('-rf', my_www);
-    shell.mkdir(my_www);
+    // If project contains 'merges' for our platform, use them as another overrides
+    var merges_path = path.join(cordovaProject.root, 'merges', 'browser');
+    if (fs.existsSync(merges_path)) {
+        events.emit('verbose', 'Found "merges/browser" folder. Copying its contents into the browser project.');
+        // add merges/browser to sourceDirs
+        sourceDirs.push(path.join('merges', 'browser'));
+    }
 
-    // Copy over stock platform www assets (cordova.js)
-    shell.cp('-rf', path.join(platform_www, '*'), my_www);
-
-    // Copy over all app www assets ( overwriting stock )
-    shell.cp('-rf', path.join(app_www, '*'), my_www);
+    // targetDir points to browser/www
+    var targetDir = path.relative(cordovaProject.root, my_www);
+    events.emit('verbose', 'Merging and updating files from [' + sourceDirs.join(', ') + '] to ' + targetDir);
+    FileUpdater.mergeAndUpdateDir(sourceDirs, targetDir, { rootDir: cordovaProject.root }, logFileOp);
 };
 
 browser_parser.prototype.update_overrides = function () {

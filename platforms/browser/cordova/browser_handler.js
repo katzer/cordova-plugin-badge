@@ -115,12 +115,17 @@ module.exports = {
     asset: {
         install: function (asset, plugin_dir, wwwDest) {
             var src = path.join(plugin_dir, asset.src);
-            if (fs.statSync(src).isDirectory()) {
-                src = path.join(src, '*');
-            }
             var dest = path.join(wwwDest, asset.target);
+            var destDir = path.parse(dest).dir;
+            if (destDir !== '' && !fs.existsSync(destDir)) {
+                shell.mkdir('-p', destDir);
+            }
 
-            shell.cp('-rf', src, dest);
+            if (fs.statSync(src).isDirectory()) {
+                shell.cp('-Rf', src + '/*', dest);
+            } else {
+                shell.cp('-f', src, dest);
+            }
         },
         uninstall: function (asset, wwwDest, plugin_id) {
             shell.rm('-rf', path.join(wwwDest, asset.target));

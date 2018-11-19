@@ -22,7 +22,7 @@
       "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
     },
     "cordova-plugin-badge": {
-      "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
   "dependent_plugins": {},
@@ -34,11 +34,6 @@
       "clobbers": [
         "window.plugins.toast"
       ]
-    },
-    {
-      "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-      "id": "cordova-plugin-x-toast.tests",
-      "pluginId": "cordova-plugin-x-toast"
     },
     {
       "file": "plugins/cordova-plugin-badge/www/badge.js",

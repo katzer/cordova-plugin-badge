@@ -1,0 +1,37 @@
+root: true
+extends: semistandard
+
+rules:
+  # not used in patch release (at least for now):
+  # indent:
+  #   - error
+  #   - 4
+  camelcase: off
+  padded-blocks: off
+  operator-linebreak: off
+  no-throw-literal: off
+  # needed in patch release (at least for now):
+
+  indent: off
+  no-useless-escape: off
+  space-before-function-paren: off
+  eol-last: off
+  no-undef: off
+  one-var: off
+  func-call-spacing: off
+  space-infix-ops: off
+  comma-spacing: off
+  no-multi-spaces: off
+  brace-style: off
+  spaced-comment: off
+  eqeqeq: off
+  space-in-parens: off
+  keyword-spacing: off
+  no-trailing-spaces: off
+  no-useless-return: off
+  space-before-blocks: off
+  curly: off
+  key-spacing: off
+  new-cap: off
+  no-multiple-empty-lines: off
+  no-extra-boolean-cast: off

@@ -25,15 +25,15 @@ var path = require('path');
 // into the actual platform.
 
 var platforms = {
-    amazon_fireos: {www_dir: 'assets/www'},
-    android: {www_dir: 'assets/www'},
-    blackberry10: {www_dir: 'www'},
-    browser: {www_dir: 'www'},
-    firefoxos: {www_dir: 'www'},
-    ios: {www_dir: 'www'},
-    ubuntu: {www_dir: 'www'},
-    windows: {www_dir: 'www'},
-    wp8: {www_dir: 'www'}
+    amazon_fireos: { www_dir: 'assets/www' },
+    android: { www_dir: 'assets/www' },
+    blackberry10: { www_dir: 'www' },
+    browser: { www_dir: 'www' },
+    firefoxos: { www_dir: 'www' },
+    ios: { www_dir: 'www' },
+    ubuntu: { www_dir: 'www' },
+    windows: { www_dir: 'www' },
+    wp8: { www_dir: 'www' }
 };
 
 /**
@@ -76,7 +76,14 @@ function getPlatformWwwRoot (cordovaProjectRoot, platformName) {
     if (!platform) {
         throw new Error('Unrecognized platform: ' + platformName);
     }
-    return path.join(cordovaProjectRoot, 'platforms', platformName, platform.www_dir);
+
+    try {
+        var Api = require(path.join(cordovaProjectRoot, 'platforms', platformName, 'cordova/api'));
+        return new Api().locations.www;
+    } catch (e) {
+        // Fallback on hardcoded paths if platform api not found
+        return path.join(cordovaProjectRoot, 'platforms', platformName, platform.www_dir);
+    }
 }
 
 function isRootDir (dir) {
