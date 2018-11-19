@@ -1,6 +1,6 @@
 ## ChangeLog
 
-#### Version 0.8.8 (not yet released)
+#### Version 0.8.8 (19.11.2018)
 - Upgrade ShortcutBadger to v1.1.22
 
 #### Version 0.8.7 (24.01.2018)
