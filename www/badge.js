@@ -22,7 +22,7 @@ var exec      = require('cordova/exec'),
     isMac     = ua.indexOf('macintosh') > -1,
     isWin     = window.Windows !== undefined,
     isAndroid = !isWin && ua.indexOf('android') > -1,
-    isWinPC   = isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop'),
+    isWinPC   = false; /*isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop')*/,
     isDesktop = isMac || isWinPC;
 
 // Default settings
