@@ -17,13 +17,13 @@
        under the License.
 */
 
-/*jshint node: true*/
+/* jshint node: true */
 
-var Q = require('q'),
-    path   = require('path'),
-    build  = require('./build'),
-    spawn  = require('./spawn'),
-    events = require('cordova-common').events;
+var Q = require('q');
+var path = require('path');
+var build = require('./build');
+var spawn = require('./spawn');
+var events = require('cordova-common').events;
 
 var projectPath = path.join(__dirname, '..', '..');
 
@@ -47,9 +47,9 @@ module.exports.run = function (runOptions) {
  * runs the app
  * @return {Promise}        Resolves when run succeeds otherwise rejects
  */
-function runApp(appDir, appName) {
+function runApp (appDir, appName) {
     var binPath = path.join(appDir, 'Contents', 'MacOS', appName);
-    events.emit('log','Starting: ' + binPath);
+    events.emit('log', 'Starting: ' + binPath);
     return spawn(binPath);
 }
 

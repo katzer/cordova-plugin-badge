@@ -23,6 +23,7 @@
 
     <!-- Preferences for OSX -->
     <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="AllowWebViewNavigation" value="true" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
     <preference name="EnableViewportScale" value="false" />

@@ -17,32 +17,30 @@
        under the License.
 */
 
-function Version(major, minor, build, qfe) {
+function Version (major, minor, build, qfe) {
     this.major = major;
     this.minor = zeroIfUndefined(minor);
     this.build = zeroIfUndefined(build);
-    this.qfe   = zeroIfUndefined(qfe);
+    this.qfe = zeroIfUndefined(qfe);
 }
 
-function zeroIfUndefined(val) {
-    if (typeof val === 'undefined')
-        return 0;
+function zeroIfUndefined (val) {
+    if (typeof val === 'undefined') { return 0; }
 
     return val;
 }
 
 Version.Expression = /^\d{1,8}(\.\d{1,8}){0,3}$/;
-Version.fromString = function(str) {
+Version.fromString = function (str) {
     var result = Version.tryParse(str);
-    if (!result)
-        throw new RangeError('Could not parse a version from the provided value "' + str + '".');
+    if (!result) { throw new RangeError('Could not parse a version from the provided value "' + str + '".'); }
 
     return result;
 };
 
-Version.tryParse = function(str) {
+Version.tryParse = function (str) {
     if (Version.Expression.test(str)) {
-        var parts = str.split('.').map(function(part) {
+        var parts = str.split('.').map(function (part) {
             return parseInt(part, 10);
         });
 
@@ -53,21 +51,16 @@ Version.tryParse = function(str) {
     return false;
 };
 
-Version.comparer = function(a, b) {
-    if (a.constructor !== Version || b.constructor !== Version) 
-        throw new TypeError('Must compare only Versions');
+Version.comparer = function (a, b) {
+    if (a.constructor !== Version || b.constructor !== Version) { throw new TypeError('Must compare only Versions'); }
 
-    if (a.gt(b))
-        return 1;
-    else if (a.eq(b))
-        return 0;
+    if (a.gt(b)) { return 1; } else if (a.eq(b)) { return 0; }
 
     return -1;
 };
 
-Version.prototype.gt = function(other) {
-    if (other.constructor !== Version)
-        throw new TypeError('other is not a Version.');
+Version.prototype.gt = function (other) {
+    if (other.constructor !== Version) { throw new TypeError('other is not a Version.'); }
 
     if (this.major > other.major) return true;
     if (this.major < other.major) return false;
@@ -81,9 +74,8 @@ Version.prototype.gt = function(other) {
     return false;
 };
 
-Version.prototype.gte = function(other) {
-    if (other.constructor !== Version)
-        throw new TypeError('other is not a Version.');
+Version.prototype.gte = function (other) {
+    if (other.constructor !== Version) { throw new TypeError('other is not a Version.'); }
 
     if (this.major > other.major) return true;
     if (this.major < other.major) return false;
@@ -97,17 +89,15 @@ Version.prototype.gte = function(other) {
     return true;
 };
 
-Version.prototype.eq = function(other) {
-    if (other.constructor !== Version)
-        throw new TypeError('other is not a Version.');
+Version.prototype.eq = function (other) {
+    if (other.constructor !== Version) { throw new TypeError('other is not a Version.'); }
 
-    if (this.major === other.major && this.minor === other.minor && this.build === other.build && this.qfe === other.qfe)
-        return true;
+    if (this.major === other.major && this.minor === other.minor && this.build === other.build && this.qfe === other.qfe) { return true; }
 
     return false;
 };
 
-Version.prototype.toString = function() {
+Version.prototype.toString = function () {
     return this.major + '.' + this.minor + '.' + this.build + '.' + this.qfe;
 };
 

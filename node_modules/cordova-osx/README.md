@@ -112,12 +112,7 @@ defaults write com.yourcompany.yourbundleid WebKitDeveloperExtras -bool true
 After you changed the defatuls, start the application and right-click inside the webview and select _Inspect Element_. This opens the Safari Developer Tools.
 
 > **Note**: The _bundleid_ is usually the same as your _widget id_ you define in your `config.xml` unless overridden by the `ios-CFBundleVersion` argument.
-
-
-
-BUGS?
------
-File them at the [Cordova Issue Tracker](https://issues.apache.org/jira/browse/CB)     
+ 
 
 
 MORE INFO

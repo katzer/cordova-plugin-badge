@@ -26,14 +26,14 @@ const versions = require('./versions');
 
 const SUPPORTED_OS_PLATFORMS = [ 'darwin' ];
 
-const XCODEBUILD_MIN_VERSION = '7.0.0';
+const XCODEBUILD_MIN_VERSION = '9.0.0';
 const XCODEBUILD_NOT_FOUND_MESSAGE =
     'Please install version ' + XCODEBUILD_MIN_VERSION + ' or greater from App Store';
 
 const IOS_DEPLOY_MIN_VERSION = '1.9.2';
 const IOS_DEPLOY_NOT_FOUND_MESSAGE =
     'Please download, build and install version ' + IOS_DEPLOY_MIN_VERSION + ' or greater' +
-    ' from https://github.com/phonegap/ios-deploy into your path, or do \'npm install -g ios-deploy\'';
+    ' from https://github.com/ios-control/ios-deploy into your path, or do \'npm install -g ios-deploy\'';
 
 const COCOAPODS_MIN_VERSION = '1.0.1';
 const COCOAPODS_NOT_FOUND_MESSAGE =

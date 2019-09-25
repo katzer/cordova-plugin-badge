@@ -7,10 +7,10 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-x-toast": {
+    "cordova-plugin-badge": {
       "PACKAGE_NAME": "BadgeExample"
     },
-    "cordova-plugin-badge": {
+    "cordova-plugin-x-toast": {
       "PACKAGE_NAME": "BadgeExample"
     }
   },

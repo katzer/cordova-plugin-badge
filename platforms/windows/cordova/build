@@ -41,7 +41,7 @@ if(['--help', '/?', '-h', 'help', '-help', '/help'].indexOf(process.argv[2]) >= 
     console.log('                                  architectures (`anycpu`, `arm`, `x86`, `x64`).');
     console.log('                                  Separate multiple choices with spaces and if');
     console.log('                                  passing multiple choices, enclose with " ".');
-    console.log('    --appx=<8.1-win|8.1-phone|uap>');
+    console.log('    --appx=<8.1-win|8.1-phone|uap|uwp>');
     console.log('                                : Overrides windows-target-version to build');
     console.log('                                  Windows 8.1, Windows Phone 8.1, or');
     console.log('                                  Windows 10 Universal.');

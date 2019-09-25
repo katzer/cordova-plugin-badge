@@ -33,12 +33,6 @@
     id arg0 = [command argumentAtIndex:0];
     NSLog(@"TestPlugin.echo(%@)", arg0);
 
-//    CDVPluginResult* pluginResult;
-//    if ([arg0 isKindOfClass:[NSString class]]) {
-//        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:arg0];
-//    }
-//
-//
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:arg0];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }

@@ -12,7 +12,7 @@
             // amd
             define([], factory);
         } else {
-            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.0.winjs.2015.10.2 base.js,StartTM');
+            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.2.winjs.2017.3.14 base.js,StartTM');
             if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
                 // CommonJS
                 factory();
@@ -20,7 +20,7 @@
                 // No module system
                 factory(globalObject.WinJS);
             }
-            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.0.winjs.2015.10.2 base.js,StopTM');
+            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.2.winjs.2017.3.14 base.js,StopTM');
         }
     }(function (WinJS) {
 
@@ -1235,6 +1235,10 @@ define('require-json!strings/en-us/Microsoft.WinJS.resjson',{
     "_ui/appBarIcons/fontsize.comment":                   "{Locked=qps-ploc,qps-plocm}",
     "ui/appBarIcons/cellphone":                           "\uE1C9", // group:Communications
     "_ui/appBarIcons/cellphone.comment":                  "{Locked=qps-ploc,qps-plocm}",
+    "ui/appBarIcons/print":                               "\uE749", // group:Communications
+    "_ui/appBarIcons/print.comment":                      "{Locked=qps-ploc,qps-plocm}",
+    "ui/appBarIcons/share":                               "\uE72D", // group:Communications
+    "_ui/appBarIcons/share.comment":                      "{Locked=qps-ploc,qps-plocm}",
     "ui/appBarIcons/reshare":                             "\uE1CA", // group:Communications
     "_ui/appBarIcons/reshare.comment":                    "{Locked=qps-ploc,qps-plocm}",
     "ui/appBarIcons/tag":                                 "\uE1CB", // group:Data
@@ -5198,7 +5202,7 @@ define('WinJS/Core/_BaseUtils',[
         _traceAsyncCallbackStarting: _Trace._traceAsyncCallbackStarting,
         _traceAsyncCallbackCompleted: _Trace._traceAsyncCallbackCompleted,
 
-        _version: "4.4.0"
+        _version: "4.4.2"
     });
 
     _Base.Namespace._moduleDefine(exports, "WinJS", {
@@ -6219,7 +6223,7 @@ define('WinJS/Utilities/_ElementUtilities',[
             _resizeEvent: { get: function () { return 'WinJSElementResize'; } }
         }
     );
-   
+
     // - object: The object on which GenericListener will listen for events.
     // - objectName: A string representing the name of *object*. This will be
     //   incorporated into the names of the events and classNames created by
@@ -7523,18 +7527,9 @@ define('WinJS/Utilities/_ElementUtilities',[
                 return 0;
             }
 
-            var left = element.offsetLeft;
-            var e = element.parentNode;
-            while (e) {
-                left -= e.offsetLeft;
-
-                if (e === parent) {
-                    break;
-                }
-                e = e.parentNode;
-            }
-
-            return left;
+            var elementPosition = exports._getPositionRelativeTo(element, null);
+            var parentPosition = exports._getPositionRelativeTo(parent, null);
+            return elementPosition.left - parentPosition.left;
         },
 
         getRelativeTop: function (element, parent) {
@@ -7556,18 +7551,9 @@ define('WinJS/Utilities/_ElementUtilities',[
                 return 0;
             }
 
-            var top = element.offsetTop;
-            var e = element.parentNode;
-            while (e) {
-                top -= e.offsetTop;
-
-                if (e === parent) {
-                    break;
-                }
-                e = e.parentNode;
-            }
-
-            return top;
+            var elementPosition = exports._getPositionRelativeTo(element, null);
+            var parentPosition = exports._getPositionRelativeTo(parent, null);
+            return elementPosition.top - parentPosition.top;
         },
 
         getScrollPosition: getScrollPosition,
@@ -12704,6 +12690,7 @@ define('WinJS/Utilities',[
 
     //wrapper module
 });
+// Copyright (c) Microsoft Corporation.  All Rights Reserved. Licensed under the MIT License. See License.txt in the project root for license information.
 define('WinJS/XYFocus',["require", "exports", "./Core/_Global", "./Core/_Base", "./Core/_BaseUtils", "./Utilities/_ElementUtilities", "./Core/_Events", "./ControlProcessor/_OptionsParser"], function (require, exports, _Global, _Base, _BaseUtils, _ElementUtilities, _Events, _OptionsParser) {
     "use strict";
     var Keys = _ElementUtilities.Key;
@@ -13149,6 +13136,9 @@ define('WinJS/XYFocus',["require", "exports", "./Core/_Global", "./Core/_Base", 
         return container && !_ElementUtilities.hasClass(container, ClassNames.toggleModeActive);
     }
     function _isToggleMode(element) {
+        if (_ElementUtilities.hasClass(_Global.document.body, ClassNames.xboxPlatform)) {
+            return false;
+        }
         if (_ElementUtilities.hasClass(element, ClassNames.toggleMode)) {
             return true;
         }

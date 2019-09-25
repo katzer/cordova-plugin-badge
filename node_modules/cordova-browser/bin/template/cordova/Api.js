@@ -211,9 +211,9 @@ Api.prototype.prepare = function (cordovaProject, options) {
                     "sizes": "128x128"
                 } ******/
                 // ?Is it worth looking at file extentions?
-                return {'src': icon.src,
+                return { 'src': icon.src,
                     'type': 'image/png',
-                    'sizes': (icon.width + 'x' + icon.height)};
+                    'sizes': (icon.width + 'x' + icon.height) };
             });
             manifestJson.icons = manifestIcons;
 
@@ -230,7 +230,7 @@ Api.prototype.prepare = function (cordovaProject, options) {
             }
 
             // get start_url
-            var contentNode = this.config.doc.find('content') || {'attrib': {'src': 'index.html'}}; // sensible default
+            var contentNode = this.config.doc.find('content') || { 'attrib': { 'src': 'index.html' } }; // sensible default
             manifestJson.start_url = contentNode.attrib.src;
 
             // now we get some values from start_url page ...

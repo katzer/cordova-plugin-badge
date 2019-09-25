@@ -19,53 +19,23 @@
     under the License.
 */
 
-var child_process = require('child_process'),
-    Q = require('q');
+var child_process = require('child_process');
+var Q = require('q');
 
-exports.get_apple_osx_version = function() {
+exports.get_apple_osx_version = function () {
     var d = Q.defer();
-    child_process.exec('xcodebuild -showsdks', function(error, stdout, stderr) {
+    child_process.exec('xcodebuild -showsdks', function (error, stdout, stderr) {
         if (error) {
             d.reject(stderr);
-        }
-        else {
+        } else {
             d.resolve(stdout);
         }
     });
 
-    return d.promise.then(function(output) {
-        var regex = /[0-9]*\.[0-9]*/,
-            versions = [],
-            regexOSX = /^OS X \d+/;
-        output = output.split('\n');
-        for (var i = 0; i < output.length; i++) {
-            if (output[i].trim().match(regexOSX)) {
-                versions[versions.length] = parseFloat(output[i].match(regex)[0]);
-                }
-        }
-        versions.sort();
-        console.log(versions[0]);
-        return Q();
-    }, function(stderr) {
-        return Q.reject(stderr);
-    });
-};
-
-exports.get_apple_osx_version = function() {
-    var d = Q.defer();
-    child_process.exec('xcodebuild -showsdks', function(error, stdout, stderr) {
-        if (error) {
-            d.reject(stderr);
-        }
-        else {
-            d.resolve(stdout);
-        }
-    });
-
-    return d.promise.then(function(output) {
-        var regex = /[0-9]*\.[0-9]*/,
-            versions = [],
-            regexOSX = /^OS X \d+/;
+    return d.promise.then(function (output) {
+        var regex = /[0-9]*\.[0-9]*/;
+        var versions = [];
+        var regexOSX = /^OS X \d+/;
         output = output.split('\n');
         for (var i = 0; i < output.length; i++) {
             if (output[i].trim().match(regexOSX)) {
@@ -75,14 +45,42 @@ exports.get_apple_osx_version = function() {
         versions.sort();
         console.log(versions[0]);
         return Q();
-    }, function(stderr) {
+    }, function (stderr) {
         return Q.reject(stderr);
     });
 };
 
-exports.get_apple_xcode_version = function() {
+exports.get_apple_osx_version = function () {
     var d = Q.defer();
-    child_process.exec('xcodebuild -version', function(error, stdout, stderr) {
+    child_process.exec('xcodebuild -showsdks', function (error, stdout, stderr) {
+        if (error) {
+            d.reject(stderr);
+        } else {
+            d.resolve(stdout);
+        }
+    });
+
+    return d.promise.then(function (output) {
+        var regex = /[0-9]*\.[0-9]*/;
+        var versions = [];
+        var regexOSX = /^OS X \d+/;
+        output = output.split('\n');
+        for (var i = 0; i < output.length; i++) {
+            if (output[i].trim().match(regexOSX)) {
+                versions[versions.length] = parseFloat(output[i].match(regex)[0]);
+            }
+        }
+        versions.sort();
+        console.log(versions[0]);
+        return Q();
+    }, function (stderr) {
+        return Q.reject(stderr);
+    });
+};
+
+exports.get_apple_xcode_version = function () {
+    var d = Q.defer();
+    child_process.exec('xcodebuild -version', function (error, stdout, stderr) {
         var versionMatch = /Xcode (.*)/.exec(stdout);
         if (error || !versionMatch) {
             d.reject(stderr);
@@ -101,8 +99,8 @@ exports.get_apple_xcode_version = function() {
  */
 exports.get_tool_version = function (toolName) {
     switch (toolName) {
-        case 'xcodebuild': return exports.get_apple_xcode_version();
-        default: return Q.reject(toolName + ' is not valid tool name. Valid names are: \'xcodebuild\'');
+    case 'xcodebuild': return exports.get_apple_xcode_version();
+    default: return Q.reject(toolName + ' is not valid tool name. Valid names are: \'xcodebuild\'');
     }
 };
 

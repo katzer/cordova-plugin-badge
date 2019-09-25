@@ -11,14 +11,14 @@
 		70BD683118FFB02D00A1EFCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70BD682F18FFB02D00A1EFCF /* InfoPlist.strings */; };
 		70BD683318FFB02D00A1EFCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD683218FFB02D00A1EFCF /* main.m */; };
 		70BD683F18FFB02D00A1EFCF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70BD683E18FFB02D00A1EFCF /* Images.xcassets */; };
-		70BD686318FFB04800A1EFCF /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686018FFB04300A1EFCF /* libCordova.a */; };
+		70BD686318FFB04800A1EFCF /* libCordovaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686018FFB04300A1EFCF /* libCordovaLib.a */; };
 		70BD686618FFB06500A1EFCF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686418FFB06500A1EFCF /* SystemConfiguration.framework */; };
 		70BD686718FFB06500A1EFCF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BD686518FFB06500A1EFCF /* WebKit.framework */; };
 		70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686A18FFB0BF00A1EFCF /* AppDelegate.m */; };
 		70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BD686C18FFB0BF00A1EFCF /* MainViewController.m */; };
-		3A2FDD198F93478E8859979C /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FE50F2A0A146179FAD1710 /* APPBadge.m */; };
-		DF30C27D536B4D44ACA40231 /* DockCircularProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = ED48AF1CBEB645839A1E886B /* DockCircularProgressBar.mm */; };
-		756D2D81E71E408CA82DC3E7 /* DockDownloadProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = FB9B489D1AAC4BEAB88A6B3C /* DockDownloadProgressBar.mm */; };
+		47F12CCE43AA40B7A22B04A4 /* APPBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = C45B5D2571874F66BA98FDF2 /* APPBadge.m */; };
+		F7E8506551B340439AF1622D /* DockCircularProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = EF43D76CF57D4D9F9C7CEF0C /* DockCircularProgressBar.mm */; };
+		EF8DA03DB1FA4D30BBBAFD94 /* DockDownloadProgressBar.mm in Resources */ = {isa = PBXBuildFile; fileRef = DFE661A8BAF6495F850F1CFC /* DockDownloadProgressBar.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +28,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 70BD673A18FF9DAE00A1EFCF;
 			remoteInfo = CordovaLib;
+		};
+		70BD686118FFB04300A1EFCF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70BD685A18FFB04300A1EFCF /* CordovaLib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70BD674D18FF9DAE00A1EFCF;
+			remoteInfo = CordovaLibTests;
 		};
 		70BD687018FFB19500A1EFCF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -53,8 +60,8 @@
 
 /* Begin PBXFileReference section */
 		707060AE18FFC05700755D46 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
-		707060B018FFC0D900755D46 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BadgeExample/config.xml; sourceTree = "<group>"; };
-		70BD682318FFB02D00A1EFCF /* BadgeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BadgeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		707060B018FFC0D900755D46 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "BadgeExample/config.xml"; sourceTree = "<group>"; };
+		70BD682318FFB02D00A1EFCF /* BadgeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BadgeExample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		70BD682618FFB02D00A1EFCF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		70BD682918FFB02D00A1EFCF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		70BD682A18FFB02D00A1EFCF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -72,12 +79,12 @@
 		70BD686B18FFB0BF00A1EFCF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		70BD686C18FFB0BF00A1EFCF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		70DAA8D91908785C00AF3749 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		92FE50F2A0A146179FAD1710 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		ED48AF1CBEB645839A1E886B /* DockCircularProgressBar.mm */ = {isa = PBXFileReference; name = "DockCircularProgressBar.mm"; path = "cordova-plugin-badge/DockCircularProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FB9B489D1AAC4BEAB88A6B3C /* DockDownloadProgressBar.mm */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.mm"; path = "cordova-plugin-badge/DockDownloadProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		48E9F2DA84BC48E09CB08551 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		1A022D759694416BAD679730 /* DockCircularProgressBar.h */ = {isa = PBXFileReference; name = "DockCircularProgressBar.h"; path = "cordova-plugin-badge/DockCircularProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		69DF7452872D426C9BDD0045 /* DockDownloadProgressBar.h */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.h"; path = "cordova-plugin-badge/DockDownloadProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		C45B5D2571874F66BA98FDF2 /* APPBadge.m */ = {isa = PBXFileReference; name = "APPBadge.m"; path = "cordova-plugin-badge/APPBadge.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		EF43D76CF57D4D9F9C7CEF0C /* DockCircularProgressBar.mm */ = {isa = PBXFileReference; name = "DockCircularProgressBar.mm"; path = "cordova-plugin-badge/DockCircularProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DFE661A8BAF6495F850F1CFC /* DockDownloadProgressBar.mm */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.mm"; path = "cordova-plugin-badge/DockDownloadProgressBar.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A688E2CA05E341CE8B8822E3 /* APPBadge.h */ = {isa = PBXFileReference; name = "APPBadge.h"; path = "cordova-plugin-badge/APPBadge.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		1A52F75DB6104028B44D7A35 /* DockCircularProgressBar.h */ = {isa = PBXFileReference; name = "DockCircularProgressBar.h"; path = "cordova-plugin-badge/DockCircularProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		EE5DE0387DF44379A31E7BBC /* DockDownloadProgressBar.h */ = {isa = PBXFileReference; name = "DockDownloadProgressBar.h"; path = "cordova-plugin-badge/DockDownloadProgressBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70BD686318FFB04800A1EFCF /* libCordova.a in Frameworks */,
+				70BD686318FFB04800A1EFCF /* libCordovaLib.a in Frameworks */,
 				70BD686618FFB06500A1EFCF /* SystemConfiguration.framework in Frameworks */,
 				70BD686718FFB06500A1EFCF /* WebKit.framework in Frameworks */,
 				70BD682718FFB02D00A1EFCF /* Cocoa.framework in Frameworks */,
@@ -98,15 +105,15 @@
 		7069FBC31905A1F9000B48E1 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				92FE50F2A0A146179FAD1710 /* APPBadge.m */,
-				ED48AF1CBEB645839A1E886B /* DockCircularProgressBar.mm */,
-				FB9B489D1AAC4BEAB88A6B3C /* DockDownloadProgressBar.mm */,
-				48E9F2DA84BC48E09CB08551 /* APPBadge.h */,
-				1A022D759694416BAD679730 /* DockCircularProgressBar.h */,
-				69DF7452872D426C9BDD0045 /* DockDownloadProgressBar.h */,
+				C45B5D2571874F66BA98FDF2 /* APPBadge.m */,
+				EF43D76CF57D4D9F9C7CEF0C /* DockCircularProgressBar.mm */,
+				DFE661A8BAF6495F850F1CFC /* DockDownloadProgressBar.mm */,
+				A688E2CA05E341CE8B8822E3 /* APPBadge.h */,
+				1A52F75DB6104028B44D7A35 /* DockCircularProgressBar.h */,
+				EE5DE0387DF44379A31E7BBC /* DockDownloadProgressBar.h */,
 			);
 			name = Plugins;
-			path = BadgeExample/Plugins;
+			path = "BadgeExample/Plugins";
 			sourceTree = SOURCE_ROOT;
 		};
 		70BD681A18FFB02D00A1EFCF = {
@@ -160,7 +167,7 @@
 				70BD683E18FFB02D00A1EFCF /* Images.xcassets */,
 				70BD682D18FFB02D00A1EFCF /* Supporting Files */,
 			);
-			path = BadgeExample;
+			path = "BadgeExample";
 			sourceTree = "<group>";
 		};
 		70BD682D18FFB02D00A1EFCF /* Supporting Files */ = {
@@ -177,7 +184,8 @@
 		70BD685B18FFB04300A1EFCF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				70BD686018FFB04300A1EFCF /* libCordova.a */,
+				70BD686018FFB04300A1EFCF /* libCordovaLib.a */,
+				70BD686218FFB04300A1EFCF /* CordovaLibTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,7 +199,7 @@
 				70BD686C18FFB0BF00A1EFCF /* MainViewController.m */,
 			);
 			name = Classes;
-			path = BadgeExample/Classes;
+			path = "BadgeExample/Classes";
 			sourceTree = "<group>";
 		};
 		70D86C851B903D11000750E0 /* Resources */ = {
@@ -199,7 +207,7 @@
 			children = (
 			);
 			name = Resources;
-			path = BadgeExample/Resources;
+			path = "BadgeExample/Resources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,8 +228,8 @@
 			dependencies = (
 				70BD687118FFB19500A1EFCF /* PBXTargetDependency */,
 			);
-			name = BadgeExample;
-			productName = BadgeExample;
+			name = "BadgeExample";
+			productName = "BadgeExample";
 			productReference = 70BD682318FFB02D00A1EFCF /* BadgeExample.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -231,7 +239,7 @@
 		70BD681B18FFB02D00A1EFCF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 510;
 				ORGANIZATIONNAME = __CDV_ORGANIZATION_NAME__;
 			};
 			buildConfigurationList = 70BD681E18FFB02D00A1EFCF /* Build configuration list for PBXProject "BadgeExample" */;
@@ -259,11 +267,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		70BD686018FFB04300A1EFCF /* libCordova.a */ = {
+		70BD686018FFB04300A1EFCF /* libCordovaLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libCordova.a;
+			path = libCordovaLib.a;
 			remoteRef = 70BD685F18FFB04300A1EFCF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		70BD686218FFB04300A1EFCF /* CordovaLibTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CordovaLibTests.xctest;
+			remoteRef = 70BD686118FFB04300A1EFCF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -306,11 +321,9 @@
 				70BD683318FFB02D00A1EFCF /* main.m in Sources */,
 				70BD686D18FFB0BF00A1EFCF /* AppDelegate.m in Sources */,
 				70BD686E18FFB0BF00A1EFCF /* MainViewController.m in Sources */,
-				2A7DB5EB10A84DB9A4E7213B /* DockCircularProgressBar.mm in Sources */,
-				48E5C0A3795F4F38A92D6911 /* DockDownloadProgressBar.mm in Sources */,
-				3A2FDD198F93478E8859979C /* APPBadge.m in Sources */,
-				DF30C27D536B4D44ACA40231 /* DockCircularProgressBar.mm in Resources */,
-				756D2D81E71E408CA82DC3E7 /* DockDownloadProgressBar.mm in Resources */,
+				47F12CCE43AA40B7A22B04A4 /* APPBadge.m in Sources */,
+				F7E8506551B340439AF1622D /* DockCircularProgressBar.mm in Resources */,
+				EF8DA03DB1FA4D30BBBAFD94 /* DockDownloadProgressBar.mm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,32 +357,18 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -386,6 +385,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/include\"",
+					"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
@@ -402,32 +402,19 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -438,6 +425,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/include\"",
+					"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_LDFLAGS = "-ObjC";
@@ -454,7 +442,6 @@
 				GCC_PREFIX_HEADER = "BadgeExample/BadgeExample-Prefix.pch";
 				INFOPLIST_FILE = "BadgeExample/BadgeExample-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.appplant.cordova.plugin.badge.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -469,7 +456,6 @@
 				GCC_PREFIX_HEADER = "BadgeExample/BadgeExample-Prefix.pch";
 				INFOPLIST_FILE = "BadgeExample/BadgeExample-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.appplant.cordova.plugin.badge.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

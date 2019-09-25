@@ -21,10 +21,6 @@
 
 @interface NSScreen (Utils)
 
-+ (NSArray*) sortedScreens;
-
-+ (NSArray*) sortedScreenRects;
-
 + (NSRect) fullScreenRect;
 
 @end

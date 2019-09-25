@@ -17,11 +17,11 @@
        under the License.
 */
 
-var deploy  = require('./deployment'),
-    args = process.argv.slice(2);
+var deploy = require('./deployment');
+var args = process.argv.slice(2);
 
 // help/usage function
-function help() {
+function help () {
     console.log('');
     console.log('Usage: node target-list.js [--win10] [ --emulators | --devices | --started_emulators | --all ]');
     console.log('    --win10             : Chooses to list Windows 10 devices (Windows 8.1 is default).');
@@ -35,6 +35,7 @@ function help() {
     console.log('    node target-list.js --started_emulators');
     console.log('    node target-list.js --all');
     console.log('');
+
 }
 
 // Handle help flag
@@ -60,13 +61,12 @@ if (['--help', '/?', '-h', 'help', '-help', '/help'].indexOf(args[0]) > -1) {
     if (onlyDevices && onlyEmulators) {
         console.error('Cannot specify both --emulators and --devices');
         help();
-        return;
     }
 
     var deploymentTool = deploy.getDeploymentTool(version);
     deploymentTool.enumerateDevices().then(function (deviceList) {
         if (onlyDevices || onlyEmulators) {
-            deviceList = deviceList.filter(function(device) {
+            deviceList = deviceList.filter(function (device) {
                 return (onlyDevices && device.type === 'device') || (onlyEmulators && device.type === 'emulator');
             });
         }

@@ -30,46 +30,38 @@ var builders = require('./builders/builders');
 var events = require('cordova-common').events;
 var spawn = require('cordova-common').superspawn.spawn;
 var CordovaError = require('cordova-common').CordovaError;
+var PackageType = require('./PackageType');
 
+module.exports.parseBuildOptions = parseOpts;
 function parseOpts (options, resolvedTarget, projectRoot) {
     options = options || {};
     options.argv = nopt({
-        gradle: Boolean,
-        studio: Boolean,
         prepenv: Boolean,
         versionCode: String,
         minSdkVersion: String,
+        maxSdkVersion: String,
+        targetSdkVersion: String,
         gradleArg: [String, Array],
         keystore: path,
         alias: String,
         storePassword: String,
         password: String,
-        keystoreType: String
+        keystoreType: String,
+        packageType: String
     }, {}, options.argv, 0);
 
     // Android Studio Build method is the default
     var ret = {
         buildType: options.release ? 'release' : 'debug',
-        buildMethod: process.env.ANDROID_BUILD || 'studio',
         prepEnv: options.argv.prepenv,
         arch: resolvedTarget && resolvedTarget.arch,
         extraArgs: []
     };
 
-    if (options.argv.gradle || options.argv.studio) {
-        ret.buildMethod = options.argv.studio ? 'studio' : 'gradle';
-    }
-
-    // This comes from cordova/run
-    if (options.studio) ret.buildMethod = 'studio';
-    if (options.gradle) ret.buildMethod = 'gradle';
-
-    if (options.nobuild) ret.buildMethod = 'none';
-
     if (options.argv.versionCode) { ret.extraArgs.push('-PcdvVersionCode=' + options.argv.versionCode); }
-
     if (options.argv.minSdkVersion) { ret.extraArgs.push('-PcdvMinSdkVersion=' + options.argv.minSdkVersion); }
-
+    if (options.argv.maxSdkVersion) { ret.extraArgs.push('-PcdvMaxSdkVersion=' + options.argv.maxSdkVersion); }
+    if (options.argv.targetSdkVersion) { ret.extraArgs.push('-PcdvTargetSdkVersion=' + options.argv.targetSdkVersion); }
     if (options.argv.gradleArg) {
         ret.extraArgs = ret.extraArgs.concat(options.argv.gradleArg);
     }
@@ -78,14 +70,14 @@ function parseOpts (options, resolvedTarget, projectRoot) {
 
     if (options.argv.keystore) { packageArgs.keystore = path.relative(projectRoot, path.resolve(options.argv.keystore)); }
 
-    ['alias', 'storePassword', 'password', 'keystoreType'].forEach(function (flagName) {
+    ['alias', 'storePassword', 'password', 'keystoreType', 'packageType'].forEach(function (flagName) {
         if (options.argv[flagName]) { packageArgs[flagName] = options.argv[flagName]; }
     });
 
     var buildConfig = options.buildConfig;
 
     // If some values are not specified as command line arguments - use build config to supplement them.
-    // Command line arguemnts have precedence over build config.
+    // Command line arguments have precedence over build config.
     if (buildConfig) {
         if (!fs.existsSync(buildConfig)) {
             throw new Error('Specified build config file does not exist: ' + buildConfig);
@@ -103,7 +95,7 @@ function parseOpts (options, resolvedTarget, projectRoot) {
                 events.emit('log', 'Reading the keystore from: ' + packageArgs.keystore);
             }
 
-            ['alias', 'storePassword', 'password', 'keystoreType'].forEach(function (key) {
+            ['alias', 'storePassword', 'password', 'keystoreType', 'packageType'].forEach(function (key) {
                 packageArgs[key] = packageArgs[key] || androidInfo[key];
             });
         }
@@ -115,9 +107,36 @@ function parseOpts (options, resolvedTarget, projectRoot) {
     }
 
     if (!ret.packageInfo) {
-        if (Object.keys(packageArgs).length > 0) {
+        // The following loop is to decide whether to print a warning about generating a signed archive
+        // We only want to produce a warning if they are using a config property that is related to signing, but
+        // missing the required properties for signing. We don't want to produce a warning if they are simply
+        // using a build property that isn't related to signing, such as --packageType
+        let shouldWarn = false;
+        const signingKeys = ['keystore', 'alias', 'storePassword', 'password', 'keystoreType'];
+
+        for (let key in packageArgs) {
+            if (!shouldWarn && signingKeys.indexOf(key) > -1) {
+                // If we enter this condition, we have a key used for signing a build,
+                // but we are missing some required signing properties
+                shouldWarn = true;
+            }
+        }
+
+        if (shouldWarn) {
             events.emit('warn', '\'keystore\' and \'alias\' need to be specified to generate a signed archive.');
         }
+    }
+
+    if (packageArgs.packageType) {
+        const VALID_PACKAGE_TYPES = [PackageType.APK, PackageType.BUNDLE];
+        if (VALID_PACKAGE_TYPES.indexOf(packageArgs.packageType) === -1) {
+            events.emit('warn', '"' + packageArgs.packageType + '" is an invalid packageType. Valid values are: ' + VALID_PACKAGE_TYPES.join(', ') + '\nDefaulting packageType to ' + PackageType.APK);
+            ret.packageType = PackageType.APK;
+        } else {
+            ret.packageType = packageArgs.packageType;
+        }
+    } else {
+        ret.packageType = PackageType.APK;
     }
 
     return ret;
@@ -129,7 +148,8 @@ function parseOpts (options, resolvedTarget, projectRoot) {
  */
 module.exports.runClean = function (options) {
     var opts = parseOpts(options, null, this.root);
-    var builder = builders.getBuilder(opts.buildMethod);
+    var builder = builders.getBuilder();
+
     return builder.prepEnv(opts).then(function () {
         return builder.clean(opts);
     });
@@ -149,20 +169,26 @@ module.exports.runClean = function (options) {
  */
 module.exports.run = function (options, optResolvedTarget) {
     var opts = parseOpts(options, optResolvedTarget, this.root);
-    console.log(opts.buildMethod);
-    var builder = builders.getBuilder(opts.buildMethod);
+    var builder = builders.getBuilder();
+
     return builder.prepEnv(opts).then(function () {
         if (opts.prepEnv) {
             events.emit('verbose', 'Build file successfully prepared.');
             return;
         }
         return builder.build(opts).then(function () {
-            var apkPaths = builder.findOutputApks(opts.buildType, opts.arch);
-            events.emit('log', 'Built the following apk(s): \n\t' + apkPaths.join('\n\t'));
+            var paths;
+            if (opts.packageType === PackageType.BUNDLE) {
+                paths = builder.findOutputBundles(opts.buildType);
+                events.emit('log', 'Built the following bundle(s): \n\t' + paths.join('\n\t'));
+            } else {
+                paths = builder.findOutputApks(opts.buildType, opts.arch);
+                events.emit('log', 'Built the following apk(s): \n\t' + paths.join('\n\t'));
+            }
+
             return {
-                apkPaths: apkPaths,
-                buildType: opts.buildType,
-                buildMethod: opts.buildMethod
+                paths: paths,
+                buildType: opts.buildType
             };
         });
     });
@@ -276,13 +302,14 @@ module.exports.help = function () {
     console.log('Flags:');
     console.log('    \'--debug\': will build project in debug mode (default)');
     console.log('    \'--release\': will build project for release');
-    console.log('    \'--ant\': will build project with ant');
-    console.log('    \'--gradle\': will build project with gradle (default)');
     console.log('    \'--nobuild\': will skip build process (useful when using run command)');
     console.log('    \'--prepenv\': don\'t build, but copy in build scripts where necessary');
-    console.log('    \'--versionCode=#\': Override versionCode for this build. Useful for uploading multiple APKs. Requires --gradle.');
-    console.log('    \'--minSdkVersion=#\': Override minSdkVersion for this build. Useful for uploading multiple APKs. Requires --gradle.');
+    console.log('    \'--versionCode=#\': Override versionCode for this build. Useful for uploading multiple APKs.');
+    console.log('    \'--minSdkVersion=#\': Override minSdkVersion for this build.');
+    console.log('    \'--maxSdkVersion=#\': Override maxSdkVersion for this build. (Not Recommended)');
+    console.log('    \'--targetSdkVersion=#\': Override targetSdkVersion for this build.');
     console.log('    \'--gradleArg=<gradle command line arg>\': Extra args to pass to the gradle command. Use one flag per arg. Ex. --gradleArg=-PcdvBuildMultipleApks=true');
+    console.log('    \'--packageType=<apk|bundle>\': Builds an APK or a bundle');
     console.log('');
     console.log('Signed APK flags (overwrites debug/release-signing.proprties) :');
     console.log('    \'--keystore=<path to keystore>\': Key store used to build a signed archive. (Required)');

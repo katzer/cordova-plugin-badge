@@ -11,17 +11,17 @@
       "browser"
     ],
     "plugins": {
-      "cordova-plugin-x-toast": {},
-      "cordova-plugin-badge": {}
+      "cordova-plugin-badge": {},
+      "cordova-plugin-x-toast": {}
     }
   },
   "dependencies": {
-    "cordova-android": "^7.1.2",
-    "cordova-browser": "^5.0.4",
-    "cordova-ios": "^4.5.5",
-    "cordova-osx": "^4.0.2",
+    "cordova-android": "^8.1.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-ios": "^5.0.1",
+    "cordova-osx": "^5.0.0",
     "cordova-plugin-badge": "^0.8.8",
-    "cordova-plugin-x-toast": "^2.7.0",
-    "cordova-windows": "^5.0.0"
+    "cordova-plugin-x-toast": "^2.7.2",
+    "cordova-windows": "^6.0.1"
   }
 }

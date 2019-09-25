@@ -17,11 +17,11 @@
        under the License.
 */
 
-var Q     = require('q');
-var fs    = require('fs');
-var path  = require('path');
+var Q = require('q');
+var fs = require('fs');
+var path = require('path');
 var shell = require('shelljs');
-var uuid  = require('node-uuid');
+var uuid = require('node-uuid');
 var events = require('cordova-common').events;
 var CordovaError = require('cordova-common').CordovaError;
 var AppxManifest = require('../../template/cordova/lib/AppxManifest');
@@ -29,7 +29,7 @@ var pkg = require('../../package');
 
 // Creates cordova-windows project at specified path with specified namespace, app name and GUID
 module.exports.create = function (destinationDir, config, options) {
-    if(!destinationDir) return Q.reject('No destination directory specified.');
+    if (!destinationDir) return Q.reject('No destination directory specified.');
 
     var projectPath = path.resolve(destinationDir);
     if (fs.existsSync(projectPath)) {
@@ -39,8 +39,8 @@ module.exports.create = function (destinationDir, config, options) {
     // Set parameters/defaults for create
     var packageName = (config && config.packageName()) || 'Cordova.Example';
     var appName = (config && config.name()) || 'CordovaAppProj';
-        // 64 symbols restriction goes from manifest schema definition
-        // http://msdn.microsoft.com/en-us/library/windows/apps/br211415.aspx
+    // 64 symbols restriction goes from manifest schema definition
+    // http://msdn.microsoft.com/en-us/library/windows/apps/br211415.aspx
     var safeAppName = appName.length <= 64 ? appName : appName.substr(0, 64);
     var templateOverrides = options.customTemplate;
     var guid = options.guid || uuid.v1();
@@ -99,17 +99,17 @@ module.exports.create = function (destinationDir, config, options) {
     // replace specific values in manifests' templates
     events.emit('verbose', 'Updating manifest files with project configuration.');
     [ 'package.windows.appxmanifest', 'package.phone.appxmanifest',
-      'package.windows10.appxmanifest' ]
-    .forEach(function (item) {
-        var manifest = AppxManifest.get(path.join(projectPath, item));
-        if (manifest.hasPhoneIdentity) {
-            manifest.getPhoneIdentity().setPhoneProductId(guid);
-        }
+        'package.windows10.appxmanifest' ]
+        .forEach(function (item) {
+            var manifest = AppxManifest.get(path.join(projectPath, item));
+            if (manifest.hasPhoneIdentity) {
+                manifest.getPhoneIdentity().setPhoneProductId(guid);
+            }
 
-        manifest.setPackageName(packageName)
-            .setAppName(safeAppName)
-            .write();
-    });
+            manifest.setPackageName(packageName)
+                .setAppName(safeAppName)
+                .write();
+        });
 
     // Delete bld forder and bin folder
     ['bld', 'bin', '*.user', '*.suo', 'MyTemplate.vstemplate'].forEach(function (file) {
@@ -120,7 +120,7 @@ module.exports.create = function (destinationDir, config, options) {
     return Q.resolve();
 };
 
-function recursiveCreateDirectory(targetPath, previousPath) {
+function recursiveCreateDirectory (targetPath, previousPath) {
     if (previousPath === targetPath) {
         // Shouldn't ever happen because we're already in a created directory
         // This is just here to prevent any potential infinite loop / stack overflow condition

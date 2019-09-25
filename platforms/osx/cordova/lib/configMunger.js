@@ -17,18 +17,18 @@
        under the License.
 */
 
-/*jshint node: true*/
+/* jshint node: true */
 
 var PlatformJson = require('cordova-common').PlatformJson;
 var PlatformMunger = require('cordova-common').ConfigChanges.PlatformMunger;
 var PluginInfoProvider = require('cordova-common').PluginInfoProvider;
 
-//shared PlatformMunger instance
+// shared PlatformMunger instance
 var _instance = null;
 
 module.exports = {
 
-    get: function(platformRoot) {
+    get: function (platformRoot) {
         if (!_instance) {
             _instance = new PlatformMunger('osx', platformRoot, PlatformJson.load(platformRoot, 'osx'),
                 new PluginInfoProvider());

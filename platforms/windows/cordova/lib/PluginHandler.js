@@ -17,9 +17,7 @@
  *
  */
 
-/* jshint sub:true */
-
-var fs   = require('fs');
+var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
 var events = require('cordova-common').events;
@@ -27,14 +25,14 @@ var CordovaError = require('cordova-common').CordovaError;
 
 // returns relative file path for a file in the plugin's folder that can be referenced
 // from a project file.
-function getPluginFilePath(plugin, pluginFile, targetDir) {
+function getPluginFilePath (plugin, pluginFile, targetDir) {
     var src = path.resolve(plugin.dir, pluginFile);
     return '$(ProjectDir)' + path.relative(targetDir, src);
 }
 
 var handlers = {
     'source-file': {
-        install:function(obj, plugin, project, options) {
+        install: function (obj, plugin, project, options) {
             var dest = path.join('plugins', plugin.id, obj.targetDir || '', path.basename(obj.src));
             if (options && options.force) {
                 copyFile(plugin.dir, obj.src, project.root, dest);
@@ -44,15 +42,15 @@ var handlers = {
             // add reference to this file to jsproj.
             project.addSourceFile(dest);
         },
-        uninstall:function(obj, plugin, project, options) {
+        uninstall: function (obj, plugin, project, options) {
             var dest = path.join('plugins', plugin.id, obj.targetDir || '', path.basename(obj.src));
             removeFile(project.root, dest);
             // remove reference to this file from csproj.
             project.removeSourceFile(dest);
         }
     },
-    'resource-file':{
-        install:function(obj, plugin, project, options) {
+    'resource-file': {
+        install: function (obj, plugin, project, options) {
             if (obj.reference) {
                 // do not copy, but reference the file in the plugin folder. This allows to
                 // have multiple source files map to the same target and select the appropriate
@@ -75,7 +73,7 @@ var handlers = {
                 project.addResourceFileToProject(obj.target, obj.target, getTargetConditions(obj));
             }
         },
-        uninstall:function(obj, plugin, project, options) {
+        uninstall: function (obj, plugin, project, options) {
             if (obj.reference) {
                 var relativeSrcPath = getPluginFilePath(plugin, obj.src, project.projectFolder);
                 project.removeResourceFileFromProject(relativeSrcPath, getTargetConditions(obj));
@@ -86,18 +84,18 @@ var handlers = {
         }
     },
     'lib-file': {
-        install:function(obj, plugin, project, options) {
-            var inc  = obj.Include || obj.src;
+        install: function (obj, plugin, project, options) {
+            var inc = obj.Include || obj.src;
             project.addSDKRef(inc, getTargetConditions(obj));
         },
-        uninstall:function(obj, plugin, project, options) {
+        uninstall: function (obj, plugin, project, options) {
             events.emit('verbose', 'windows lib-file uninstall :: ' + plugin.id);
             var inc = obj.Include || obj.src;
             project.removeSDKRef(inc, getTargetConditions(obj));
         }
     },
     'framework': {
-        install:function(obj, plugin, project, options) {
+        install: function (obj, plugin, project, options) {
             events.emit('verbose', 'windows framework install :: ' + plugin.id);
 
             var src = obj.src;
@@ -106,7 +104,7 @@ var handlers = {
             var targetDir = obj.targetDir || '';
             var implementPath = obj.implementation;
 
-            if(type === 'projectReference') {
+            if (type === 'projectReference') {
                 dest = path.join(path.relative(project.projectFolder, plugin.dir), targetDir, src);
                 project.addProjectReference(dest, getTargetConditions(obj));
             } else {
@@ -120,24 +118,23 @@ var handlers = {
             }
 
         },
-        uninstall:function(obj, plugin, project, options) {
-            events.emit('verbose', 'windows framework uninstall :: ' + plugin.id  );
+        uninstall: function (obj, plugin, project, options) {
+            events.emit('verbose', 'windows framework uninstall :: ' + plugin.id);
 
             var src = obj.src;
             var type = obj.type;
 
-            if(type === 'projectReference') {
+            if (type === 'projectReference') {
                 project.removeProjectReference(path.join(path.relative(project.projectFolder, plugin.dir), src), getTargetConditions(obj));
-            }
-            else {
+            } else {
                 var targetPath = path.join('plugins', plugin.id);
                 removeFile(project.root, targetPath);
                 project.removeReference(src, getTargetConditions(obj));
             }
         }
     },
-    asset:{
-        install:function(obj, plugin, project, options) {
+    asset: {
+        install: function (obj, plugin, project, options) {
             if (!obj.src) {
                 throw new CordovaError(generateAttributeError('src', 'asset', plugin.id));
             }
@@ -148,7 +145,7 @@ var handlers = {
             copyFile(plugin.dir, obj.src, project.www, obj.target);
             if (options && options.usePlatformWww) copyFile(plugin.dir, obj.src, project.platformWww, obj.target);
         },
-        uninstall:function(obj, plugin, project, options) {
+        uninstall: function (obj, plugin, project, options) {
             var target = obj.target || obj.src;
 
             if (!target) throw new CordovaError(generateAttributeError('target', 'asset', plugin.id));
@@ -165,7 +162,7 @@ var handlers = {
         install: function (obj, plugin, project, options) {
             // Copy the plugin's files into the www directory.
             var moduleSource = path.resolve(plugin.dir, obj.src);
-            var moduleName = plugin.id + '.' + (obj.name || path.basename(obj.src, path.extname (obj.src)));
+            var moduleName = plugin.id + '.' + (obj.name || path.basename(obj.src, path.extname(obj.src)));
 
             // Read in the file, prepend the cordova.define, and write it back out.
             var scriptContent = fs.readFileSync(moduleSource, 'utf-8').replace(/^\ufeff/, ''); // Window BOM
@@ -201,7 +198,7 @@ module.exports.getInstaller = function (type) {
     events.emit('verbose', '<' + type + '> is not supported for Windows plugins');
 };
 
-module.exports.getUninstaller = function(type) {
+module.exports.getUninstaller = function (type) {
     if (handlers[type] && handlers[type].uninstall) {
         return handlers[type].uninstall;
     }
@@ -209,7 +206,7 @@ module.exports.getUninstaller = function(type) {
     events.emit('verbose', '<' + type + '> is not supported for Windows plugins');
 };
 
-function getTargetConditions(obj) {
+function getTargetConditions (obj) {
     return { versions: obj.versions, deviceTarget: obj.deviceTarget, arch: obj.arch };
 }
 
@@ -220,14 +217,12 @@ function copyFile (plugin_dir, src, project_dir, dest, link) {
     // check that src path is inside plugin directory
     var real_path = fs.realpathSync(src);
     var real_plugin_path = fs.realpathSync(plugin_dir);
-    if (real_path.indexOf(real_plugin_path) !== 0)
-        throw new CordovaError('File "' + src + '" is located outside the plugin directory "' + plugin_dir + '"');
+    if (real_path.indexOf(real_plugin_path) !== 0) { throw new CordovaError('File "' + src + '" is located outside the plugin directory "' + plugin_dir + '"'); }
 
     dest = path.resolve(project_dir, dest);
 
     // check that dest path is located in project directory
-    if (dest.indexOf(path.resolve(project_dir)) !== 0)
-        throw new CordovaError('Destination "' + dest + '" for source file "' + src + '" is located outside the project');
+    if (dest.indexOf(path.resolve(project_dir)) !== 0) { throw new CordovaError('Destination "' + dest + '" for source file "' + src + '" is located outside the project'); }
 
     shell.mkdir('-p', path.dirname(dest));
 
@@ -235,7 +230,7 @@ function copyFile (plugin_dir, src, project_dir, dest, link) {
         fs.symlinkSync(path.relative(path.dirname(dest), src), dest);
     } else if (fs.statSync(src).isDirectory()) {
         // XXX shelljs decides to create a directory when -R|-r is used which sucks. http://goo.gl/nbsjq
-        shell.cp('-Rf', src+'/*', dest);
+        shell.cp('-Rf', src + '/*', dest);
     } else {
         shell.cp('-f', src, dest);
     }
@@ -244,8 +239,7 @@ function copyFile (plugin_dir, src, project_dir, dest, link) {
 // Same as copy file but throws error if target exists
 function copyNewFile (plugin_dir, src, project_dir, dest, link) {
     var target_path = path.resolve(project_dir, dest);
-    if (fs.existsSync(target_path))
-        throw new CordovaError('"' + target_path + '" already exists!');
+    if (fs.existsSync(target_path)) { throw new CordovaError('"' + target_path + '" already exists!'); }
 
     copyFile(plugin_dir, src, project_dir, dest, !!link);
 }
@@ -266,8 +260,8 @@ function removeFileAndParents (baseDir, destFile, stopper) {
     // check if directory is empty
     var curDir = path.dirname(file);
 
-    while(curDir !== path.resolve(baseDir, stopper)) {
-        if(fs.existsSync(curDir) && fs.readdirSync(curDir).length === 0) {
+    while (curDir !== path.resolve(baseDir, stopper)) {
+        if (fs.existsSync(curDir) && fs.readdirSync(curDir).length === 0) {
             fs.rmdirSync(curDir);
             curDir = path.resolve(curDir, '..');
         } else {
@@ -277,6 +271,6 @@ function removeFileAndParents (baseDir, destFile, stopper) {
     }
 }
 
-function generateAttributeError(attribute, element, id) {
+function generateAttributeError (attribute, element, id) {
     return 'Required attribute "' + attribute + '" not specified in <' + element + '> element from plugin: ' + id;
 }

@@ -1,2 +1,4 @@
 bin/node_modules/*
 bin/templates/project/*
+tests/cdv-test-project/*
+tests/CordovaLibTests/*

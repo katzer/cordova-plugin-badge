@@ -21,6 +21,7 @@
 #import "CDVWebViewDelegate.h"
 #import "CDVConsole.h"
 #import "CDVBridge.h"
+#import "NSWindow+Utils.h"
 // #import "CookieJar.h"
 
 @implementation CDVWebViewDelegate
@@ -82,9 +83,15 @@
 #pragma mark WebPolicyDelegate
 
 - (void) webView:(WebView*) sender decidePolicyForNavigationAction:(NSDictionary*) actionInformation request:(NSURLRequest*) request frame:(WebFrame*) frame decisionListener:(id <WebPolicyDecisionListener>) listener {
-    NSString* url = [[request URL] description];
-    NSLog(@"navigating to %@", url);
+  NSURL *url = [request URL];
+  NSLog(@"navigating to %@", url.description);
+  if (self.allowWebViewNavigation || [@"file" isEqualToString:url.scheme]) {
+    // Open in-app if navigation is allowed in the WebView, or if this is a local file request.
     [listener use];
+  } else {
+    // Forward external requests to the system otherwise.
+    [[NSWorkspace sharedWorkspace] openURL:url];
+  }
 }
 
 #pragma mark WebViewDelegate
@@ -114,7 +121,15 @@
     [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
     [alert setMessageText:message];
 
-    [alert runModal];
+    // workaround for fullscreen windows (see CB-11948)
+    [alert.window setLevel:NSMainMenuWindowLevel + 2];
+    [alert.window setIsLevelLocked:true];
+
+    @try {
+        [alert runModal];
+    } @finally {
+        [alert.window setIsLevelLocked:false];
+    }
 }
 
 - (BOOL) webView:(WebView*) sender runJavaScriptConfirmPanelWithMessage:(NSString*) message initiatedByFrame:(WebFrame*) frame {
@@ -123,7 +138,14 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
     [alert setMessageText:message];
 
-    return ([alert runModal] == NSAlertFirstButtonReturn);
+    // workaround for fullscreen windows (see CB-11948)
+    [alert.window setLevel:NSMainMenuWindowLevel + 2];
+    [alert.window setIsLevelLocked:true];
+    @try {
+        return ([alert runModal] == NSAlertFirstButtonReturn);
+    } @finally {
+        [alert.window setIsLevelLocked:false];
+    }
 }
 
 - (NSString*) webView:(WebView*) sender runJavaScriptTextInputPanelWithPrompt:(NSString*) prompt defaultText:(NSString*) defaultText initiatedByFrame:(WebFrame*) frame {
@@ -135,13 +157,20 @@
     [input setStringValue:defaultText];
     [alert setAccessoryView:input];
 
-    NSInteger button = [alert runModal];
-    if (button == NSAlertFirstButtonReturn) {
-        [input validateEditing];
-        return [input stringValue];
-    }
+    // workaround for fullscreen windows (see CB-11948)
+    [alert.window setLevel:NSMainMenuWindowLevel + 2];
+    [alert.window setIsLevelLocked:true];
 
-    return nil;
+    @try {
+        NSInteger button = [alert runModal];
+        if (button == NSAlertFirstButtonReturn) {
+            [input validateEditing];
+            return [input stringValue];
+        }
+        return nil;
+    } @finally {
+        [alert.window setIsLevelLocked:false];
+    }
 }
 
 # pragma mark WebResourceLoadDelegate

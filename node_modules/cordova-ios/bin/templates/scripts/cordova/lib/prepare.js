@@ -22,7 +22,6 @@ var Q = require('q');
 var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
-var xcode = require('xcode');
 var unorm = require('unorm');
 var plist = require('plist');
 var URL = require('url');
@@ -189,7 +188,6 @@ function updateProject (platformConfig, locations) {
     // because node and shell scripts handles unicode symbols differently
     // We need to normalize the name to NFD form since iOS uses NFD unicode form
     var name = unorm.nfd(platformConfig.name());
-    var pkg = platformConfig.getAttribute('ios-CFBundleIdentifier') || platformConfig.packageName();
     var version = platformConfig.version();
     var displayName = platformConfig.shortName && platformConfig.shortName();
 
@@ -198,7 +196,6 @@ function updateProject (platformConfig, locations) {
     // Update package id (bundle id)
     var plistFile = path.join(locations.xcodeCordovaProj, originalName + '-Info.plist');
     var infoPlist = plist.parse(fs.readFileSync(plistFile, 'utf8'));
-    infoPlist['CFBundleIdentifier'] = pkg;
 
     // Update version (bundle version)
     infoPlist['CFBundleShortVersionString'] = version;
@@ -224,10 +221,14 @@ function updateProject (platformConfig, locations) {
     handleOrientationSettings(platformConfig, infoPlist);
     updateProjectPlistForLaunchStoryboard(platformConfig, infoPlist);
 
-    var info_contents = plist.build(infoPlist);
+    /* eslint-disable no-tabs */
+    // Write out the plist file with the same formatting as Xcode does
+    var info_contents = plist.build(infoPlist, { indent: '	', offset: -1 });
+    /* eslint-enable no-tabs */
+
     info_contents = info_contents.replace(/<string>[\s\r\n]*<\/string>/g, '<string></string>');
     fs.writeFileSync(plistFile, info_contents, 'utf-8');
-    events.emit('verbose', 'Wrote out iOS Bundle Identifier "' + pkg + '" and iOS Bundle Version "' + version + '" to ' + plistFile);
+    events.emit('verbose', 'Wrote out iOS Bundle Version "' + version + '" to ' + plistFile);
 
     return handleBuildSettings(platformConfig, locations, infoPlist).then(function () {
         if (name === originalName) {
@@ -274,37 +275,51 @@ function handleOrientationSettings (platformConfig, infoPlist) {
 }
 
 function handleBuildSettings (platformConfig, locations, infoPlist) {
+    var pkg = platformConfig.getAttribute('ios-CFBundleIdentifier') || platformConfig.packageName();
     var targetDevice = parseTargetDevicePreference(platformConfig.getPreference('target-device', 'ios'));
     var deploymentTarget = platformConfig.getPreference('deployment-target', 'ios');
     var needUpdatedBuildSettingsForLaunchStoryboard = checkIfBuildSettingsNeedUpdatedForLaunchStoryboard(platformConfig, infoPlist);
+    var swiftVersion = platformConfig.getPreference('SwiftVersion', 'ios');
+
+    var project;
+
+    try {
+        project = projectFile.parse(locations);
+    } catch (err) {
+        return Q.reject(new CordovaError('Could not parse ' + locations.pbxproj + ': ' + err));
+    }
+
+    var origPkg = project.xcode.getBuildProperty('PRODUCT_BUNDLE_IDENTIFIER');
 
     // no build settings provided and we don't need to update build settings for launch storyboards,
     // then we don't need to parse and update .pbxproj file
-    if (!targetDevice && !deploymentTarget && !needUpdatedBuildSettingsForLaunchStoryboard) {
+    if (origPkg === pkg && !targetDevice && !deploymentTarget && !needUpdatedBuildSettingsForLaunchStoryboard && !swiftVersion) {
         return Q();
     }
 
-    var proj = new xcode.project(locations.pbxproj); /* eslint new-cap : 0 */
-
-    try {
-        proj.parseSync();
-    } catch (err) {
-        return Q.reject(new CordovaError('Could not parse project.pbxproj: ' + err));
+    if (origPkg !== pkg) {
+        events.emit('verbose', 'Set PRODUCT_BUNDLE_IDENTIFIER to ' + pkg + '.');
+        project.xcode.updateBuildProperty('PRODUCT_BUNDLE_IDENTIFIER', pkg);
     }
 
     if (targetDevice) {
         events.emit('verbose', 'Set TARGETED_DEVICE_FAMILY to ' + targetDevice + '.');
-        proj.updateBuildProperty('TARGETED_DEVICE_FAMILY', targetDevice);
+        project.xcode.updateBuildProperty('TARGETED_DEVICE_FAMILY', targetDevice);
     }
 
     if (deploymentTarget) {
         events.emit('verbose', 'Set IPHONEOS_DEPLOYMENT_TARGET to "' + deploymentTarget + '".');
-        proj.updateBuildProperty('IPHONEOS_DEPLOYMENT_TARGET', deploymentTarget);
+        project.xcode.updateBuildProperty('IPHONEOS_DEPLOYMENT_TARGET', deploymentTarget);
     }
 
-    updateBuildSettingsForLaunchStoryboard(proj, platformConfig, infoPlist);
+    if (swiftVersion) {
+        events.emit('verbose', 'Set SwiftVersion to "' + swiftVersion + '".');
+        project.xcode.updateBuildProperty('SWIFT_VERSION', swiftVersion);
+    }
 
-    fs.writeFileSync(locations.pbxproj, proj.writeSync(), 'utf-8');
+    updateBuildSettingsForLaunchStoryboard(project.xcode, platformConfig, infoPlist);
+
+    project.write();
 
     return Q();
 }
@@ -313,34 +328,31 @@ function mapIconResources (icons, iconsDir) {
     // See https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconMatrix.html
     // for launch images sizes reference.
     var platformIcons = [
-        {dest: 'icon-20.png', width: 20, height: 20},
-        {dest: 'icon-20@2x.png', width: 40, height: 40},
-        {dest: 'icon-20@3x.png', width: 60, height: 60},
-        {dest: 'icon-40.png', width: 40, height: 40},
-        {dest: 'icon-40@2x.png', width: 80, height: 80},
-        {dest: 'icon-50.png', width: 50, height: 50},
-        {dest: 'icon-50@2x.png', width: 100, height: 100},
-        {dest: 'icon-60@2x.png', width: 120, height: 120},
-        {dest: 'icon-60@3x.png', width: 180, height: 180},
-        {dest: 'icon-72.png', width: 72, height: 72},
-        {dest: 'icon-72@2x.png', width: 144, height: 144},
-        {dest: 'icon-76.png', width: 76, height: 76},
-        {dest: 'icon-76@2x.png', width: 152, height: 152},
-        {dest: 'icon-83.5@2x.png', width: 167, height: 167},
-        {dest: 'icon-1024.png', width: 1024, height: 1024},
-        {dest: 'icon-small.png', width: 29, height: 29},
-        {dest: 'icon-small@2x.png', width: 58, height: 58},
-        {dest: 'icon-small@3x.png', width: 87, height: 87},
-        {dest: 'icon.png', width: 57, height: 57},
-        {dest: 'icon@2x.png', width: 114, height: 114},
-        {dest: 'AppIcon24x24@2x.png', width: 48, height: 48},
-        {dest: 'AppIcon27.5x27.5@2x.png', width: 55, height: 55},
-        {dest: 'AppIcon29x29@2x.png', width: 58, height: 58},
-        {dest: 'AppIcon29x29@3x.png', width: 87, height: 87},
-        {dest: 'AppIcon40x40@2x.png', width: 80, height: 80},
-        {dest: 'AppIcon44x44@2x.png', width: 88, height: 88},
-        {dest: 'AppIcon86x86@2x.png', width: 172, height: 172},
-        {dest: 'AppIcon98x98@2x.png', width: 196, height: 196}
+        { dest: 'icon-20.png', width: 20, height: 20 },
+        { dest: 'icon-20@2x.png', width: 40, height: 40 },
+        { dest: 'icon-20@3x.png', width: 60, height: 60 },
+        { dest: 'icon-40.png', width: 40, height: 40 },
+        { dest: 'icon-40@2x.png', width: 80, height: 80 },
+        { dest: 'icon-50.png', width: 50, height: 50 },
+        { dest: 'icon-50@2x.png', width: 100, height: 100 },
+        { dest: 'icon-60@2x.png', width: 120, height: 120 },
+        { dest: 'icon-60@3x.png', width: 180, height: 180 },
+        { dest: 'icon-72.png', width: 72, height: 72 },
+        { dest: 'icon-72@2x.png', width: 144, height: 144 },
+        { dest: 'icon-76.png', width: 76, height: 76 },
+        { dest: 'icon-76@2x.png', width: 152, height: 152 },
+        { dest: 'icon-83.5@2x.png', width: 167, height: 167 },
+        { dest: 'icon-1024.png', width: 1024, height: 1024 },
+        { dest: 'icon-29.png', width: 29, height: 29 },
+        { dest: 'icon-29@2x.png', width: 58, height: 58 },
+        { dest: 'icon-29@3x.png', width: 87, height: 87 },
+        { dest: 'icon.png', width: 57, height: 57 },
+        { dest: 'icon@2x.png', width: 114, height: 114 },
+        { dest: 'icon-24@2x.png', width: 48, height: 48 },
+        { dest: 'icon-27.5@2x.png', width: 55, height: 55 },
+        { dest: 'icon-44@2x.png', width: 88, height: 88 },
+        { dest: 'icon-86@2x.png', width: 172, height: 172 },
+        { dest: 'icon-98@2x.png', width: 196, height: 196 }
     ];
 
     var pathMap = {};
@@ -402,18 +414,18 @@ function cleanIcons (projectRoot, projectConfig, locations) {
 
 function mapSplashScreenResources (splashScreens, splashScreensDir) {
     var platformSplashScreens = [
-        {dest: 'Default~iphone.png', width: 320, height: 480},
-        {dest: 'Default@2x~iphone.png', width: 640, height: 960},
-        {dest: 'Default-Portrait~ipad.png', width: 768, height: 1024},
-        {dest: 'Default-Portrait@2x~ipad.png', width: 1536, height: 2048},
-        {dest: 'Default-Landscape~ipad.png', width: 1024, height: 768},
-        {dest: 'Default-Landscape@2x~ipad.png', width: 2048, height: 1536},
-        {dest: 'Default-568h@2x~iphone.png', width: 640, height: 1136},
-        {dest: 'Default-667h.png', width: 750, height: 1334},
-        {dest: 'Default-736h.png', width: 1242, height: 2208},
-        {dest: 'Default-Landscape-736h.png', width: 2208, height: 1242},
-        {dest: 'Default-2436h.png', width: 1125, height: 2436},
-        {dest: 'Default-Landscape-2436h.png', width: 2436, height: 1125}
+        { dest: 'Default~iphone.png', width: 320, height: 480 },
+        { dest: 'Default@2x~iphone.png', width: 640, height: 960 },
+        { dest: 'Default-Portrait~ipad.png', width: 768, height: 1024 },
+        { dest: 'Default-Portrait@2x~ipad.png', width: 1536, height: 2048 },
+        { dest: 'Default-Landscape~ipad.png', width: 1024, height: 768 },
+        { dest: 'Default-Landscape@2x~ipad.png', width: 2048, height: 1536 },
+        { dest: 'Default-568h@2x~iphone.png', width: 640, height: 1136 },
+        { dest: 'Default-667h.png', width: 750, height: 1334 },
+        { dest: 'Default-736h.png', width: 1242, height: 2208 },
+        { dest: 'Default-Landscape-736h.png', width: 2208, height: 1242 },
+        { dest: 'Default-2436h.png', width: 1125, height: 2436 },
+        { dest: 'Default-Landscape-2436h.png', width: 2436, height: 1125 }
     ];
 
     var pathMap = {};
@@ -497,7 +509,11 @@ function updateFileResources (cordovaProject, locations) {
         let targetPath = path.join(project.resources_dir, target);
         targetPath = path.relative(cordovaProject.root, targetPath);
 
-        project.xcode.addResourceFile(target);
+        if (!fs.existsSync(targetPath)) {
+            project.xcode.addResourceFile(target);
+        } else {
+            events.emit('warn', 'Overwriting existing resource file at ' + targetPath);
+        }
 
         resourceMap[targetPath] = src;
     });
@@ -535,7 +551,7 @@ function cleanFileResources (projectRoot, projectConfig, locations) {
         });
 
         FileUpdater.updatePaths(
-            resourceMap, {rootDir: projectRoot, all: true}, logFileOp);
+            resourceMap, { rootDir: projectRoot, all: true }, logFileOp);
 
         project.write();
     }
@@ -945,7 +961,7 @@ function processAccessAndAllowNavigationEntries (config) {
     var allow_navigations = config.getAllowNavigations();
 
     return allow_navigations
-        // we concat allow_navigations and accesses, after processing accesses
+    // we concat allow_navigations and accesses, after processing accesses
         .concat(accesses.map(function (obj) {
             // map accesses to a common key interface using 'href', not origin
             obj.href = obj.origin;
@@ -1002,7 +1018,8 @@ function processAccessAndAllowNavigationEntries (config) {
     null is returned if the URL cannot be parsed, or is to be skipped for ATS.
 */
 function parseWhitelistUrlForATS (url, options) {
-    var href = URL.parse(url);
+    // @todo 'url.parse' was deprecated since v11.0.0. Use 'url.URL' constructor instead.
+    var href = URL.parse(url); // eslint-disable-line
     var retObj = {};
     retObj.Hostname = href.hostname;
 
@@ -1035,7 +1052,9 @@ function parseWhitelistUrlForATS (url, options) {
         var subdomain1 = '/*.'; // wildcard in hostname
         var subdomain2 = '*://*.'; // wildcard in hostname and protocol
         var subdomain3 = '*://'; // wildcard in protocol only
-        if (href.pathname.indexOf(subdomain1) === 0) {
+        if (!href.pathname) {
+            return null;
+        } else if (href.pathname.indexOf(subdomain1) === 0) {
             retObj.NSIncludesSubdomains = true;
             retObj.Hostname = href.pathname.substring(subdomain1.length);
         } else if (href.pathname.indexOf(subdomain2) === 0) {
@@ -1144,7 +1163,7 @@ function default_CFBundleVersion (version) {
 // Converts cordova specific representation of target device to XCode value
 function parseTargetDevicePreference (value) {
     if (!value) return null;
-    var map = {'universal': '"1,2"', 'handset': '"1"', 'tablet': '"2"'};
+    var map = { 'universal': '"1,2"', 'handset': '"1"', 'tablet': '"2"' };
     if (map[value.toLowerCase()]) {
         return map[value.toLowerCase()];
     }

@@ -19,7 +19,7 @@
 
 var path = require('path');
 
-function MRTImage(filePath) {
+function MRTImage (filePath) {
     this.path = filePath;
     this.location = path.dirname(filePath);
     this.extension = path.extname(filePath);

@@ -87,4 +87,26 @@
 - (NSString*) _localStorageDatabasePath;
 
 - (void) _setLocalStorageDatabasePath:(NSString*) path;
+
+- (BOOL)requestAnimationFrameEnabled;
+- (void)setRequestAnimationFrameEnabled:(BOOL)enabled;
+
+- (BOOL)accelerated2dCanvasEnabled;
+- (void)setAccelerated2dCanvasEnabled:(BOOL)enabled;
+
+- (BOOL)acceleratedDrawingEnabled;
+- (void)setAcceleratedDrawingEnabled:(BOOL)enabled;
+
+- (BOOL)canvasUsesAcceleratedDrawing;
+- (void)setCanvasUsesAcceleratedDrawing:(BOOL)enabled;
+
+- (BOOL)acceleratedCompositingEnabled;
+- (void)setAcceleratedCompositingEnabled:(BOOL)enabled;
+
+- (BOOL)showDebugBorders;
+- (void)setShowDebugBorders:(BOOL)show;
+
+- (BOOL)showRepaintCounter;
+- (void)setShowRepaintCounter:(BOOL)show;
+
 @end

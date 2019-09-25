@@ -19,7 +19,6 @@
 
 #import <XCTest/XCTest.h>
 #import <Cordova/CDVViewController.h>
-#import <Cordova/CDVBridge.h>
 
 #import "CDVWebViewTest.h"
 

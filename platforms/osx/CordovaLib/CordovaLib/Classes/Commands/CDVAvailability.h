@@ -1,5 +1,5 @@
 /*
- Licensed to the Apache Software Foundation (ASF) under one
+    #define CORDOVA_VERSION_MIN_REQUIRED __CORDOVA_5_0_0
  or more contributor license agreements.  See the NOTICE file
  distributed with this work for additional information
  regarding copyright ownership.  The ASF licenses this file
@@ -53,3 +53,4 @@
 #else
     #define CDV_EXEC_LOG(...) do {} while (NO)
 #endif
+#define __CORDOVA_5_0_0 50000

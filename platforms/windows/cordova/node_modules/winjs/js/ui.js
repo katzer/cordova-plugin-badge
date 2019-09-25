@@ -12,7 +12,7 @@
             // amd
             define(["./base"], factory);
         } else {
-            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.0.winjs.2015.10.2 ui.js,StartTM');
+            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.2.winjs.2017.3.14 ui.js,StartTM');
             if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
                 // CommonJS
                 factory(require("./base"));
@@ -20,7 +20,7 @@
                 // No module system
                 factory(globalObject.WinJS);
             }
-            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.0.winjs.2015.10.2 ui.js,StopTM');
+            globalObject.msWriteProfilerMark && msWriteProfilerMark('WinJS.4.4 4.4.2.winjs.2017.3.14 ui.js,StopTM');
         }
     }(function (WinJS) {
 
@@ -7566,6 +7566,7 @@ define('WinJS/Vui',["require", "exports", "./Core/_Global", "./Utilities/_Elemen
     }
 });
 
+// Copyright (c) Microsoft Corporation.  All Rights Reserved. Licensed under the MIT License. See License.txt in the project root for license information.
 define('WinJS/_Accents',["require", "exports", "./Core/_Global", "./Core/_WinRT", "./Core/_Base", "./Core/_BaseUtils", './Utilities/_ElementUtilities'], function (require, exports, _Global, _WinRT, _Base, _BaseUtils, _ElementUtilities) {
     var Constants = {
         accentStyleId: "WinJSAccentsStyle",
@@ -20999,6 +21000,9 @@ define('WinJS/Controls/ListView',[
 
                 _forceLayoutImpl: function ListView_forceLayoutImpl(viewChange) {
                     var that = this;
+                    if (!this._versionManager) {
+                        return;
+                    }
                     this._versionManager.unlocked.then(function () {
                         that._writeProfilerMark("_forceLayoutImpl viewChange(" + viewChange + "),info");
 
@@ -21492,7 +21496,7 @@ define('WinJS/Controls/ListView',[
                         modeHandler("PointerUp"),
                         modeHandler("LostPointerCapture"),
                         modeHandler("MSHoldVisual", true),
-                        modeHandler("PointerCancel", true),
+                        modeHandler("PointerCancel"),
                         modeHandler("DragStart"),
                         modeHandler("DragOver"),
                         modeHandler("DragEnter"),
@@ -24770,25 +24774,34 @@ define('WinJS/Controls/FlipView/_PageManager',[
                         return;
                     }
 
-                    while (this._currentPage.element && this._getItemStart(this._currentPage) > newPos && this._currentPage.prev.element) {
+                    var movedPages = false;
+
+                    while (this._currentPage.element && this._currentPage.prev && this._currentPage.prev.element && newPos <= this._getItemStart(this._currentPage.prev)) {
                         this._currentPage = this._currentPage.prev;
                         this._fetchOnePrevious(bufferEnd.prev);
                         bufferEnd = bufferEnd.prev;
+                        movedPages = true;
                     }
 
-                    while (this._currentPage.element && this._itemEnd(this._currentPage) <= newPos && this._currentPage.next.element) {
+                    while (this._currentPage.element && this._currentPage.next && this._currentPage.next.element && newPos >= this._getItemStart(this._currentPage.next)) {
                         this._currentPage = this._currentPage.next;
                         this._fetchOneNext(bufferEnd.next);
                         bufferEnd = bufferEnd.next;
+                        movedPages = true;
                     }
+
                     this._setButtonStates();
                     this._checkElementVisibility(false);
                     this._blockTabs = true;
                     this._lastScrollPos = newPos;
+
                     if (this._currentPage.element) {
                         this._tabManager.childFocus = this._currentPage.element;
                     }
-                    this._setListEnds();
+
+                    if (movedPages) {
+                        this._ensureCentered(true);
+                    }
 
                     if (!this._manipulationState && this._viewportOnItemStart()) {
                         // Setup a timeout to invoke _itemSettledOn in cases where the scroll position is changed, and the control
@@ -29283,12 +29296,14 @@ define('WinJS/Controls/DatePicker',[
                         } else {
                             newDate = value;
                         }
-
-                        var oldDate = this._currentDate;
-                        if (oldDate !== newDate) {
-                            this._currentDate = newDate;
-                            this._updateDisplay();
+                        if (newDate) {
+                            var oldDate = this._currentDate;
+                            if (oldDate !== newDate) {
+                                this._currentDate = newDate;
+                                this._updateDisplay();
+                            }
                         }
+                        
                     }
                 },
 
@@ -35502,14 +35517,14 @@ define('WinJS/Controls/Pivot/_Pivot',["require", "exports", "../../Core/_Global"
             else {
                 this._surfaceElement.appendChild(item.element);
             }
+            this._headersState.render();
+            this._headersState.refreshHeadersState(true);
             if (index <= this.selectedIndex) {
                 this._selectedIndex++;
             }
             if (this._items.length === 1) {
                 this.selectedIndex = 0;
             }
-            this._headersState.render();
-            this._headersState.refreshHeadersState(true);
         };
         Pivot.prototype._handleItemMoved = function (ev) {
             // Move is triggered by binding list move() API.
@@ -38029,7 +38044,7 @@ define('WinJS/_LightDismissService',["require", "exports", './Application', './C
     //   Call WinJS.UI._LightDismissService._setDebug(true)
     //   This disables the "window blur" light dismiss cue. It enables you to move focus
     //   to the debugger or DOM explorer without causing the light dismissables to close.
-    // 
+    //
     // Example usage of _LightDismissService
     //   To implement a new light dismissable, you just need to:
     //     - Tell the service when you are shown
@@ -38042,25 +38057,25 @@ define('WinJS/_LightDismissService',["require", "exports", './Application', './C
     //   Here's what a basic light dismissable looks like in code:
     //
     //     var SimpleOverlay = _Base.Class.define(function (element) {
-    //         var that = this; 
-    //         this.element = element || document.createElement("div"); 
-    //         this.element.winControl = this; 
+    //         var that = this;
+    //         this.element = element || document.createElement("div");
+    //         this.element.winControl = this;
     //         _ElementUtilities.addClass(this.element, "simpleoverlay");
     //
-    //         this._dismissable = new _LightDismissService.LightDismissableElement({ 
+    //         this._dismissable = new _LightDismissService.LightDismissableElement({
     //             element: this.element,
     //             tabIndex: this.element.hasAttribute("tabIndex") ? this.element.tabIndex : -1,
-    //             onLightDismiss: function () { 
-    //                 that.hide(); 
-    //             } 
-    //         }); 
+    //             onLightDismiss: function () {
+    //                 that.hide();
+    //             }
+    //         });
     //     }, {
     //         show: function () {
-    //             _ElementUtilities.addClass(this.element, "simpleoverlay-shown"); 
+    //             _ElementUtilities.addClass(this.element, "simpleoverlay-shown");
     //             _LightDismissService.shown(this._dismissable);
     //         },
     //         hide: function () {
-    //             _ElementUtilities.removeClass(this.element, "simpleoverlay-shown"); 
+    //             _ElementUtilities.removeClass(this.element, "simpleoverlay-shown");
     //             _LightDismissService.hidden(this._dismissable);
     //         }
     //     });
@@ -38421,12 +38436,12 @@ define('WinJS/_LightDismissService',["require", "exports", './Application', './C
             var zIndexGap = 0;
             var lastUsedZIndex = baseZIndex + 1;
             this._clients.forEach(function (c, i) {
-                var currentZIndex = lastUsedZIndex + zIndexGap;
+                var currentZIndex = parseInt(lastUsedZIndex.toString()) + parseInt(zIndexGap.toString());
                 c.setZIndex("" + currentZIndex);
                 lastUsedZIndex = currentZIndex;
                 // count + 1 so that there's an unused zIndex between each pair of
                 // dismissables that can be used by the click eater.
-                zIndexGap = c.getZIndexCount() + 1;
+                zIndexGap = parseInt(c.getZIndexCount().toString()) + 1;
             });
             if (serviceActive) {
                 this._clickEaterEl.style.zIndex = "" + (lastUsedZIndex - 1);
@@ -40066,6 +40081,81 @@ define('WinJS/Controls/Flyout',[
 ], function flyoutInit(exports, _Global, _Base, _BaseUtils, _ErrorFromName, _Events, _Log, _Resources, _WriteProfilerMark, Animations, _Signal, _LightDismissService, _Dispose, _ElementUtilities, _KeyboardBehavior, _Hoverable, _Constants, _Overlay) {
     "use strict";
 
+    // Implementation details:
+    //
+    // The WinJS Flyout is a low policy control for popup ui and can host any arbitrary HTML that an app would like to display. Flyout derives from the private WinJS
+    // _Overlay class, and relies on _Overlay to create the hide and show animations as well as fire all beforeshow, aftershow, beforehide, afterhide.  Flyout also has a
+    // child class, WinJS Menu, which is a high policy control for popup ui and has many more restrictions on the content it can host.
+    //
+    // All of the following information pertains to both Flyouts and Menus, but for simplicity only the term flyout is used. Notes on Menu specific implementation details are
+    // covered separately in the Menu class.
+    //
+    // The responsibilities of the WinJS Flyout include:
+    //
+    //  - On screen positioning:
+    //      - A showing Flyout can be positioned in one of two ways
+    //          - Relative to another element, as specified by the flyout "anchor", "placement", and "alignment" properties and the flyout.show() method
+    //          - At a location specified by a mouse event, as specified in the parameters to the flyout.showAt(MouseEvent) method.
+    //      - A shown Flyout always wants to stay within bounds of the visual viewport in the users App. In IE11, Edge, Win 8.1 apps and Win 10 apps, the Flyout uses CSS
+    //        position: -ms-device-fixed; which will cause its top, left, bottom & right CSS properties be styled in relation to the visual viewport.
+    //      - In other browsers -ms-device-fixed positioning doesn't exist and the Flyout falls back to CSS position: fixed; which will cause its top, left, bottom & right
+    //        CSS properties be styled in relation to the layout viewport.
+    //      - See http://quirksmode.org/mobile/viewports2.html for more details on the difference between layout viewport and visual viewport.
+    //      - Being able to position the Flyout relative to the visual viewport is particularly important in windows 8.1 apps and Windows 10 apps (as opposed to the web),
+    //        because the Flyout is also concerned with getting out of the way of the Windows IHM (virtual keyboard). When the IHM starts to show or hide, the Flyout reacts to
+    //        a WinRT event, if the IHM would occlude part of a Flyout, the Flyout will move itself  up and out of the way, normally pinning its bottom edge to the top edge of
+    //        the IHM.
+    //      - Computing this is quite tricky as the IHM is a system pane and not actually in the DOM. Flyout uses the private _KeyboardInfo component to help calculate the top
+    //        and bottom coordinates of the "visible document" which is essentially the top and bottom of the visual viewport minus any IHM occlusion.
+    //      - The Flyout is not optimized for scenarios involving optical zoom. How and where the Flyout is affected when an optical zoom (pinch zoom) occurs will vary based on
+    //        the type of positioning being used for the environment.
+    //
+    //  - Rendering
+    //      - By default the flyout has a minimum height and minmium width defined in CSS, but no maximums, instead preferring to allow its element to  grow to the size of its
+    //        content.
+    //      - If a showing Flyout would be taller than the height of the "visible document" the flyout's show logic will temporarily constrain the max-height of the flyout
+    //        element to fit tightly within the upper and lower bounds of the "visible document", for as long as the flyout remains shown. While in this state the Flyout will
+    //        acquire a vertical scrollbar.
+    //
+    //  - Cascading Behavior:
+    //      - Starting in WinJS 4, flyouts, can be cascaded. Previous versions of WinJS did not allow more than one instance of a flyout to be shown at the same time.
+    //        Attempting to do so would first cause any other shown flyout to hide.
+    //      - Now any flyout can be shown as part of a cascade of other flyouts, allowing any other ancestor flyouts in the same cascade can remain open.
+    //      - The Flyout class relies on a private singleton _CascadeManager component to manage all flyouts in the current cascade. Here are some important implementation
+    //        details for _CascadeManager:
+    //          - The cascade is represented as a stack data structure and should only ever contain flyouts that are shown.
+    //          - If only one flyout is shown, it is considered to be in a cascade of length 1.
+    //          - A flyout "A" is considered to have an ancestor in the current cascade if flyout A's "anchor" property points to any element contained by ANY of the flyouts
+    //            in the current cascade, including the flyout elements themselves.
+    //          - Any time a flyout "A" transitions from hidden to shown, it is always added to the top of the stack.
+    //              - Only one cascade of flyouts can be shown at a time. If flyout "A" is about to be shown, and has no ancestors in the current cascade, all flyouts in the
+    //                current cascade must first be hidden and popped from the stack, then flyout "A" may be shown and pushed into the stack as the head flyout in a new cascade.
+    //              - If flyout "A" had an ancestor flyout in the cascade, flyout "A" will be put into the stack directly above its ancestor.
+    //              - If in the above scenario, the ancestor flyout already had other descendant flyouts on top of it in the stack, before flyout "A" can finish showing, all of
+    //                those flyouts are first popped off the stack and hidden,  then flyout "A" is pushed into the stack directly above its ancestor.
+    //          - Any time a flyout "A" is hidden, it is removed from the stack and no longer in the cascade. If that flyout also had any descendant flyouts in the cascade,
+    //            they are all hidden and removed from the stack as well. Any of flyout A's ancestor flyouts that were already in the cascade will remain there.
+    //
+    //  - Light Dismiss
+    //      - Cascades of flyouts are light dismissible, but an individual flyout is not.
+    //          - The WinJS Flyout implements a private LightDismissableLayer component to track focus and interpret light dismiss cues for all flyouts in the cascade.
+    //            The LightDismissableLayer is stored as a property on the _CascadeManager
+    //          - Normally when a lightdismissable control loses focus, it would trigger light dismiss, but that is not always the desired scenario for flyouts in the cascade.
+    //              - When focus moves from any Flyout in the cascade, to an element outside of the cascade, all flyouts in the cascade should light dismiss.
+    //              - When focus moves from an ancestor flyout "A" in the cascade, to descendant flyout "B" also in the cascade, no flyouts should light dismiss. A common
+    //                scenario for this is when flyout B first shows itself, since flyouts always take focus immediately after showing.
+    //              - When flyout "A" receives focus, all of A's descendant flyouts in the cascade should light dismiss. A common scenario for this is when a user clicks on an
+    //                ancestor flyout in the cascade, all descendant flyouts will close. WinJS Menu implements one exception to this rule where sometimes the immediate
+    //                descendant of the ancestor flyout would be allowed to remain open.
+    //          - The LightDismissibleLayer helps WinJS _LightDismissService dynamically manage the z-indices of all flyouts in the cascade. Flyouts as light dismissable
+    //            overlays are subject to the same stacking context pitfalls as any other light dismissible overlay:
+    //            https://github.com/winjs/winjs/wiki/Dismissables-and-Stacking-Contexts and therefore every flyout should always be defined as a direct child of the
+    //            <body> element.
+    //      - Debugging Tip: Light dismiss can make debugging shown flyouts tricky. A good idea is to temporarily suspend the light dismiss cue that triggers when clicking
+    //        outside of the current window. This can be achieved by executing the following code in the JavaScript console window:
+    //        "WinJS.UI._LightDismissService._setDebug(true)"
+
+
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
         /// <field>
         /// <summary locid="WinJS.UI.Flyout">
@@ -40486,7 +40576,7 @@ define('WinJS/Controls/Flyout',[
                         // Horizontal auto or autohorizontal placement will be positioned to the left of the anchor if room, otherwise to the right.
                         //   - this is because right handed users would be more likely to obscure a flyout on the right of the anchor.
                         // All three auto placements will add a vertical scrollbar if necessary.
-                        // 
+                        //
 
                         var anchorBorderBox;
 
@@ -40523,9 +40613,9 @@ define('WinJS/Controls/Flyout',[
 
                         // If the anchor is centered vertically, would the flyout fit above it?
                         function fitsVerticallyWithCenteredAnchor(anchorBorderBox, flyoutMeasurements) {
-                            // Returns true if the flyout would always fit at least top 
-                            // or bottom of its anchor, regardless of the position of the anchor, 
-                            // as long as the anchor never changed its height, nor did the height of 
+                            // Returns true if the flyout would always fit at least top
+                            // or bottom of its anchor, regardless of the position of the anchor,
+                            // as long as the anchor never changed its height, nor did the height of
                             // the visualViewport change.
                             return ((_Overlay._Overlay._keyboardInfo._visibleDocHeight - anchorBorderBox.height) / 2) >= flyoutMeasurements.totalHeight;
                         }
@@ -40682,7 +40772,7 @@ define('WinJS/Controls/Flyout',[
                                 // When there is enough room to align a subMenu to either the top or the bottom of its
                                 // anchor element, the subMenu prefers to be top aligned.
                                 // FALLBACK:
-                                // When there is enough room to bottom align a subMenu but not enough room to top align it, 
+                                // When there is enough room to bottom align a subMenu but not enough room to top align it,
                                 // then the subMenu will align to the bottom of its anchor element.
                                 // LASTRESORT:
                                 // When there is not enough room to top align or bottom align the subMenu to its anchor,
@@ -40691,10 +40781,10 @@ define('WinJS/Controls/Flyout',[
                                     centerVertically(anchorBorderBox, flyoutMeasurements);
                                 }
 
-                                // Cascading Menus should overlap their ancestor menu horizontally by 4 pixels and we have a 
-                                // unit test to verify that behavior. Because we don't have access to the ancestor flyout we 
-                                // need to specify the overlap in terms of our anchor element. There is a 1px border around 
-                                // the menu that contains our anchor we need to overlap our anchor by 3px to ensure that we 
+                                // Cascading Menus should overlap their ancestor menu horizontally by 4 pixels and we have a
+                                // unit test to verify that behavior. Because we don't have access to the ancestor flyout we
+                                // need to specify the overlap in terms of our anchor element. There is a 1px border around
+                                // the menu that contains our anchor we need to overlap our anchor by 3px to ensure that we
                                 // overlap the containing Menu by 4px.
                                 var horizontalOverlap = 3;
 
@@ -41035,7 +41125,7 @@ define('WinJS/Controls/Flyout',[
                 /// Shows the Flyout, if hidden, at the specified (x,y) coordinates.
                 /// </summary>
                 /// <param name="coordinates" type="Object" locid="WinJS.UI.Flyout.showAt_p:coordinates">
-                /// An Object specifying the (X,Y) position to render the top left corner of the Flyout. commands to show. 
+                /// An Object specifying the (X,Y) position to render the top left corner of the Flyout. commands to show.
                 /// The coordinates object may be a MouseEventObj, or an Object in the shape of {x:number, y:number}.
                 /// </param>
                 /// </signature>
@@ -41080,13 +41170,13 @@ define('WinJS/Controls/Flyout',[
                         return;
                     }
 
-                    // If we're animating (eg baseShow is going to fail), or the cascadeManager is in the middle of 
+                    // If we're animating (eg baseShow is going to fail), or the cascadeManager is in the middle of
                     // updating the cascade, then don't mess up our current state.
-                    // Add this flyout to the correct position in the cascadingStack, first collapsing flyouts 
+                    // Add this flyout to the correct position in the cascadingStack, first collapsing flyouts
                     // in the current stack that are not anchored ancestors to this flyout.
                     Flyout._cascadeManager.appendFlyout(this);
 
-                    // If we're animating (eg baseShow is going to fail), or the cascadeManager is in the 
+                    // If we're animating (eg baseShow is going to fail), or the cascadeManager is in the
                     // middle of updating the cascade, then we have to try again later.
                     if (this._element.winAnimating) {
                         // Queue us up to wait for the current animation to finish.
@@ -41338,15 +41428,17 @@ define('WinJS/Controls/Flyout',[
                         return;
                     }
 
-                    // May need to adjust top by viewport offset
-                    if (this._currentPosition.top < 0) {
-                        // Need to attach to bottom
-                        this._element.style.bottom = _Overlay._Overlay._keyboardInfo._visibleDocBottomOffset + "px";
-                        this._element.style.top = "auto";
-                    } else {
-                        // Normal, attach to top
-                        this._element.style.top = this._currentPosition.top + "px";
-                        this._element.style.bottom = "auto";
+                    if (typeof this._currentPosition !== 'undefined') {
+                        // May need to adjust top by viewport offset
+                        if (this._currentPosition.top < 0) {
+                            // Need to attach to bottom
+                            this._element.style.bottom = _Overlay._Overlay._keyboardInfo._visibleDocBottomOffset + "px";
+                            this._element.style.top = "auto";
+                        } else {
+                            // Normal, attach to top
+                            this._element.style.top = this._currentPosition.top + "px";
+                            this._element.style.bottom = "auto";
+                        }
                     }
                 },
 
@@ -41357,7 +41449,7 @@ define('WinJS/Controls/Flyout',[
                     } else {
                         this._element.style.opacity = 1;
                         this._element.style.visibility = "visible";
-                        return Animations.showPopup(this._element, this._currentPosition.animOffset);
+                        return Animations.showPopup(this._element, (typeof this._currentPosition !== 'undefined') ? this._currentPosition.animOffset : 0);
                     }
                 },
 
@@ -41366,7 +41458,7 @@ define('WinJS/Controls/Flyout',[
                         return this._baseAnimateOut();
                     } else {
                         this._element.style.opacity = 0;
-                        return Animations.hidePopup(this._element, this._currentPosition.animOffset);
+                        return Animations.hidePopup(this._element, (typeof this._currentPosition !== 'undefined') ? this._currentPosition.animOffset : 0);
                     }
                 },
 
@@ -41737,6 +41829,8 @@ define('WinJS/Controls/AppBar/_Icon',[
                     "fontincrease",
                     "fontsize",
                     "cellphone",
+                    "print",
+                    "share",
                     "reshare",
                     "tag",
                     "repeatone",
@@ -42027,9 +42121,6 @@ define('WinJS/Controls/AppBar/_Command',[
 
                         // Update aria-label
                         this._element.setAttribute("aria-label", this.label);
-
-                        // Check if we need to suppress the tooltip
-                        this._testIdenticalTooltip();
                     }
                 },
 
@@ -42172,9 +42263,6 @@ define('WinJS/Controls/AppBar/_Command',[
                         if (this._tooltipControl) {
                             this._tooltipControl.innerHTML = this._tooltip;
                         }
-
-                        // Check if we need to suppress the tooltip
-                        this._testIdenticalTooltip();
                     }
                 },
 
@@ -42337,11 +42425,6 @@ define('WinJS/Controls/AppBar/_Command',[
                     }
                 },
 
-                // Private
-                _testIdenticalTooltip: function AppBarCommand_testIdenticalToolTip() {
-                    this._hideIfFullSize = (this._label === this._tooltip);
-                },
-
                 _createContent: function AppBarCommand_createContent() {
                     // Make sure there's an element
                     if (!this._element) {
@@ -42416,12 +42499,6 @@ define('WinJS/Controls/AppBar/_Command',[
                     // Attach a tooltip - Note: we're going to stomp on it's setControl so we don't have to make another DOM element to hang it off of.
                     // This private _tooltipControl attribute is used by other pieces, changing the name could break them.
                     this._tooltipControl = new Tooltip.Tooltip(this._element);
-                    var that = this;
-                    this._tooltipControl.addEventListener("beforeopen", function () {
-                        if (that._hideIfFullSize && !_Overlay._Overlay._getParentControlUsingClassName(that._element.parentElement, _Constants.reducedClass)) {
-                            that._tooltipControl.close();
-                        }
-                    }, false);
                 },
 
                 _setSection: function AppBarCommand_setSection(section) {
@@ -42568,8 +42645,9 @@ define('WinJS/Controls/Menu/_Command',[
     '../../Utilities/_Control',
     '../../Utilities/_ElementUtilities',
     '../_LegacyAppBar/_Constants',
-    '../Flyout/_Overlay'
-], function menuCommandInit(exports, _Global, _Base, _ErrorFromName, _Resources, Promise, _Control, _ElementUtilities, _Constants, _Overlay) {
+    '../Flyout/_Overlay',
+    '../Tooltip'
+], function menuCommandInit(exports, _Global, _Base, _ErrorFromName, _Resources, Promise, _Control, _ElementUtilities, _Constants, _Overlay, Tooltip) {
     "use strict";
 
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
@@ -42814,6 +42892,21 @@ define('WinJS/Controls/Menu/_Command',[
                     }
                 },
 
+                /// <field type="String" locid="WinJS.UI.AppBarCommand.tooltip" helpKeyword="WinJS.UI.AppBarCommand.tooltip">Gets or sets the tooltip text of the AppBarCommand.</field>
+                tooltip: {
+                    get: function () {
+                        return this._tooltip;
+                    },
+                    set: function (value) {
+                        this._tooltip = value;
+
+                        // Update already-constructed tooltips. Separators and content commands won't have these:
+                        if (this._tooltipControl) {
+                            this._tooltipControl.innerHTML = this._tooltip;
+                        }
+                    }
+                },
+
                 /// <field type="Boolean" locid="WinJS.UI.MenuCommand.selected" helpKeyword="WinJS.UI.MenuCommand.selected">
                 /// Gets or sets the selected state of a toggle button. This property is true if the toggle button is selected; otherwise, it's false.
                 /// <compatibleWith platform="Windows" minVersion="8.0"/>
@@ -42914,6 +43007,10 @@ define('WinJS/Controls/Menu/_Command',[
                         return;
                     }
                     this._disposed = true;
+                    
+                    if (this._tooltipControl) {
+                        this._tooltipControl.dispose();
+                    }
                 },
 
                 addEventListener: function (type, listener, useCapture) {
@@ -42988,6 +43085,9 @@ define('WinJS/Controls/Menu/_Command',[
                     this._labelSpan = this._toggleSpan.nextElementSibling;
                     this._flyoutSpan = this._labelSpan.nextElementSibling;
 
+                    // Attach a tooltip - Note: we're going to stomp on it's setControl so we don't have to make another DOM element to hang it off of.
+                    // This private _tooltipControl attribute is used by other pieces, changing the name could break them.
+                    this._tooltipControl = new Tooltip.Tooltip(this._element);
                 },
                 _sendEvent: function MenuCommand_sendEvent(eventName, detail) {
                     if (!this._disposed) {
@@ -44769,6 +44869,7 @@ define('WinJS/Controls/CommandingSurface/_CommandingSurface',["require", "export
                 type: (originalCommand.type === _Constants.typeContent ? _Constants.typeFlyout : originalCommand.type) || _Constants.typeButton,
                 disabled: originalCommand.disabled,
                 flyout: originalCommand.flyout,
+                tooltip: originalCommand.tooltip,
                 beforeInvoke: function () {
                     // Save the command that was selected
                     _this._chosenCommand = (menuCommand["_originalICommand"]);
@@ -44875,6 +44976,70 @@ define('require-style!less/styles-toolbar',[],function(){});
 define('WinJS/Controls/ToolBar/_ToolBar',["require", "exports", "../../Core/_Base", "../ToolBar/_Constants", "../CommandingSurface", "../../Utilities/_Control", "../../Utilities/_Dispose", "../../Utilities/_ElementUtilities", "../../Core/_ErrorFromName", '../../Core/_Events', "../../Core/_Global", '../../_LightDismissService', "../../Core/_Resources", '../../Utilities/_OpenCloseMachine', "../../Core/_WriteProfilerMark"], function (require, exports, _Base, _Constants, _CommandingSurface, _Control, _Dispose, _ElementUtilities, _ErrorFromName, _Events, _Global, _LightDismissService, _Resources, _OpenCloseMachine, _WriteProfilerMark) {
     require(["require-style!less/styles-toolbar"]);
     "use strict";
+    // The WinJS ToolBar is a specialized UI wrapper for the private _CommandingSurface UI component. The _CommandingSurface is responsible for rendering 
+    // opened and closed states, knowing how to create the open and close animations, laying out commands, creating command hide/show animations and 
+    // keyboard navigation across commands. The WinJS ToolBar is very similar to the WinJS AppBar, however the ToolBar is meant to be positioned in line 
+    // with your app content whereas the AppBar is meant to overlay your app content.
+    //
+    // The responsibilities of the ToolBar include:
+    //
+    //    - Seamlessly hosting the _CommandingSurface
+    //        - From an end user perspective, there should be no visual distinction between where the ToolBar ends and the _CommandingSurface begins.
+    //            - ToolBar wants to rely on the _CommandingSurface to do as much of the rendering as possible. The ToolBar relies on the _CommandingSurface to render its opened 
+    //              and closed states-- which defines the overall height of the ToolBar and CommandingSurface elements. The ToolBar has no policy or CSS styles regarding its own 
+    //              height and ToolBar takes advantage of the default behavior of its DIV element which is to always grow or shrink to match the height of its content.
+    //        - From an end developer perspective, the _CommandingSurface should be abstracted as an implementation detail of the ToolBar as much as possible.
+    //            - Developers should never have to interact with the CommandingSurface directly.The ToolBar exposes the majority of _CommandingSurface functionality through its 
+    //              own APIs
+    //            - There are some  HTML elements inside of the _CommandingSurface's DOM that a developer might like to style. After the _CommandingSurface has been instantiated 
+    //              and added to the ToolBar DOM, the ToolBar will inject its own "toolbar" specific class-names onto these elements to make them more discoverable to developers.
+    //            - Example of developer styling guidelines https://msdn.microsoft.com/en-us/library/windows/apps/jj839733.asp
+    //
+    //    - Open direction:
+    //        - The ToolBar and its _CommandingSurface component can open upwards or downwards.Because there is no policy on where the ToolBar can be placed in an App, the ToolBar 
+    //          always wants to avoid opening in a direction that would cause any of its content to clip outside of the screen.
+    //        - When the ToolBar is opening, it will always choose to expand in the direction(up or down) that currently has the most available space between the edge of the 
+    //          ToolBar element and the corresponding edge of the visual viewport.
+    //        - This means that the a ToolBar near the bottom of the page will open upwards, but if the page is scrolled down such that the ToolBar is now near the top, the next
+    //          time the ToolBar is opened it will open downwards.
+    //
+    //    - Light dismiss
+    //        - The ToolBar is a light dismissible when opened. This means that the ToolBar is closed thru a variety of cues such as tapping anywhere outside of it, 
+    //          pressing the escape key, and resizing the window.ToolBar relies on the _LightDismissService component for most of this functionality.
+    //          The only pieces the ToolBar is responsible for are:
+    //            - Describing what happens when a light dismiss is triggered on the ToolBar .
+    //            - Describing how the ToolBar should take / restore focus when it becomes the topmost light dismissible in the light dismiss stack
+    //        - Debugging Tip: Light dismiss can make debugging an opened ToolBar tricky.A good idea is to temporarily suspend the light dismiss cue that triggers when clicking
+    //          outside of the current window.This can be achieved by executing the following code in the JavaScript console window: "WinJS.UI._LightDismissService._setDebug(true)"
+    //
+    //    - Inline element when closed, overlay when opened:
+    //        - The design of the toolbar called for it to be an control that developers can place inline with their other app content.When the ToolBar is closed it exists as a an
+    //          element in your app, next to other app content and take up space in the flow of the document.
+    //        - However, when the ToolBar opens, its vertical height will increase.Normally the change in height of an inline element will cause all of the other elements below the
+    //          expanding element to move out of the way.Rather than push the rest of the app content down when opening, the design of the ToolBar called for it to overlay that content other content, while still taking up the same vertical space in the document as it did when closed.
+    //        - The implementation of this feature is very complicated:
+    //            - The only way one element can overlay another is to remove it from the flow of the document and give it a new CSS positioning like "absolute" or "fixed".
+    //            - However, simply removing the ToolBar element from the document to make it an overlay, would leave behind a gap in the document that all the neighboring elements 
+    //              would try to fill by shifting over, leading to a jarring reflow of many elements whenever the ToolBar was opened.This was also undesirable
+    //            - The final solution is as follows
+    //                - Create a transparent placeholder element that is the exact same height and width as the closed ToolBar element.
+    //                - Removing the ToolBar element from its place in the document while simultaneously inserting the placeholder element into the same spot the ToolBar element was 
+    //                  just removed from.
+    //                - Inserting the ToolBar element as a direct child of the body and giving it css position: fixed; 
+    //                  We insert it directly into the body element because while opened, ToolBar is a Light dismissible overlay and is subject to the same stacking context pitfalls 
+    //                  as any other light dismissible. https://github.com/winjs/winjs/wiki/Dismissables-and-Stacking-Contexts
+    //                - Reposition the ToolBar element to be exactly overlaid on top of the placeholder element.
+    //                - Render the ToolBar as opened, via the _CommandingSurface API, increasing the overall height of the ToolBar.
+    //            - Closing the ToolBar is basically the same steps but in reverse.
+    //        - One limitation to this implementation is that developers may not position the ToolBar element themselves directly via the CSS "position" or "float" properties.
+    //            - This is because The ToolBar expects its element to be in the flow of the document when closed, and the placeholder element would not receive these same styles
+    //              when inserted to replace the ToolBar element.
+    //            - An easy workaround for developers is to wrap the ToolBar into another DIV element that they may style and position however they'd like.
+    //
+    //        - Responding to the IHM:
+    //            - If the ToolBar is opened when the IHM is shown, it will close itself.This is to avoid scenarios where the IHM totally occludes the opened ToolBar. If the ToolBar 
+    //              did not close itself, then the next mouse or touch input within the App wouldn't appear to do anything since it would just go to closing the light dismissible 
+    //              ToolBar anyway.
     var strings = {
         get ariaLabel() {
             return _Resources._getWinJSString("ui/toolbarAriaLabel").value;
@@ -47429,6 +47594,31 @@ define('WinJS/Controls/Menu',[
 ], function menuInit(exports, _Global, _Base, _BaseUtils, _ErrorFromName, _Resources, _WriteProfilerMark, Promise, _ElementUtilities, _Hoverable, _KeyboardBehavior, _Constants, Flyout, _Overlay, _Command) {
     "use strict";
     
+    // Implementation details:
+    //
+    // WinJS Menu is a child class of WinJS Flyout. Unlike flyouts, menus have a lot of policy on the content they can contain. flyouts can host any arbitrary HTML content,
+    // but menus can only host WinJS MenuCommand objects. Menu relies on its flyout base class for on screen positioning, light dismiss,  and cascading behavior.
+    //
+    // The responsibilities of the WinJS Menu include:
+    //  - Rendering and Laying out commands:
+    //      - MenuCommands are displayed in DOM order. 
+    //      - Menu will add and remove CSS classes on itself depending on whether or it contains any visible MenuCommands whose type property is set to either "toggle" or 
+    //        "flyout".
+    //      - The presence or absence of these command types in a Menu will affect the total width of all commands in the Menu as well as the horizontal alignment of their 
+    //        labels.
+    //      - Menu relies on logic defined in its _Overlay ancestor class to animate the hiding and showing of commands.
+    //	- Menu spacing for last input type: 
+    //      - The vertical padding within MenuCommands in a Menu will vary based on the last input type.
+    //      - When a menu is shown, it will check the last known input type, which is stored in the "inputType" property on the static Flyout._cascadeManager object.
+    //          - If the inputType was "touch" the vertical padding in all commands in the menu will be increased to enable a more touch friendly UI.
+    //          - If the input Type was "mouse" or "keyboard" the vertical padding in all commands in the menu will be decreased for space efficiency
+    //	- Arrow key navigation between commands.
+    //      - Menu listens to keydown events in order to redirect focus to the next/previous command whenever the Up and down arrows keys are pressed.
+    //	- Mouse over event. 
+    //      - Menu all detects mouseover events and if a mouseover occurs over one of its commands, the menu moves focus to that command.
+    //      - If a command has type === "flyout", and that command is hovered over for few hundred milliseconds, the Menu will invoke the "flyout" typed command, causing its
+    //        sub flyout to show in the cascade.
+
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
         /// <field>
         /// <summary locid="WinJS.UI.Menu">Represents a menu flyout for displaying commands.</summary>
@@ -48116,6 +48306,60 @@ define('require-style!less/styles-autosuggestbox',[],function(){});
 
 define('require-style!less/colors-autosuggestbox',[],function(){});
 // Copyright (c) Microsoft Corporation.  All Rights Reserved. Licensed under the MIT License. See License.txt in the project root for license information.
+
+// High Level
+//	- Displays a suggestions list below the input box
+//		- Simple suggestions
+//		- Suggestion results with icons
+//		- Separators
+//	- Maintains a history of previous search queries
+
+//Emphasis on Light-Weight
+// The ASB is a very policy-light control that just displays a list of suggestions
+// below the input box. It does NOT filter the suggestions based on the current input,
+// or sorts the suggestions in any way. It is entirely up to the app developer what and
+// what not to display in the suggestions list, given the current input query.
+
+// Anatomy
+// ASB
+//	- Input box
+//	- Suggestion List wrapper div
+//		? Repeater
+
+// Fake focus and keyboard navigation
+// When the selection list with more than one item is displayed, the user can arrow up
+// and down the list of suggestions which visually mimics focus movement, however, it
+// is not. The focus is always maintained on the input box itself and the control
+// programmatically maintains and styles the "current selected suggestion" indicating
+// what is currently selected.
+
+//IME support
+// The ASB has special IME support in IE/Edge, whenever the msInputContext function is
+// available. The ASB will reposition the suggestion list to account for the space the
+// IME takes up.
+
+//SearchBox
+//History
+// A bit of history first. The SearchBox control predates the ASB control, yet the
+// SearchBox derives from the ASB implementation. The reason is that the SearchBox
+// originally solved a very specific scenario, which is Windows 8 Search contract
+// integration; both, the contract and the control have since been deprecated. Going
+// forward, a new Search-like control was needed, which is the AutoSuggestBox and its
+// specifications are identical to the SearchBox, minus the Search contract integration.
+// So the creation of the ASB was mostly a deletion of code from the SearchBox. Finally,
+// for compatibility's sake, the SearchBox control and all of its original API needed to
+// still exist which is why the SearchBox control simply derives from the ASB and adding
+// all the deleted stuff back on top.
+
+//Features
+//	- FocusOnKeyboardInput (Type-To-Search)
+//    This feature assumes that the SearchBox is a singleton (again, legacy reasons) and
+//    kidnaps every typed key. It first moves focus into the SearchBox, so the typed key
+//    appears in the SearchBox.
+//	- Buddy Icon (The magnifier button next to the input)
+//	  The SearchBox has a magnifier button next to the input that, when clicked, is
+//    equivalent to clicking on a suggestion or hitting the enter key.
+
 define('WinJS/Controls/AutoSuggestBox',[
     "exports",
     "../Core/_Global",
@@ -55059,6 +55303,91 @@ define('require-style!less/styles-appbar',[],function(){});
 define('WinJS/Controls/AppBar/_AppBar',["require", "exports", "../../Core/_Base", "../AppBar/_Constants", "../CommandingSurface", "../../Utilities/_Control", "../../Utilities/_Dispose", "../../Utilities/_ElementUtilities", "../../Core/_ErrorFromName", '../../Core/_Events', "../../Core/_Global", '../../Utilities/_KeyboardInfo', '../../_LightDismissService', '../../Promise', "../../Core/_Resources", '../../Utilities/_OpenCloseMachine', "../../Core/_WriteProfilerMark"], function (require, exports, _Base, _Constants, _CommandingSurface, _Control, _Dispose, _ElementUtilities, _ErrorFromName, _Events, _Global, _KeyboardInfo, _LightDismissService, Promise, _Resources, _OpenCloseMachine, _WriteProfilerMark) {
     require(["require-style!less/styles-appbar"]);
     "use strict";
+    // Implementation Details:
+    //
+    // The WinJS AppBar is a specialized UI wrapper for the private _CommandingSurface UI component. // The AppBar relies on the _CommandingSurface for rendering 
+    // opened and closed states, knowing how to create the open and close animations, laying out commands, creating command hide/show animations and keyboard 
+    // navigation across commands. See the _CommandingSurface implementation details for more information on how that component operates.
+    //
+    // The responsibilities of the AppBar include:
+    //
+    //  - Hosting the _CommandingSurface
+    //      - From an end user perspective, there should be no visual distinction between where the AppBar ends and the _CommandingSurface begins.
+    //          - AppBar wants to rely on the _CommandingSurface to do as much of the rendering as possible.The AppBar relies on the _CommandingSurface to render its opened and 
+    //            closed states -- which defines the overall height of the AppBar and CommandingSurface elements. The AppBar has no policy or CSS styles regarding its own height 
+    //            and instead takes advantage of the default behavior of its DIV element which is to always grow or shrink to match the height of its content.
+    //      - From an end developer perspective, the _CommandingSurface should be abstracted as an implementation detail of the AppBar as much as possible.
+    //          - Developers should never have to interact with the CommandingSurface directly.The AppBar exposes the majority of _CommandingSurface functionality through its own APIs
+    //          - There are some  HTML elements inside of the _CommandingSurface's DOM that a developer might like to style. After the _CommandingSurface has been instantiated and
+    //            added to the AppBar DOM, the AppBar will inject its own "appbar" specific class-names onto these elements to make them more discoverable to developers.
+    //          - Example of developer styling guidelines https://msdn.microsoft.com/en-us/library/windows/apps/jj839733.aspx
+    //
+    //  - Light dismiss
+    //      - The AppBar is a light dismissable when opened.This means that the AppBar is closed thru a variety of cues such as tapping anywhere outside of it, pressing the escape 
+    //        key, and resizing the window.AppBar relies on the _LightDismissService component for most of this functionality.The only pieces the AppBar is responsible for are:
+    //          - Describing what happens when a light dismiss is triggered on the AppBar.
+    //          - Describing how the AppBar should take / restore focus when it becomes the topmost light dismissible in the light dismiss stack.
+    //      - Debugging Tip: Light dismiss can make debugging an opened AppBar tricky.A good idea is to temporarily suspend the light dismiss cue that triggers when clicking 
+    //        outside of the current window.This can be achieved by executing the following code in the JavaScript console window: "WinJS.UI._LightDismissService._setDebug(true)"
+    //
+    //  - Configuring a state machine for open / close state management:
+    //      - The AppBar and CommandingSurface share a private _OpenCloseMachine component to manage their states.The contract is:
+    //          - The AppBar Constructor is responsible for the instantiation and configuration of the _OpenCloseMachine.
+    //              - AppBar constructor configures the _OpenCloseMachine to always fire events on the AppBar element directly.
+    //              - AppBar constructor specifies the callbacks that the _OpenCloseMachine should use to setup and execute the _CommandingSurface open and close animations after
+    //                the _OpenCloseMachine determines a state transition has completed.
+    //              - AppBar constructor passes the _OpenCloseMachine as an argument to the _CommandingSurface constructor and doesn�t keep any references to it.
+    //          - _CommandingSurface is responsible for both, continued communication with, and final the cleanup of, the _OpenCloseMachine
+    //              - _CommandingSurface expects a reference to an _OpenCloseMachine in its constructor options.
+    //              - Only the _CommandingSurface holds onto a reference to the _OpenCloseMachine, no other object should communicate with the _OpenCloseMachine directly after 
+    //                initialization.
+    //              - _CommandingSurface is responsible for telling _OpenCloseMachine when a state change or re - render is requested.A simple example of this is  the 
+    //                _CommandingSurface.open() method.
+    //          - _OpenCloseMachine is responsible for everything else including:
+    //              - Ensuring that the animations callbacks get run at the appropriate times.
+    //              - Enforcing the rules of the current state and ensuring the right thing happens when an _OpenCloseMachine method is called.For example:
+    //                  - open is called while the control is already open
+    //                  - close is called while the control is in the middle of opening
+    //                  - dispose is called within a beforeopen event handler
+    //              - Firing all the beforeopen, afteropen, beforeclose, and afterclose events for the AppBar.
+    //
+    //  - Rendering with Update DOM.
+    //      - AppBar follows the Update DOM pattern for rendering.For more information about this pattern, see:     https://github.com/winjs/winjs/wiki/Update-DOM-Pattern
+    //      - Note that the AppBar reads from the DOM when it needs to determine its position relative to the top or bottom edge of the visible document and when measuring its 
+    //        closed height to help the _CommandingSurface generate accurate open / close animations.When possible, it caches this information and reads from the cache instead of 
+    //        the DOM. This minimizes the performance cost.
+    //      - Outside of updateDom, AppBar writes to the DOM in a couple of places:
+    //          - The initializeDom function runs during construction and creates the initial version of the AppBar's DOM
+    //          - Immediately before and after executing _CommandingSurface open and close animations, inside of the onOpen and onClose callbacks that the AppBar gives to the 
+    //            _OpenCloseMachine.There is a rendering bug in Edge when performing the _CommandingSurface's animation if a parent element is using CSS position: -ms-device-fixed; 
+    //            AppBar has to work around this by temporarily switching to CSS position: fixed; and converting its physical location into layout viewport coordinates for the 
+    //            duration of the Animation only.
+    //
+    //  - Overlaying App Content
+    //      - AppBar is an overlay and should occlude other app content in the body when opened or closed.However, AppBar should not occlude any other WinJS light dismissible 
+    //        control when it is closed.
+    //      - AppBar has a default starting z - index that was chosen to be very high but still slightly smaller than the starting z - index for light dismissible controls.
+    //      - The WinJS _LightDismissService dynamically manages the z - indices of active light dismissible controls in the light dismiss stack.AppBar is also an active light
+    //        dismissible when opened, and it is expected that the _LightDismissService will overwrite its z - index to an appropriate higher value while the AppBar is opened.
+    //        AppBar is subject to the same stacking context pitfalls as any other light dismissible: https://github.com/winjs/winjs/wiki/Dismissables-and-Stacking-Contexts and 
+    //        should always be defined as a direct child of the < body>
+    //
+    //  - Positioning itself along the top or bottom edge of the App.
+    //      - The AppBar always wants to stick to the top or bottom edge of the visual viewport in the users App.Which edge it chooses can be configured by the AppBar.placement 
+    //        property.
+    //      - In IE11, Edge, Win 8.1 apps and Win 10 apps, the AppBar uses CSS position: -ms - device - fixed; which will cause its top, left, bottom & right CSS properties be 
+    //        styled in relation to the visual viewport.
+    //      - In other browsers - ms - device - fixed positioning doesn't exist and the AppBar falls back to CSS position: fixed; which will cause its top, left, bottom & right 
+    //        CSS properties be styled in relation to the layout viewport.
+    //      - See http://quirksmode.org/mobile/viewports2.html for more details on the difference between layout viewport and visual viewport.
+    //      - Being able to position the AppBar relative to the visual viewport is particularly important in windows 8.1 apps and Windows 10 apps(as opposed to the web), because
+    //        the AppBar is also concerned with getting out of the way of the Windows IHM(virtual keyboard).When the IHM starts to show or hide, the AppBar reacts to a WinRT event, 
+    //        if the IHM would occlude the bottom edge of the visual viewport, and the AppBar.placement is set to "bottom", the AppBar will move itself to bottom align with the top 
+    //        edge of the IHM.
+    //      - Computing this is quite tricky as the IHM is a system pane and not actually in the DOM.AppBar uses the private _KeyboardInfo component to help calculate the top and 
+    //        bottom coordinates of the "visible document" which is essentially the top and bottom of the visual viewport minus any IHM occlusion.
+    //      - The AppBar is not optimized for scenarios involving optical zoom.How and where the AppBar is affected when an optical zoom(pinch zoom) occurs will vary based on the
+    //        type of positioning being used for the environment.
     var keyboardInfo = _KeyboardInfo._KeyboardInfo;
     var strings = {
         get ariaLabel() {
@@ -55455,9 +55784,13 @@ define('WinJS/Controls/AppBar/_AppBar',["require", "exports", "../../Core/_Base"
             return keyboardInfo._visible && !keyboardInfo._isResized;
         };
         AppBar.prototype._handleHidingKeyboard = function () {
-            // Make sure AppBar has the correct offsets since it could have been displaced by the IHM.
-            this._adjustedOffsets = this._computeAdjustedOffsets();
-            this._commandingSurface.deferredDomUpate();
+            var _this = this;
+            var duration = keyboardInfo._animationShowLength + keyboardInfo._scrollTimeout;
+            Promise.timeout(duration).then(function () {
+                // Make sure AppBar has the correct offsets since it could have been displaced by the IHM.
+                _this._adjustedOffsets = _this._computeAdjustedOffsets();
+                _this._commandingSurface.deferredDomUpate();
+            });
         };
         AppBar.prototype._computeAdjustedOffsets = function () {
             // Position the AppBar element relative to the top or bottom edge of the visible

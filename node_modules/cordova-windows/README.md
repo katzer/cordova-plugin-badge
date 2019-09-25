@@ -19,7 +19,7 @@
 #
 -->
 
-#Apache Cordova for Windows
+# Apache Cordova for Windows
 
 [![Build status](https://ci.appveyor.com/api/projects/status/19h1fq0lyvwtei05/branch/master)](https://ci.appveyor.com/project/Humbedooh/cordova-windows/branch/master)
 [![Build Status](https://travis-ci.org/apache/cordova-windows.svg?branch=master)](https://travis-ci.org/apache/cordova-windows)
@@ -31,7 +31,7 @@ This repo contains the code for an [Apache Cordova](http://cordova.apache.org) p
 
 [Apache Cordova](http://cordova.apache.org) is a project of [The Apache Software Foundation (ASF)](http://apache.org)
 
-#Requirements
+# Requirements
 ### Windows 10, Windows 8.1, Windows Phone 8.1
 
 Host OS: Windows 8.1 or Windows 10
@@ -44,7 +44,7 @@ Host OS: Windows 8.1
 
 Install the tools: [Visual Studio 2013 Express](http://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-8).
 
-#Getting started
+# Getting started
 The best way to use this is to install the [Cordova CLI](https://www.npmjs.com/package/cordova), create a project, add the windows platform, and run the app:
 
 	npm install -g cordova
@@ -52,7 +52,7 @@ The best way to use this is to install the [Cordova CLI](https://www.npmjs.com/p
 	cordova platform add windows
 	cordova run windows
 
-#Getting logs from Windows Store applications
+# Getting logs from Windows Store applications
 You can get your JavaScript logs as well as Windows logs related to your Windows Store application by running the following command from your app directory:
 
 	platforms\windows\cordova\log
@@ -65,9 +65,9 @@ In most cases, this command requires administrator privileges. However, if you w
 
 Please note that the log command is supported only for Windows Store applications and cannot get logs from Windows Phone application.
 
-#Report Issues
+# Report Issues
 Report them at the [Apache Cordova Issue Tracker](https://issues.apache.org/jira/browse/CB). Create a user account, use `windows` as the component.
 
-#Further Reading
+# Further Reading
 - [Windows Platform Guide](http://cordova.apache.org/docs/en/edge/guide_platforms_win8_index.md.html#Windows%208%20Platform%20Guide)
 - [Apache Cordova Documentation](http://docs.cordova.io)

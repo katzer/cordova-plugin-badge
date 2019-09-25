@@ -57,6 +57,7 @@
         {
             "idiom": "mac",
             "size": "512x512",
+            "filename": "icon-1024x1024.png",
             "scale": "2x"
         }
     ],

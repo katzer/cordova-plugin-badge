@@ -3,9 +3,6 @@
     <feature name="LocalStorage">
         <param name="osx-package" value="CDVLocalStorage" />
     </feature>
-    <feature name="Badge">
-        <param name="osx-package" value="APPBadge" />
-    </feature>
     <name>BadgeExample</name>
     <description>
         Cordova plugin to access and modify the badge number
@@ -16,6 +13,7 @@
     <content src="index.html" />
     <access origin="*" />
     <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="AllowWebViewNavigation" value="true" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
     <preference name="EnableViewportScale" value="false" />

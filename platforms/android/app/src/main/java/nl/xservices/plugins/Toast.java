@@ -90,7 +90,7 @@ public class Toast extends CordovaPlugin {
           final android.widget.Toast toast = android.widget.Toast.makeText(
               IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext(),
               message,
-              android.widget.Toast.LENGTH_LONG // actually controlled by a timer further down
+              "short".equalsIgnoreCase(duration) ? android.widget.Toast.LENGTH_SHORT : android.widget.Toast.LENGTH_LONG
           );
 
           if ("top".equals(position)) {
@@ -195,9 +195,10 @@ public class Toast extends CordovaPlugin {
           _timer = new CountDownTimer(hideAfterMs, 2500) {
             public void onTick(long millisUntilFinished) {
               // see https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues/116
-              if (!IS_AT_LEAST_PIE) {
-                toast.show();
-              }
+              // and https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues/120
+//              if (!IS_AT_LEAST_PIE) {
+//                toast.show();
+//              }
             }
             public void onFinish() {
               returnTapEvent("hide", msg, data, callbackContext);

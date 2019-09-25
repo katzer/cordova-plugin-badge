@@ -19,10 +19,11 @@
 
 var Q = require('q');
 var path = require('path');
-var iossim = require('ios-sim');
 var build = require('./build');
-var spawn = require('./spawn');
+var shell = require('shelljs');
+var superspawn = require('cordova-common').superspawn;
 var check_reqs = require('./check_reqs');
+var fs = require('fs-extra');
 
 var events = require('cordova-common').events;
 
@@ -78,7 +79,7 @@ module.exports.run = function (runOptions) {
                         var ipafile = path.join(buildOutputDir, projectName + '.ipa');
 
                         // unpack the existing platform/ios/build/device/appname.ipa (zipfile), will create a Payload folder
-                        return spawn('unzip', [ '-o', '-qq', ipafile ], buildOutputDir);
+                        return superspawn.spawn('unzip', [ '-o', '-qq', ipafile ], { cwd: buildOutputDir, printCommand: true, stdio: 'inherit' });
                     })
                     .then(function () {
                         // Uncompress IPA (zip file)
@@ -87,15 +88,13 @@ module.exports.run = function (runOptions) {
                         var payloadFolder = path.join(buildOutputDir, 'Payload');
 
                         // delete the existing platform/ios/build/device/appname.app
-                        return spawn('rm', [ '-rf', appFile ], buildOutputDir)
-                            .then(function () {
-                                // move the platform/ios/build/device/Payload/appname.app to parent
-                                return spawn('mv', [ '-f', appFileInflated, buildOutputDir ], buildOutputDir);
-                            })
-                            .then(function () {
-                                // delete the platform/ios/build/device/Payload folder
-                                return spawn('rm', [ '-rf', payloadFolder ], buildOutputDir);
-                            });
+                        fs.removeSync(appFile);
+                        // move the platform/ios/build/device/Payload/appname.app to parent
+                        shell.mv('-f', appFileInflated, buildOutputDir);
+                        // delete the platform/ios/build/device/Payload folder
+                        shell.rm('-rf', payloadFolder);
+
+                        return null;
                     })
                     .then(function () {
                         appPath = path.join(projectPath, 'build', 'device', projectName + '.app');
@@ -149,7 +148,7 @@ function filterSupportedArgs (args) {
  * @return {Promise} Fullfilled when any device is connected, rejected otherwise
  */
 function checkDeviceConnected () {
-    return spawn('ios-deploy', ['-c', '-t', '1']);
+    return superspawn.spawn('ios-deploy', ['-c', '-t', '1'], { printCommand: true, stdio: 'inherit' });
 }
 
 /**
@@ -159,11 +158,12 @@ function checkDeviceConnected () {
  * @return {Promise}        Resolves when deploy succeeds otherwise rejects
  */
 function deployToDevice (appPath, target, extraArgs) {
+    events.emit('log', 'Deploying to device');
     // Deploying to device...
     if (target) {
-        return spawn('ios-deploy', ['--justlaunch', '-d', '-b', appPath, '-i', target].concat(extraArgs));
+        return superspawn.spawn('ios-deploy', ['--justlaunch', '-d', '-b', appPath, '-i', target].concat(extraArgs), { printCommand: true, stdio: 'inherit' });
     } else {
-        return spawn('ios-deploy', ['--justlaunch', '--no-wifi', '-d', '-b', appPath].concat(extraArgs));
+        return superspawn.spawn('ios-deploy', ['--justlaunch', '--no-wifi', '-d', '-b', appPath].concat(extraArgs), { printCommand: true, stdio: 'inherit' });
     }
 }
 
@@ -174,8 +174,9 @@ function deployToDevice (appPath, target, extraArgs) {
  * @return {Promise}        Resolves when deploy succeeds otherwise rejects
  */
 function deployToSim (appPath, target) {
-    // Select target device for emulator. Default is 'iPhone-6'
+    events.emit('log', 'Deploying to simulator');
     if (!target) {
+        // Select target device for emulator
         return require('./list-emulator-images').run()
             .then(function (emulators) {
                 if (emulators.length > 0) {
@@ -186,7 +187,7 @@ function deployToSim (appPath, target) {
                         target = emulator;
                     }
                 });
-                events.emit('log', 'No target specified for emulator. Deploying to ' + target + ' simulator');
+                events.emit('log', `No target specified for emulator. Deploying to "${target}" simulator.`);
                 return startSim(appPath, target);
             });
     } else {
@@ -197,7 +198,25 @@ function deployToSim (appPath, target) {
 function startSim (appPath, target) {
     var logPath = path.join(cordovaPath, 'console.log');
 
-    return iossim.launch(appPath, 'com.apple.CoreSimulator.SimDeviceType.' + target, logPath, '--exit');
+    return iossimLaunch(appPath, 'com.apple.CoreSimulator.SimDeviceType.' + target, logPath, '--exit');
+}
+
+function iossimLaunch (appPath, devicetypeid, log, exit) {
+    var f = path.resolve(path.dirname(require.resolve('ios-sim')), 'bin', 'ios-sim');
+    var params = ['launch', appPath, '--devicetypeid', devicetypeid, '--log', log, exit];
+
+    return superspawn.spawn(f, params, { cwd: projectPath, printCommand: true })
+        .progress(function (stdio) {
+            if (stdio.stderr) {
+                events.emit('error', `[ios-sim] ${stdio.stderr}`);
+            }
+            if (stdio.stdout) {
+                events.emit('log', `[ios-sim] ${stdio.stdout.trim()}`);
+            }
+        })
+        .then(function (result) {
+            events.emit('log', 'Simulator successfully started via `ios-sim`.');
+        });
 }
 
 function listDevices () {

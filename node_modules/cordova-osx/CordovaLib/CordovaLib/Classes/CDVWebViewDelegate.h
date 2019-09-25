@@ -30,6 +30,7 @@
 @interface CDVWebViewDelegate : NSObject {
 }
 
+@property (nonatomic) BOOL allowWebViewNavigation;
 @property (nonatomic, strong) CDVConsole* console;
 @property (nonatomic, strong) CDVBridge* bridge;
 @property (nonatomic,

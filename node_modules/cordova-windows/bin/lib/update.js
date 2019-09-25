@@ -17,10 +17,10 @@
        under the License.
 */
 
-var Q      = require('q');
-var fs     = require('fs');
-var path   = require('path');
-var shell   = require('shelljs');
+var Q = require('q');
+var fs = require('fs');
+var path = require('path');
+var shell = require('shelljs');
 var create = require('./create');
 var events = require('cordova-common').events;
 var ConfigParser = require('cordova-common').ConfigParser;
@@ -29,13 +29,13 @@ var AppxManifest = require('../../template/cordova/lib/AppxManifest');
 
 // updates the cordova.js in project along with the cordova tooling.
 module.exports.update = function (destinationDir, options) {
-    if (!fs.existsSync(destinationDir)){
+    if (!fs.existsSync(destinationDir)) {
         // if specified project path is not valid then reject promise
         return Q.reject(new CordovaError('The given path to the project does not exist: ' + destinationDir));
     }
 
     var projectConfig = path.join(destinationDir, 'config.xml');
-    if (!fs.existsSync(projectConfig)){
+    if (!fs.existsSync(projectConfig)) {
         return Q.reject(new CordovaError('Can\'t update project at ' + destinationDir +
             '. config.xml does not exist in destination directory'));
     }
@@ -50,9 +50,8 @@ module.exports.update = function (destinationDir, options) {
     var manifestPath = path.join(destinationDir, 'package.phone.appxmanifest');
     try {
         guid = AppxManifest.get(manifestPath).getPhoneIdentity().getPhoneProductId();
-    } catch (e) { /*ignore IO errors */ }
+    } catch (e) { /* ignore IO errors */ }
 
     shell.rm('-rf', destinationDir);
     return create.create(destinationDir, config, {guid: guid}, events);
 };
-

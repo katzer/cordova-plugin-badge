@@ -31,18 +31,18 @@
     "is_top_level": false,
     "variables": {}
   },
-  "cordova-plugin-x-toast": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-x-toast"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-badge": {
     "source": {
       "type": "registry",
       "id": "cordova-plugin-badge@0.8.8"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-x-toast": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-x-toast@latest"
     },
     "is_top_level": true,
     "variables": {}

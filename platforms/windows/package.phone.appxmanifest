@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
     <Identity Name="de.appplant.cordova.plugin.badge.example" Publisher="CN=$username$" Version="0.6.0.0" />
-    <mp:PhoneIdentity PhoneProductId="533a4580-a938-11e7-a408-a9bf0abd109c" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
+    <mp:PhoneIdentity PhoneProductId="96423890-ed7c-11e8-84c3-95786e9b68c7" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
     <Properties>
         <DisplayName>BadgeExample</DisplayName>
         <PublisherDisplayName>Sebastián Katzer</PublisherDisplayName>
         <Logo>images\StoreLogo.png</Logo>
-        <Description>Cordova plugin to access and modify the badge number</Description>
+        <Description>A sample Apache Cordova application that responds to the deviceready event.</Description>
     </Properties>
     <Prerequisites>
         <OSMinVersion>6.3.1</OSMinVersion>
@@ -17,7 +17,7 @@
     </Resources>
     <Applications>
         <Application Id="de.appplant.cordova.plugin.badge.example" StartPage="www/index.html">
-            <m3:VisualElements BackgroundColor="transparent" Description="Cordova plugin to access and modify the badge number" DisplayName="BadgeExample" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+            <m3:VisualElements BackgroundColor="transparent" Description="A sample Apache Cordova application that responds to the deviceready event." DisplayName="BadgeExample" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
                 <m3:DefaultTile Square71x71Logo="images\Square71x71Logo.png" Wide310x150Logo="images\Wide310x150Logo.png">
                     <m3:ShowNameOnTiles>
                         <m3:ShowOn Tile="square150x150Logo" />

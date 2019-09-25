@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -17,14 +17,12 @@
  * under the License.
  */
 
-/*jshint node: true*/
-
-var Q     = require('q'),
-    path  = require('path'),
-    shell = require('shelljs'),
-    spawn = require('./spawn'),
-    check_reqs = require('./check_reqs'),
-    fs = require('fs');
+var Q = require('q');
+var path = require('path');
+var shell = require('shelljs');
+var spawn = require('./spawn');
+var check_reqs = require('./check_reqs');
+var fs = require('fs');
 
 var events = require('cordova-common').events;
 
@@ -43,18 +41,18 @@ module.exports.run = function (buildOpts) {
         return Q.reject('Only one of "device"/"emulator" options should be specified');
     }
 
-    if(buildOpts.buildConfig) {
-        if(!fs.existsSync(buildOpts.buildConfig)) {
+    if (buildOpts.buildConfig) {
+        if (!fs.existsSync(buildOpts.buildConfig)) {
             return Q.reject('Build config file does not exist:' + buildOpts.buildConfig);
         }
-        events.emit('log','Reading build config file:', path.resolve(buildOpts.buildConfig));
+        events.emit('log', 'Reading build config file:', path.resolve(buildOpts.buildConfig));
         var buildConfig = JSON.parse(fs.readFileSync(buildOpts.buildConfig, 'utf-8'));
-        if(buildConfig.osx) {
+        if (buildConfig.osx) {
             var buildType = buildOpts.release ? 'release' : 'debug';
             var config = buildConfig.osx[buildType];
-            if(config) {
+            if (config) {
                 ['codeSignIdentity', 'codeSignResourceRules', 'provisioningProfile'].forEach(
-                    function(key) {
+                    function (key) {
                         buildOpts[key] = buildOpts[key] || config[key];
                     });
             }
@@ -79,32 +77,31 @@ module.exports.run = function (buildOpts) {
     }).then(function () {
         var configuration = buildOpts.release ? 'Release' : 'Debug';
 
-        events.emit('log','Building project  : ' + path.join(projectPath, projectName + '.xcodeproj'));
-        events.emit('log','\tConfiguration : ' + configuration);
+        events.emit('log', 'Building project  : ' + path.join(projectPath, projectName + '.xcodeproj'));
+        events.emit('log', '\tConfiguration : ' + configuration);
 
         var xcodebuildArgs = getXcodeArgs(projectName, projectPath, configuration);
         return spawn('xcodebuild', xcodebuildArgs, projectPath);
     }).then(function () {
         if (buildOpts.noSign) {
-            return;
+
         }
-        //var buildOutputDir = path.join(projectPath, 'build');
-        //var pathToApp = path.join(buildOutputDir, projectName + '.app');
-        //var pathToIpa = path.join(buildOutputDir, projectName + '.ipa');
-        //var xcRunArgs = ['-sdk', 'iphoneos', 'PackageApplication',
+        // var buildOutputDir = path.join(projectPath, 'build');
+        // var pathToApp = path.join(buildOutputDir, projectName + '.app');
+        // var pathToIpa = path.join(buildOutputDir, projectName + '.ipa');
+        // var xcRunArgs = ['-sdk', 'iphoneos', 'PackageApplication',
         //    '-v', pathToApp,
         //    '-o', pathToIpa];
-        //if (buildOpts.codeSignIdentity) {
+        // if (buildOpts.codeSignIdentity) {
         //    xcRunArgs.concat('--sign', buildOpts.codeSignIdentity);
-        //}
-        //if (buildOpts.provisioningProfile) {
+        // }
+        // if (buildOpts.provisioningProfile) {
         //    xcRunArgs.concat('--embed', buildOpts.provisioningProfile);
-        //}
-        //return spawn('xcrun', xcRunArgs, projectPath);
+        // }
+        // return spawn('xcrun', xcRunArgs, projectPath);
 
         // todo
 
-        return;
     });
 };
 
@@ -113,7 +110,7 @@ module.exports.run = function (buildOpts) {
  * @param  {String} projectPath Path where to search project
  * @return {Promise}            Promise either fulfilled with project name or rejected
  */
-function findXCodeProjectIn(projectPath) {
+function findXCodeProjectIn (projectPath) {
     // 'Searching for Xcode project in ' + projectPath);
     var xcodeProjFiles = shell.ls(projectPath).filter(function (name) {
         return path.extname(name) === '.xcodeproj';
@@ -123,7 +120,7 @@ function findXCodeProjectIn(projectPath) {
         return Q.reject('No Xcode project found in ' + projectPath);
     }
     if (xcodeProjFiles.length > 1) {
-        events.emit('warn','Found multiple .xcodeproj directories in \n' +
+        events.emit('warn', 'Found multiple .xcodeproj directories in \n' +
             projectPath + '\nUsing first one');
     }
 
@@ -140,7 +137,7 @@ module.exports.findXCodeProjectIn = findXCodeProjectIn;
  * @param  {String}  configuration Configuration name: debug|release
  * @return {Array}                 Array of arguments that could be passed directly to spawn method
  */
-function getXcodeArgs(projectName, projectPath, configuration) {
+function getXcodeArgs (projectName, projectPath, configuration) {
     return [
         '-xcconfig', path.join(__dirname, '..', 'build-' + configuration.toLowerCase() + '.xcconfig'),
         '-project', projectName + '.xcodeproj',
@@ -153,7 +150,8 @@ function getXcodeArgs(projectName, projectPath, configuration) {
 }
 
 // help/usage function
-module.exports.help = function help() {
+/* eslint-disable no-useless-escape */
+module.exports.help = function help () {
     console.log('');
     console.log('Usage: build [--debug | --release]');
     console.log('             [--codeSignIdentity=\"<identity>\"]');

@@ -17,8 +17,6 @@
  under the License.
  */
 
-/* jshint quotmark:false */
-
 /*
  Helper for dealing with Windows Store JS app .jsproj files
  */
@@ -34,31 +32,30 @@ var PluginHandler = require('./PluginHandler');
 var events = require('cordova-common').events;
 var CordovaError = require('cordova-common').CordovaError;
 var xml_helpers = require('cordova-common').xmlHelpers;
-var AppxManifest = require('./AppxManifest');
 
-var WinCSharpProjectTypeGUID = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";  // .csproj
-var WinCplusplusProjectTypeGUID = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";  // .vcxproj
+var WinCSharpProjectTypeGUID = '{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'; // .csproj
+var WinCplusplusProjectTypeGUID = '{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}'; // .vcxproj
 
 // Match a JavaScript Project
 var JSPROJ_REGEXP = /(Project\("\{262852C6-CD72-467D-83FE-5EEB1973A190}"\)\s*=\s*"[^"]+",\s*"[^"]+",\s*"\{[0-9a-f\-]+}"[^\r\n]*[\r\n]*)/gi;
 
 // Chars in a string that need to be escaped when used in a RegExp
-var ESCAPE_REGEXP = /([.?*+\^$\[\]\\(){}|\-])/g;
+var ESCAPE_REGEXP = /([.?*+\^$\[\]\\(){}|\-])/g; /* eslint no-useless-escape : 0 */
 
-function jsprojManager(location) {
+function jsprojManager (location) {
     this.root = path.dirname(location);
-    this.isUniversalWindowsApp = path.extname(location).toLowerCase() === ".projitems";
+    this.isUniversalWindowsApp = path.extname(location).toLowerCase() === '.projitems';
     this.projects = [];
     this.master = this.isUniversalWindowsApp ? new proj(location) : new jsproj(location);
-    this.projectFolder = path.dirname(location);
+    this.projectFolder = path.dirname(location); /* eslint new-cap : 0 */
     this.www = path.join(this.root, 'www');
     this.platformWww = path.join(this.root, 'platform_www');
 }
 
-function getProjectName(pluginProjectXML, relative_path) {
-    var projNameElt = pluginProjectXML.find("PropertyGroup/ProjectName");
+function getProjectName (pluginProjectXML, relative_path) {
+    var projNameElt = pluginProjectXML.find('PropertyGroup/ProjectName');
     // Falling back on project file name in case ProjectName is missing
-    return !!projNameElt ? projNameElt.text : path.basename(relative_path, path.extname(relative_path));
+    return projNameElt ? projNameElt.text : path.basename(relative_path, path.extname(relative_path));
 }
 
 jsprojManager.getProject = function (directory) {
@@ -73,10 +70,10 @@ jsprojManager.getProject = function (directory) {
 jsprojManager.prototype = {
     _projects: null,
 
-    getPackageName: function() {
+    getPackageName: function () {
         // CB-10394 Do not cache manifest file while getting package name to avoid problems
         // with windows.appxmanifest cached twice (here and in ConfigFile module)
-        return AppxManifest.get(path.join(this.root, 'package.windows.appxmanifest'), /*ignoreCache=*/true)
+        return AppxManifest.get(path.join(this.root, 'package.windows.appxmanifest'), /* ignoreCache= */true)
             .getProperties().getDisplayName();
     },
 
@@ -144,9 +141,9 @@ jsprojManager.prototype = {
         var children = [hint_path];
 
         var extName = path.extname(relPath);
-        if (extName === ".winmd") {
-            var mdFileTag = new et.Element("IsWinMDFile");
-            mdFileTag.text = "true";
+        if (extName === '.winmd') {
+            var mdFileTag = new et.Element('IsWinMDFile');
+            mdFileTag.text = 'true';
             children.push(mdFileTag);
         }
 
@@ -195,18 +192,18 @@ jsprojManager.prototype = {
         var pluginProjectXML = xml_helpers.parseElementtreeSync(path.resolve(this.projectFolder, relative_path));
 
         // find the guid + name of the referenced project
-        var projectGuid = pluginProjectXML.find("PropertyGroup/ProjectGuid").text;
+        var projectGuid = pluginProjectXML.find('PropertyGroup/ProjectGuid').text;
         var projName = getProjectName(pluginProjectXML, relative_path);
 
         // get the project type
         var projectTypeGuid = getProjectTypeGuid(relative_path);
         if (!projectTypeGuid) {
-            throw new CordovaError("Unrecognized project type at " + relative_path + " (not .csproj or .vcxproj)");
+            throw new CordovaError('Unrecognized project type at ' + relative_path + ' (not .csproj or .vcxproj)');
         }
 
-        var preInsertText = "\tProjectSection(ProjectDependencies) = postProject\r\n" +
-            "\t\t" + projectGuid + "=" + projectGuid + "\r\n" +
-            "\tEndProjectSection\r\n";
+        var preInsertText = '\tProjectSection(ProjectDependencies) = postProject\r\n' +
+            '\t\t' + projectGuid + '=' + projectGuid + '\r\n' +
+            '\tEndProjectSection\r\n';
         var postInsertText = '\r\nProject("' + projectTypeGuid + '") = "' +
             projName + '", "' + inserted_path + '", ' +
             '"' + projectGuid + '"\r\nEndProject';
@@ -222,7 +219,7 @@ jsprojManager.prototype = {
 
         // There may be multiple solution files (for different VS versions) - process them all
         getSolutionPaths(this.projectFolder).forEach(function (solutionPath) {
-            var solText = fs.readFileSync(solutionPath, {encoding: "utf8"});
+            var solText = fs.readFileSync(solutionPath, {encoding: 'utf8'});
 
             if (useProjItems) {
                 // Insert a project dependency into every jsproj in the solution.
@@ -233,7 +230,7 @@ jsprojManager.prototype = {
                 });
 
                 if (!jsProjectFound) {
-                    throw new CordovaError("No jsproj found in solution");
+                    throw new CordovaError('No jsproj found in solution');
                 }
             } else {
                 // Insert a project dependency only for projects that match specified target and version
@@ -246,14 +243,14 @@ jsprojManager.prototype = {
 
             // Add the project after existing projects. Note that this fairly simplistic check should be fine, since the last
             // EndProject in the file should actually be an EndProject (and not an EndProjectSection, for example).
-            var pos = solText.lastIndexOf("EndProject");
+            var pos = solText.lastIndexOf('EndProject');
             if (pos === -1) {
-                throw new Error("No EndProject found in solution");
+                throw new Error('No EndProject found in solution');
             }
             pos += 10; // Move pos to the end of EndProject text
             solText = solText.slice(0, pos) + postInsertText + solText.slice(pos);
 
-            fs.writeFileSync(solutionPath, solText, {encoding: "utf8"});
+            fs.writeFileSync(solutionPath, solText, {encoding: 'utf8'});
         });
 
         // Add the ItemGroup/ProjectReference to each matching cordova project :
@@ -274,13 +271,13 @@ jsprojManager.prototype = {
 
         // find the guid + name of the referenced project
         var pluginProjectXML = xml_helpers.parseElementtreeSync(path.resolve(this.projectFolder, relative_path));
-        var projectGuid = pluginProjectXML.find("PropertyGroup/ProjectGuid").text;
+        var projectGuid = pluginProjectXML.find('PropertyGroup/ProjectGuid').text;
         var projName = getProjectName(pluginProjectXML, relative_path);
 
         // get the project type
         var projectTypeGuid = getProjectTypeGuid(relative_path);
         if (!projectTypeGuid) {
-            throw new Error("Unrecognized project type at " + relative_path + " (not .csproj or .vcxproj)");
+            throw new Error('Unrecognized project type at ' + relative_path + ' (not .csproj or .vcxproj)');
         }
 
         var preInsertTextRegExp = getProjectReferencePreInsertRegExp(projectGuid);
@@ -288,20 +285,20 @@ jsprojManager.prototype = {
 
         // There may be multiple solutions (for different VS versions) - process them all
         getSolutionPaths(this.projectFolder).forEach(function (solutionPath) {
-            var solText = fs.readFileSync(solutionPath, {encoding: "utf8"});
+            var solText = fs.readFileSync(solutionPath, {encoding: 'utf8'});
 
             // To be safe (to handle subtle changes in formatting, for example), use a RegExp to find and remove
             // preInsertText and postInsertText
 
             solText = solText.replace(preInsertTextRegExp, function () {
-                return "";
+                return '';
             });
 
             solText = solText.replace(postInsertTextRegExp, function () {
-                return "";
+                return '';
             });
 
-            fs.writeFileSync(solutionPath, solText, {encoding: "utf8"});
+            fs.writeFileSync(solutionPath, solText, {encoding: 'utf8'});
         });
 
         this._getMatchingProjects(targetConditions).forEach(function (project) {
@@ -331,7 +328,7 @@ jsprojManager.prototype = {
         return [this.master];
     },
 
-    get projects() {
+    get projects () {
         var projects = this._projects;
         if (!projects) {
             projects = [];
@@ -360,12 +357,12 @@ jsprojManager.prototype.getUninstaller = function (type) {
     return PluginHandler.getUninstaller(type);
 };
 
-function getProjectReferencePreInsertRegExp(projectGuid) {
+function getProjectReferencePreInsertRegExp (projectGuid) {
     projectGuid = escapeRegExpString(projectGuid);
-    return new RegExp("\\s*ProjectSection\\(ProjectDependencies\\)\\s*=\\s*postProject\\s*" + projectGuid + "\\s*=\\s*" + projectGuid + "\\s*EndProjectSection", "gi");
+    return new RegExp('\\s*ProjectSection\\(ProjectDependencies\\)\\s*=\\s*postProject\\s*' + projectGuid + '\\s*=\\s*' + projectGuid + '\\s*EndProjectSection', 'gi');
 }
 
-function getProjectReferencePostInsertRegExp(projName, projectGuid, relative_path, projectTypeGuid) {
+function getProjectReferencePostInsertRegExp (projName, projectGuid, relative_path, projectTypeGuid) {
     projName = escapeRegExpString(projName);
     projectGuid = escapeRegExpString(projectGuid);
     relative_path = escapeRegExpString(relative_path);
@@ -373,31 +370,31 @@ function getProjectReferencePostInsertRegExp(projName, projectGuid, relative_pat
     return new RegExp('\\s*Project\\("' + projectTypeGuid + '"\\)\\s*=\\s*"' + projName + '"\\s*,\\s*"' + relative_path + '"\\s*,\\s*"' + projectGuid + '"\\s*EndProject', 'gi');
 }
 
-function getSolutionPaths(projectFolder) {
-    return shell.ls(path.join(projectFolder, "*.sln"));
+function getSolutionPaths (projectFolder) {
+    return shell.ls(path.join(projectFolder, '*.sln'));
 }
 
-function escapeRegExpString(regExpString) {
-    return regExpString.replace(ESCAPE_REGEXP, "\\$1");
+function escapeRegExpString (regExpString) {
+    return regExpString.replace(ESCAPE_REGEXP, '\\$1');
 }
 
-function getJsProjRegExForProject(projectFile) {
+function getJsProjRegExForProject (projectFile) {
     projectFile = escapeRegExpString(projectFile);
     return new RegExp('(Project\\("\\{262852C6-CD72-467D-83FE-5EEB1973A190}"\\)\\s*=\\s*"[^"]+",\\s*"' + projectFile + '",\\s*"\\{[0-9a-f\\-]+}"[^\\r\\n]*[\\r\\n]*)', 'gi');
 }
 
-function getProjectTypeGuid(projectPath) {
+function getProjectTypeGuid (projectPath) {
     switch (path.extname(projectPath)) {
-        case ".vcxproj":
-            return WinCplusplusProjectTypeGUID;
+    case '.vcxproj':
+        return WinCplusplusProjectTypeGUID;
 
-        case ".csproj":
-            return WinCSharpProjectTypeGUID;
+    case '.csproj':
+        return WinCSharpProjectTypeGUID;
     }
     return null;
 }
 
-function createItemGroupElement(path, incText, targetConditions, children) {
+function createItemGroupElement (path, incText, targetConditions, children) {
     path = path.split('/');
     path.reverse();
 
@@ -426,15 +423,15 @@ function createItemGroupElement(path, incText, targetConditions, children) {
     return lastElement;
 }
 
-function getDeviceTarget(targetConditions) {
+function getDeviceTarget (targetConditions) {
     var target = targetConditions.deviceTarget;
     if (target) {
         target = target.toLowerCase().trim();
-        if (target === "all") {
+        if (target === 'all') {
             target = null;
-        } else if (target === "win") {
+        } else if (target === 'win') {
             // Allow "win" as alternative to "windows"
-            target = "windows";
+            target = 'windows';
         } else if (target !== 'phone' && target !== 'windows') {
             throw new Error('Invalid device-target attribute (must be "all", "phone", "windows" or "win"): ' + target);
         }
@@ -442,7 +439,7 @@ function getDeviceTarget(targetConditions) {
     return target;
 }
 
-function getVersions(targetConditions) {
+function getVersions (targetConditions) {
     var versions = targetConditions.versions;
     if (versions && !semver.validRange(versions, /* loose */ true)) {
         throw new Error('Invalid versions attribute (must be a valid semantic version range): ' + versions);
@@ -450,10 +447,9 @@ function getVersions(targetConditions) {
     return versions;
 }
 
-
 /* proj */
 
-function proj(location) {
+function proj (location) {
     // Class to handle simple project xml operations
     if (!location) {
         throw new Error('Project file location can\'t be null or empty');
@@ -548,24 +544,23 @@ proj.prototype = {
     }
 };
 
-
 /* jsproj */
 
-function jsproj(location) {
-    function targetPlatformIdentifierToDevice(jsprojPlatform) {
-        var index = ["Windows", "WindowsPhoneApp", "UAP"].indexOf(jsprojPlatform);
+function jsproj (location) {
+    function targetPlatformIdentifierToDevice (jsprojPlatform) {
+        var index = ['Windows', 'WindowsPhoneApp', 'UAP'].indexOf(jsprojPlatform);
         if (index < 0) {
             throw new Error("Unknown TargetPlatformIdentifier '" + jsprojPlatform + "' in project file '" + location + "'");
         }
-        return ["windows", "phone", "windows"][index];
+        return ['windows', 'phone', 'windows'][index];
     }
 
-    function validateVersion(version) {
+    function validateVersion (version) {
         version = version.split('.');
         while (version.length < 3) {
-            version.push("0");
+            version.push('0');
         }
-        return version.join(".");
+        return version.join('.');
     }
 
     // Class to handle a jsproj file
@@ -608,19 +603,18 @@ jsproj.prototype.getSemVersion = function () {
 
 /* Common support functions */
 
-function createConditionAttrib(targetConditions) {
+function createConditionAttrib (targetConditions) {
     var arch = targetConditions.arch;
     if (arch) {
-        if (arch === "arm") {
+        if (arch === 'arm') {
             // Specifcally allow "arm" as alternative to "ARM"
-            arch = "ARM";
-        } else if (arch !== "x86" && arch !== "x64" && arch !== "ARM") {
+            arch = 'ARM';
+        } else if (arch !== 'x86' && arch !== 'x64' && arch !== 'ARM') {
             throw new Error('Invalid arch attribute (must be "x86", "x64" or "ARM"): ' + arch);
         }
         return "'$(Platform)'=='" + arch + "'";
     }
     return null;
 }
-
 
 module.exports = jsprojManager;

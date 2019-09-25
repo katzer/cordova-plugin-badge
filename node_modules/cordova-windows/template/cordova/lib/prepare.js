@@ -38,10 +38,10 @@ var PluginInfoProvider = require('cordova-common').PluginInfoProvider;
 // This is equal to the value that comes with default App template
 var DEFAULT_DESCRIPTION = 'CordovaApp';
 
-var PROJECT_WINDOWS10   = 'CordovaApp.Windows10.jsproj',
-    MANIFEST_WINDOWS    = 'package.windows.appxmanifest',
-    MANIFEST_PHONE      = 'package.phone.appxmanifest',
-    MANIFEST_WINDOWS10  = 'package.windows10.appxmanifest';
+var PROJECT_WINDOWS10 = 'CordovaApp.Windows10.jsproj';
+var MANIFEST_WINDOWS = 'package.windows.appxmanifest';
+var MANIFEST_PHONE = 'package.phone.appxmanifest';
+var MANIFEST_WINDOWS10 = 'package.windows10.appxmanifest';
 
 var TEMPLATE =
     '<?xml version="1.0" encoding="utf-8"?>\n' +
@@ -50,21 +50,21 @@ var TEMPLATE =
 
 var SUPPORTED_IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg'];
 var SPLASH_SCREEN_SIZE_LIMIT = 200 * 1024; // 200 KBytes
-var TARGET_PROJECT_81 = 'TARGET_PROJECT_81', 
-    TARGET_PROJECT_WP81 = 'TARGET_PROJECT_WP81', 
-    TARGET_PROJECT_10 = 'TARGET_PROJECT_10';
+var TARGET_PROJECT_81 = 'TARGET_PROJECT_81';
+var TARGET_PROJECT_WP81 = 'TARGET_PROJECT_WP81';
+var TARGET_PROJECT_10 = 'TARGET_PROJECT_10';
 var SPLASH_SCREEN_DESKTOP_TARGET_NAME = 'SplashScreen';
 var SPLASH_SCREEN_PHONE_TARGET_NAME = 'SplashScreenPhone';
 
 /** Note: this is only for backward compatibility, since it is being called directly from windows_parser */
-module.exports.applyPlatformConfig = function() {
+module.exports.applyPlatformConfig = function () {
     var projectRoot = path.join(__dirname, '../..');
     var appConfig = new ConfigParser(path.join(projectRoot, '../../config.xml'));
     updateProjectAccordingTo(appConfig);
     copyImages(appConfig, projectRoot);
 };
 
-module.exports.updateBuildConfig = function(buildConfig) {
+module.exports.updateBuildConfig = function (buildConfig) {
     var projectRoot = path.join(__dirname, '../..');
     var config = new ConfigParser(path.join(projectRoot, 'config.xml'));
 
@@ -78,7 +78,7 @@ module.exports.updateBuildConfig = function(buildConfig) {
 
     var root = new et.Element('Project');
     root.set('xmlns', 'http://schemas.microsoft.com/developer/msbuild/2003');
-    var buildConfigXML =  new et.ElementTree(root);
+    var buildConfigXML = new et.ElementTree(root);
     var propertyGroup = new et.Element('PropertyGroup');
     var itemGroup = new et.Element('ItemGroup');
 
@@ -150,17 +150,17 @@ function updateManifestFile (config, manifestPath) {
         var badCaps = manifest.getRestrictedCapabilities();
         if (config.hasRemoteUris() && badCaps) {
             events.emit('warn', 'The following Capabilities were declared and are restricted:' +
-                '\n\t' + badCaps.map(function(a){return a.name;}).join(', ') +
+                '\n\t' + badCaps.map(function (a) { return a.name; }).join(', ') +
                 '\nYou will be unable to on-board your app to the public Windows Store with these ' +
                 'capabilities and access rules permitting access to remote URIs.');
         }
     }
 
-    //Write out manifest
+    // Write out manifest
     manifest.write();
 }
 
-function applyCoreProperties(config, manifest) {
+function applyCoreProperties (config, manifest) {
     // CB-9450: iOS/Android and Windows Store have an incompatibility here; Windows Store assigns the
     // package name that should be used for upload to the store.  However, this can't be set for typical
     // Cordova apps.  So, we have to create a Windows-specific preference here.
@@ -210,7 +210,7 @@ function applyCoreProperties(config, manifest) {
         .setPublisherDisplayName(publisherName);
 }
 
-function applyStartPage(config, manifest, targetingWin10) {
+function applyStartPage (config, manifest, targetingWin10) {
     // If not specified, set default value
     // http://cordova.apache.org/docs/en/edge/config_ref_index.md.html#The%20config.xml%20File
     var startPage = config.startPage() || 'index.html';
@@ -221,25 +221,25 @@ function applyStartPage(config, manifest, targetingWin10) {
         // ms-appx-web:// as the homepage.  Set those here.
 
         // Only add a URI prefix if the start page doesn't specify a URI scheme
+        /* eslint-disable no-useless-escape */
         if (!(/^[\w-]+?\:\/\//i).test(startPage)) {
             uriPrefix = config.getPreference('WindowsDefaultUriPrefix');
             if (!uriPrefix) {
                 uriPrefix = 'ms-appx-web://';
-            }
-            else if (/^ms\-appx\:\/\/$/i.test(uriPrefix)) {
+            } else if (/^ms\-appx\:\/\/$/i.test(uriPrefix)) {
                 // Explicitly ignore the ms-appx:// scheme because it doesn't validate
                 // in the Windows 10 build schema (treat it as the root).
                 uriPrefix = '';
             }
         }
     }
+    /* eslint-enable no-useless-escape */
 
     var startPagePrefix = 'www/';
     if ((uriPrefix && uriPrefix.toLowerCase().substring(0, 4) === 'http') ||
         startPage.toLowerCase().substring(0, 4) === 'http') {
         startPagePrefix = '';
-    }
-    else if (uriPrefix.toLowerCase().substring(0, 7) === 'ms-appx') {
+    } else if (uriPrefix.toLowerCase().substring(0, 7) === 'ms-appx') {
         var pkgName = config.getPreference('WindowsStoreIdentityName') || config.packageName();
         // Workaround to avoid WWAHost.exe bug: https://issues.apache.org/jira/browse/CB-10446
         uriPrefix += pkgName.toLowerCase() + '/'; // add Identity.Name
@@ -250,15 +250,15 @@ function applyStartPage(config, manifest, targetingWin10) {
 
 function applyAccessRules (config, manifest) {
     var accessRules = config.getAccesses()
-    .filter(function(rule) {
-        // https:// rules are always good, * rules are always good
-        if (rule.origin.indexOf('https://') === 0 || rule.origin === '*') return true;
+        .filter(function (rule) {
+            // https:// rules are always good, * rules are always good
+            if (rule.origin.indexOf('https://') === 0 || rule.origin === '*') return true;
 
-        events.emit('warn', 'Access rules must begin with "https://", the following rule will be ignored: ' + rule.origin);
-        return false;
-    }).map(function (rule) {
-        return rule.origin;
-    });
+            events.emit('warn', 'Access rules must begin with "https://", the following rule will be ignored: ' + rule.origin);
+            return false;
+        }).map(function (rule) {
+            return rule.origin;
+        });
 
     // If * is specified, emit no access rules.
     if (accessRules.indexOf('*') > -1) {
@@ -272,7 +272,7 @@ function applyAccessRules (config, manifest) {
  * Windows 10-based whitelist-plugin-compatible support for the enhanced navigation whitelist.
  * Allows WinRT access to origins specified by <allow-navigation href="origin" /> elements.
  */
-function applyNavigationWhitelist(config, manifest) {
+function applyNavigationWhitelist (config, manifest) {
 
     if (manifest.prefix !== 'uap:') {
         // This never should happen, but to be sure let's check
@@ -282,19 +282,19 @@ function applyNavigationWhitelist(config, manifest) {
     var UriSchemeTest = /^(?:https?|ms-appx-web):\/\//i;
 
     var whitelistRules = config.getAllowNavigations()
-    .filter(function(rule) {
-        if (UriSchemeTest.test(rule.href)) return true;
+        .filter(function (rule) {
+            if (UriSchemeTest.test(rule.href)) return true;
 
-        events.emit('warn', 'The following navigation rule had an invalid URI scheme and will be ignored: "' + rule.href + '".');
-        return false;
-    })
-    .map(function (rule) {
-        return rule.href;
-    });
+            events.emit('warn', 'The following navigation rule had an invalid URI scheme and will be ignored: "' + rule.href + '".');
+            return false;
+        })
+        .map(function (rule) {
+            return rule.href;
+        });
 
     var defaultPrefix = config.getPreference('WindowsDefaultUriPrefix');
-    if ('ms-appx://' !== defaultPrefix) {
-        var hasMsAppxWeb = whitelistRules.some(function(rule) {
+    if (defaultPrefix !== 'ms-appx://') {
+        var hasMsAppxWeb = whitelistRules.some(function (rule) {
             return /^ms-appx-web:\/\/\/$/i.test(rule);
         });
         if (!hasMsAppxWeb) {
@@ -333,23 +333,26 @@ var PLATFORM_IMAGES = [
     {dest: 'SplashScreenPhone.scale-240', width: 1152, height: 1920, targetProject: TARGET_PROJECT_WP81}
 ];
 
-function findPlatformImage(width, height) {
-    if (!width && !height){
+function findPlatformImage (width, height) {
+    if (!width && !height) {
         // this could be default image,
         // Windows requires specific image dimension so we can't apply it
         return null;
     }
-    for (var idx in PLATFORM_IMAGES){
+    for (var idx in PLATFORM_IMAGES) {
         var res = PLATFORM_IMAGES[idx];
         // If only one of width or height is not specified, use another parameter for comparation
         // If both specified, compare both.
+
+        /* eslint-disable eqeqeq */
         if ((!width || (width == res.width)) &&
-            (!height || (height == res.height))){
+            (!height || (height == res.height))) {
             return res;
         }
     }
     return null;
 }
+/* eslint-enable eqeqeq */
 
 /** Maps MRT splashscreen image to its target project defined in PLATFORM_IMAGES -> 8.1|WP8.1|10
  * This assumes we have different scales used for 8.1 and 10 projects.
@@ -358,7 +361,7 @@ function findPlatformImage(width, height) {
  * @param  {MRTImage} mrtImage
  * @return {String} targetProject defined in PLATFORM_IMAGES
  */
-function mrtSplashScreenToTargetProject(mrtImage) {
+function mrtSplashScreenToTargetProject (mrtImage) {
     // Gives something like -> splashscreen.scale-100
     var splashDestToFind = [mrtImage.basename, mrtImage.qualifiers].join('.').toLowerCase();
     var matchingSplashScreen = PLATFORM_IMAGES.filter(function (img) {
@@ -368,8 +371,8 @@ function mrtSplashScreenToTargetProject(mrtImage) {
     return matchingSplashScreen && matchingSplashScreen.targetProject;
 }
 
-function mapImageResources(images, imagesDir) {
-    function exceedsSizeLimit(filePath) {
+function mapImageResources (images, imagesDir) {
+    function exceedsSizeLimit (filePath) {
         return fs.statSync(filePath).size > SPLASH_SCREEN_SIZE_LIMIT;
     }
 
@@ -388,14 +391,14 @@ function mapImageResources(images, imagesDir) {
 
             // then get all matching MRT images in source directory
             var candidates = fs.readdirSync(imageToCopy.location)
-            .map(function (file) { return new MRTImage(path.join(imageToCopy.location, file)); })
-            .filter(imageToCopy.matchesTo, imageToCopy);
+                .map(function (file) { return new MRTImage(path.join(imageToCopy.location, file)); })
+                .filter(imageToCopy.matchesTo, imageToCopy);
 
             // Warn user if no images were copied
             if (candidates.length === 0) {
                 events.emit('warn', 'No images found for target: ' + img.target);
             } else {
-                candidates.forEach(function(mrtImage) {
+                candidates.forEach(function (mrtImage) {
                     if (img.target === SPLASH_SCREEN_DESKTOP_TARGET_NAME &&
                         mrtSplashScreenToTargetProject(mrtImage) === TARGET_PROJECT_10 &&
                         exceedsSizeLimit(mrtImage.path)) {
@@ -429,7 +432,7 @@ function mapImageResources(images, imagesDir) {
     return pathMap;
 }
 
-function copyImages(cordovaProject, locations) {
+function copyImages (cordovaProject, locations) {
     var images = cordovaProject.projectConfig.getIcons('windows')
         .concat(cordovaProject.projectConfig.getSplashScreens('windows'));
 
@@ -445,7 +448,7 @@ function copyImages(cordovaProject, locations) {
         resourceMap, { rootDir: cordovaProject.root }, logFileOp);
 }
 
-function cleanImages(projectRoot, projectConfig, locations) {
+function cleanImages (projectRoot, projectConfig, locations) {
     var images = projectConfig.getIcons('windows')
         .concat(projectConfig.getSplashScreens('windows'));
 
@@ -463,7 +466,7 @@ function cleanImages(projectRoot, projectConfig, locations) {
     }
 }
 
-function applyUAPVersionToProject(projectFilePath, uapVersionInfo) {
+function applyUAPVersionToProject (projectFilePath, uapVersionInfo) {
     // No uapVersionInfo means that there is no UAP SDKs installed and there is nothing to do for us
     if (!uapVersionInfo) return;
 
@@ -479,7 +482,7 @@ function applyUAPVersionToProject(projectFilePath, uapVersionInfo) {
 }
 
 // returns {minUAPVersion: Version, targetUAPVersion: Version} | false
-function getUAPVersions(config) {
+function getUAPVersions (config) {
     var baselineVersions = MSBuildTools.getAvailableUAPVersions();
     if (!baselineVersions || baselineVersions.length === 0) {
         return false;
@@ -499,7 +502,7 @@ function getUAPVersions(config) {
  * @param  {Object} splash
  * @returns {String} 'SplashScreen'|'SplashScreenPhone'
  */
-function getTargetForImage(splash) {
+function getTargetForImage (splash) {
     if (splash.target) {
         // MRT syntax:
         return splash.target;
@@ -521,19 +524,18 @@ function getTargetForImage(splash) {
 }
 
 // Updates manifests to match the app splash screen image types (PNG/JPG/JPEG)
-function updateSplashScreenImageExtensions(cordovaProject, locations) {
+function updateSplashScreenImageExtensions (cordovaProject, locations) {
 
     // Saving all extensions used for targets to verify them later
     var extensionsUsed = {};
 
-    function checkThatExtensionsAreNotMixed() {
+    function checkThatExtensionsAreNotMixed () {
         for (var target in extensionsUsed) {
-            /*jshint loopfunc: true */
             if (extensionsUsed.hasOwnProperty(target)) {
                 var extensionsUsedForTarget = extensionsUsed[target];
 
                 // Check that extensions are not mixed:
-                if (extensionsUsedForTarget.length > 1 && extensionsUsedForTarget.some(function(item) {
+                if (extensionsUsedForTarget.length > 1 && extensionsUsedForTarget.some(function (item) {
                     return item !== extensionsUsedForTarget[0];
                 })) {
                     events.emit('warn', '"' + target + '" splash screens have mixed file extensions which is not supported. Some of the images will not be used.');
@@ -542,7 +544,7 @@ function updateSplashScreenImageExtensions(cordovaProject, locations) {
         }
     }
 
-    function checkTargetMatchAndUpdateUsedExtensions(img, target) {
+    function checkTargetMatchAndUpdateUsedExtensions (img, target) {
         var matchesTarget = getTargetForImage(img) === target;
 
         if (matchesTarget === true) {
@@ -553,7 +555,7 @@ function updateSplashScreenImageExtensions(cordovaProject, locations) {
         return matchesTarget;
     }
 
-    function updateSplashExtensionInManifest(manifestFileName, splashScreen) {
+    function updateSplashExtensionInManifest (manifestFileName, splashScreen) {
         var manifest = AppxManifest.get(path.join(locations.root, manifestFileName));
         var newExtension = path.extname(splashScreen.src);
 
@@ -566,11 +568,11 @@ function updateSplashScreenImageExtensions(cordovaProject, locations) {
 
     var splashScreens = cordovaProject.projectConfig.getSplashScreens('windows');
 
-    var desktopSplashScreen = splashScreens.filter(function(img) { 
+    var desktopSplashScreen = splashScreens.filter(function (img) {
         return checkTargetMatchAndUpdateUsedExtensions(img, SPLASH_SCREEN_DESKTOP_TARGET_NAME);
     })[0];
 
-    var phoneSplashScreen = splashScreens.filter(function(img) { 
+    var phoneSplashScreen = splashScreens.filter(function (img) {
         return checkTargetMatchAndUpdateUsedExtensions(img, SPLASH_SCREEN_PHONE_TARGET_NAME);
     })[0];
 
@@ -607,24 +609,24 @@ module.exports.prepare = function (cordovaProject, options) {
 
     // Update own www dir with project's www assets and plugins' assets and js-files
     return Q.when(updateWww(cordovaProject, this.locations))
-    .then(function () {
-        // update project according to config.xml changes.
-        return updateProjectAccordingTo(self._config, self.locations);
-    })
-    .then(function () {
-        copyImages(cordovaProject, self.locations);
+        .then(function () {
+            // update project according to config.xml changes.
+            return updateProjectAccordingTo(self._config, self.locations);
+        })
+        .then(function () {
+            copyImages(cordovaProject, self.locations);
 
-        // Update SplashScreen image extensions in the manifests
-        // TODO: Do this only when config.xml changes
-        updateSplashScreenImageExtensions(cordovaProject, self.locations);
+            // Update SplashScreen image extensions in the manifests
+            // TODO: Do this only when config.xml changes
+            updateSplashScreenImageExtensions(cordovaProject, self.locations);
 
-        // CB-5421 Add BOM to all html, js, css files
-        // to ensure app can pass Windows Store Certification
-        addBOMSignature(self.locations.www);
-    })
-    .then(function () {
-        events.emit('verbose', 'Prepared windows project successfully');
-    });
+            // CB-5421 Add BOM to all html, js, css files
+            // to ensure app can pass Windows Store Certification
+            addBOMSignature(self.locations.www);
+        })
+        .then(function () {
+            events.emit('verbose', 'Prepared windows project successfully');
+        });
 };
 
 module.exports.clean = function (options) {
@@ -655,12 +657,12 @@ module.exports.clean = function (options) {
  *
  * @param  {String}  directory  Directory where we need to update files
  */
-function addBOMSignature(directory) {
+function addBOMSignature (directory) {
     shell.ls('-R', directory)
-    .map(function (file) {
-        return path.join(directory, file);
-    })
-    .forEach(addBOMToFile);
+        .map(function (file) {
+            return path.join(directory, file);
+        })
+        .forEach(addBOMToFile);
 }
 
 /**
@@ -669,7 +671,7 @@ function addBOMSignature(directory) {
  *
  * @param {String} file Absolute path to file to add BOM to
  */
-function addBOMToFile(file) {
+function addBOMToFile (file) {
     if (!file.match(/\.(js|htm|html|css|json)$/i)) {
         return;
     }
@@ -702,7 +704,7 @@ module.exports.addBOMToFile = addBOMToFile;
  *   represents current project's configuration. When returned, the
  *   configuration is already dumped to appropriate config.xml file.
  */
-function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
+function updateConfigFilesFrom (sourceConfig, configMunger, locations) {
     // First cleanup current config and merge project's one into own
     var defaultConfig = locations.defaultConfigXml;
     var ownConfig = locations.configXml;
@@ -727,7 +729,7 @@ function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
     // Merge changes from app's config.xml into platform's one
     var config = new ConfigParser(ownConfig);
     xmlHelpers.mergeXml(sourceConfig.doc.getroot(),
-        config.doc.getroot(), 'windows', /*clobber=*/true);
+        config.doc.getroot(), 'windows', /* clobber= */true);
 
     config.write();
     return config;
@@ -736,7 +738,7 @@ function updateConfigFilesFrom(sourceConfig, configMunger, locations) {
 /**
  * Logs all file operations via the verbose event stream, indented.
  */
-function logFileOp(message) {
+function logFileOp (message) {
     events.emit('verbose', '  ' + message);
 }
 
@@ -749,7 +751,7 @@ function logFileOp(message) {
  * @param   {Object}  destinations      An object that contains destination
  *   paths for www files.
  */
-function updateWww(cordovaProject, destinations) {
+function updateWww (cordovaProject, destinations) {
     var sourceDirs = [
         path.relative(cordovaProject.root, cordovaProject.locations.www),
         path.relative(cordovaProject.root, destinations.platformWww)
@@ -772,7 +774,7 @@ function updateWww(cordovaProject, destinations) {
 /**
  * Cleans all files from the platform 'www' directory.
  */
-function cleanWww(projectRoot, locations) {
+function cleanWww (projectRoot, locations) {
     var targetDir = path.relative(projectRoot, locations.www);
     events.emit('verbose', 'Cleaning ' + targetDir);
 
@@ -788,12 +790,12 @@ function cleanWww(projectRoot, locations) {
  *   be used to update project
  * @param   {Object}  locations       A map of locations for this platform
  */
-function updateProjectAccordingTo(projectConfig, locations) {
+function updateProjectAccordingTo (projectConfig, locations) {
     // Apply appxmanifest changes
     [MANIFEST_WINDOWS, MANIFEST_WINDOWS10, MANIFEST_PHONE]
-    .forEach(function(manifestFile) {
-        updateManifestFile(projectConfig, path.join(locations.root, manifestFile));
-    });
+        .forEach(function (manifestFile) {
+            updateManifestFile(projectConfig, path.join(locations.root, manifestFile));
+        });
 
     if (process.platform === 'win32') {
         applyUAPVersionToProject(path.join(locations.root, PROJECT_WINDOWS10), getUAPVersions(projectConfig));

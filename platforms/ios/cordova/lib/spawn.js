@@ -27,11 +27,15 @@ var proc = require('child_process');
  * @param  {String} opt_cwd       Working directory for command
  * @param  {String} opt_verbosity Verbosity level for command stdout output, "verbose" by default
  * @return {Promise}              Promise either fullfilled or rejected with error code
+ * @deprecated Use `require('cordova-common').superspawn` instead.
  */
 module.exports = function (cmd, args, opt_cwd) {
+    console.warn(
+        'This function is deprecated, may be removed from a future release. ' +
+        "Use `require('cordova-common').superspawn` instead.");
     var d = Q.defer();
     try {
-        var child = proc.spawn(cmd, args, {cwd: opt_cwd, stdio: 'inherit'});
+        var child = proc.spawn(cmd, args, { cwd: opt_cwd, stdio: 'inherit' });
 
         child.on('exit', function (code) {
             if (code) {

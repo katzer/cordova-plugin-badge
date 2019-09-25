@@ -5,16 +5,6 @@
   },
   "config_munge": {
     "files": {
-      "res/xml/config.xml": {
-        "parents": {
-          "/*": [
-            {
-              "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
-              "count": 1
-            }
-          ]
-        }
-      },
       "config.xml": {
         "parents": {
           "/*": [
@@ -24,27 +14,29 @@
             }
           ]
         }
+      },
+      "res/xml/config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
       }
     }
   },
   "installed_plugins": {
-    "cordova-plugin-x-toast": {
+    "cordova-plugin-badge": {
       "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
     },
-    "cordova-plugin-badge": {
+    "cordova-plugin-x-toast": {
       "PACKAGE_NAME": "de.appplant.cordova.plugin.badge.example"
     }
   },
   "dependent_plugins": {},
   "modules": [
-    {
-      "id": "cordova-plugin-x-toast.Toast",
-      "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
-      "pluginId": "cordova-plugin-x-toast",
-      "clobbers": [
-        "window.plugins.toast"
-      ]
-    },
     {
       "id": "cordova-plugin-badge.Badge",
       "file": "plugins/cordova-plugin-badge/www/badge.js",
@@ -52,10 +44,18 @@
       "clobbers": [
         "cordova.plugins.notification.badge"
       ]
+    },
+    {
+      "id": "cordova-plugin-x-toast.Toast",
+      "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+      "pluginId": "cordova-plugin-x-toast",
+      "clobbers": [
+        "window.plugins.toast"
+      ]
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-x-toast": "2.7.0",
-    "cordova-plugin-badge": "0.8.8"
+    "cordova-plugin-badge": "0.8.8",
+    "cordova-plugin-x-toast": "2.7.2"
   }
 }

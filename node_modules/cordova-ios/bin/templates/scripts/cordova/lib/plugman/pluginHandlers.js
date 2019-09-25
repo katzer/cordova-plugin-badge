@@ -129,16 +129,7 @@ var handlers = {
             if (!obj.custom) { // CB-9825 cocoapod integration for plugins
                 var keepFrameworks = keep_these_frameworks;
                 if (keepFrameworks.indexOf(src) < 0) {
-                    if (obj.type === 'podspec') {
-                        var podsJSON = require(path.join(project.projectDir, 'pods.json'));
-                        if (podsJSON[src]) {
-                            if (podsJSON[src].count > 1) {
-                                podsJSON[src].count = podsJSON[src].count - 1;
-                            } else {
-                                delete podsJSON[src];
-                            }
-                        }
-                    } else {
+                    if (obj.type !== 'podspec') {
                         // this should be refactored
                         project.frameworks[src] = project.frameworks[src] || 1;
                         project.frameworks[src]--;
@@ -154,7 +145,7 @@ var handlers = {
             }
 
             var targetDir = fixPathSep(path.resolve(project.plugins_dir, plugin.id, path.basename(src)));
-            var pbxFile = project.xcode.removeFramework(targetDir, {customFramework: true});
+            var pbxFile = project.xcode.removeFramework(targetDir, { customFramework: true });
             if (pbxFile) {
                 project.xcode.removeFromPbxEmbedFrameworksBuildPhase(pbxFile);
             }
@@ -277,9 +268,9 @@ function installHelper (type, obj, plugin_dir, project_dir, plugin_id, options, 
         var opt = { weak: obj.weak };
         var project_relative = path.join(path.basename(project.xcode_path), project_ref);
         project.xcode.addFramework(project_relative, opt);
-        project.xcode.addToLibrarySearchPaths({path: project_ref});
+        project.xcode.addToLibrarySearchPaths({ path: project_ref });
     } else {
-        project.xcode.addSourceFile(project_ref, obj.compilerFlags ? {compilerFlags: obj.compilerFlags} : {});
+        project.xcode.addSourceFile(project_ref, obj.compilerFlags ? { compilerFlags: obj.compilerFlags } : {});
     }
 }
 
@@ -303,7 +294,7 @@ function uninstallHelper (type, obj, project_dir, plugin_id, options, project) {
     } else if (obj.framework) {
         var project_relative = path.join(path.basename(project.xcode_path), project_ref);
         project.xcode.removeFramework(project_relative);
-        project.xcode.removeFromLibrarySearchPaths({path: project_ref});
+        project.xcode.removeFromLibrarySearchPaths({ path: project_ref });
     } else {
         project.xcode.removeSourceFile(project_ref);
     }

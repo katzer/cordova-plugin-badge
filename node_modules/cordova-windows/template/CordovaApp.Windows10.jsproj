@@ -101,6 +101,7 @@
     <Content Exclude="images\*SplashScreenPhone*;images\*.scale-240.*" Include="images\*.png" />
     <Content Exclude="images\*SplashScreenPhone*;images\*.scale-240.*" Include="images\*.jpg" />
     <Content Exclude="images\*SplashScreenPhone*;images\*.scale-240.*" Include="images\*.jpeg" />
+    <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <Import Project="CordovaApp.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />

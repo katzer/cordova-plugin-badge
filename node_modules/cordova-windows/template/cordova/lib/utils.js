@@ -17,11 +17,9 @@
        under the License.
 */
 
-/* jshint sub:true */
-
-var Q     = require('q');
-var fs    = require('fs');
-var path  = require('path');
+var Q = require('q');
+var fs = require('fs');
+var path = require('path');
 var spawn = require('cordova-common').superspawn.spawn;
 var DeploymentTool = require('./deployment');
 
@@ -29,11 +27,11 @@ var DeploymentTool = require('./deployment');
 // which provides helper functions to install/unistall/start Windows Store app
 module.exports.getAppStoreUtils = function () {
     var appStoreUtils = path.join(__dirname, 'WindowsStoreAppUtils.ps1');
-    if (!fs.existsSync (appStoreUtils)) {
+    if (!fs.existsSync(appStoreUtils)) {
         return Q.reject('Can\'t unblock AppStoreUtils script');
     }
     return spawn('powershell', ['Unblock-File', module.exports.quote(appStoreUtils)], {stdio: 'ignore'})
-    .thenResolve(appStoreUtils);
+        .thenResolve(appStoreUtils);
 };
 
 // returns path to AppDeploy util from Windows Phone 8.1 SDK
@@ -52,8 +50,8 @@ module.exports.getAppDeployUtils = function (targetWin10) {
 module.exports.isCordovaProject = function (platformpath) {
     if (fs.existsSync(platformpath)) {
         var files = fs.readdirSync(platformpath);
-        for (var i in files){
-            if (path.extname(files[i]) == '.shproj'){
+        for (var i in files) {
+            if (path.extname(files[i]) === '.shproj') {
                 return true;
             }
         }
@@ -61,6 +59,6 @@ module.exports.isCordovaProject = function (platformpath) {
     return false;
 };
 
-module.exports.quote = function(str) {
+module.exports.quote = function (str) {
     return '"' + str + '"';
 };

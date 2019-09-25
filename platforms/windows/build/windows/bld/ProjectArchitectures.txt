@@ -1,1 +1,0 @@
-Z:\Documents\github\cordova-example-badge\platforms\windows\CordovaApp.Windows10.jsproj;x64

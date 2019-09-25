@@ -17,9 +17,9 @@
        under the License.
 */
 
-var Q     = require('q'),
-    shell = require('shelljs'),
-    versions = require('./versions');
+var Q = require('q');
+var shell = require('shelljs');
+var versions = require('./versions');
 
 var XCODEBUILD_MIN_VERSION = '6.0.0';
 var XCODEBUILD_NOT_FOUND_MESSAGE =
@@ -84,7 +84,7 @@ var Requirement = function (id, name, isFatal) {
  *
  * @return Promise<Requirement[]> Array of requirements. Due to implementation, promise is always fulfilled.
  */
-module.exports.check_all = function() {
+module.exports.check_all = function () {
 
     var requirements = [
         new Requirement('os', 'Apple OS X', true),
@@ -108,19 +108,19 @@ module.exports.check_all = function() {
 
             var requirement = requirements[idx];
             return checkFn()
-            .then(function (version) {
-                requirement.installed = true;
-                requirement.metadata.version = version;
-                result.push(requirement);
-            }, function (err) {
-                if (requirement.isFatal) fatalIsHit = true;
-                requirement.metadata.reason = err;
-                result.push(requirement);
-            });
+                .then(function (version) {
+                    requirement.installed = true;
+                    requirement.metadata.version = version;
+                    result.push(requirement);
+                }, function (err) {
+                    if (requirement.isFatal) fatalIsHit = true;
+                    requirement.metadata.reason = err;
+                    result.push(requirement);
+                });
         });
     }, Q())
-    .then(function () {
-        // When chain is completed, return requirements array to upstream API
-        return result;
-    });
+        .then(function () {
+            // When chain is completed, return requirements array to upstream API
+            return result;
+        });
 };

@@ -733,7 +733,7 @@ iframe {
 .win-textbox,
 .win-link,
 .win-textarea {
-  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols";
+  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols", "Segoe UI Emoji";
 }
 .win-textbox,
 .win-textarea {
@@ -2693,7 +2693,7 @@ button.win-navigation-backbutton:enabled:hover:active {
     border-color: transparent;
     color: ButtonFace;
   }
-  html.win-hoverable win-semanticzoom-button:hover {
+  html.win-hoverable .win-semanticzoom-button:hover {
     background-color: Highlight;
     border-color: ButtonText;
     color: HighlightText;
@@ -2744,7 +2744,7 @@ button.win-navigation-backbutton:enabled:hover:active {
   -ms-flex: 0 0 auto;
   -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
-  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols";
+  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols", "Segoe UI Emoji";
   font-size: 15px;
   font-weight: bold;
   white-space: nowrap;
@@ -3283,7 +3283,7 @@ button[aria-checked=true]:disabled:active .win-commandimage {
 Command button labels.
 */
 button.win-command .win-label {
-  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols";
+  font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols", "Segoe UI Emoji";
   font-size: 12px;
   font-weight: 400;
   line-height: 1.167;
@@ -5372,6 +5372,9 @@ Hide clear button in search box control.
   bottom: 0;
   left: 0;
   width: 100%;
+}
+.win-splitview.win-splitview-pane-opened.win-splitview-openeddisplayoverlay.win-splitview-placementleft {
+  position: static;
 }
 .win-splitview.win-splitview-pane-opened.win-splitview-openeddisplayoverlay.win-splitview-placementleft .win-splitview-panewrapper {
   position: absolute;

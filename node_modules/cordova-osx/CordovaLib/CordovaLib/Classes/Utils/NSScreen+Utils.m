@@ -18,56 +18,57 @@
  */
 
 #import "NSScreen+Utils.h"
+#import <IOKit/graphics/IOGraphicsLib.h>
+
+NSString* screenNameForDisplay(CGDirectDisplayID displayID) {
+    NSString *screenName = nil;
+
+    NSDictionary *deviceInfo = (__bridge NSDictionary *) IODisplayCreateInfoDictionary(CGDisplayIOServicePort(displayID), kIODisplayOnlyPreferredName);
+    NSDictionary *localizedNames = deviceInfo[[NSString stringWithUTF8String:kDisplayProductName]];
+
+    if ([localizedNames count] > 0) {
+        screenName = localizedNames[[localizedNames allKeys][0]];
+    }
+
+    return screenName;
+}
 
 @implementation NSScreen (Utils)
 
-+ (NSArray*) sortedScreens {
-    NSArray* sortedScreens = [[NSScreen screens] sortedArrayUsingComparator:^NSComparisonResult(NSScreen* screen1, NSScreen* screen2) {
-        if (screen1.frame.origin.x > screen2.frame.origin.x) {
-            return (NSComparisonResult) NSOrderedDescending;
-        }
-
-        if (screen1.frame.origin.x < screen2.frame.origin.x) {
-            return (NSComparisonResult) NSOrderedAscending;
-        }
-
-        return (NSComparisonResult) NSOrderedSame;
-    }];
-    return sortedScreens;
-}
-
-+ (NSArray*) sortedScreenRects {
-    NSMutableArray* screenWidths = [[NSMutableArray alloc] init];
-    NSRect mainScreenRect;
-
-    mainScreenRect = [[NSScreen mainScreen] frame];
-    [screenWidths addObject:[NSValue valueWithRect:mainScreenRect]];
-
-    NSArray* sortedScreens = [self sortedScreens];
-
-    for (NSScreen* screen in sortedScreens) {
-        if ([screen isNotEqualTo:[NSScreen mainScreen]] &&
-                screen.frame.origin.y + screen.frame.size.height == mainScreenRect.origin.y + mainScreenRect.size.height &&
-                screen.frame.origin.x > mainScreenRect.origin.x) {
-            [screenWidths addObject:[NSValue valueWithRect:screen.frame]];
-        }
-    }
-
-    return screenWidths;
-}
-
 + (NSRect) fullScreenRect {
-    NSArray* screenRects = [self sortedScreenRects];
-    NSRect rect = [[NSScreen mainScreen] frame];
-    CGFloat finalWidth = 0.0f;
+    CGFloat x0 = 0.0f;
+    CGFloat y0 = 0.0f;
+    CGFloat x1 = 0.0f;
+    CGFloat y1 = 0.0f;
 
-    for (NSValue* rectValue in screenRects) {
-        finalWidth += [rectValue rectValue].size.width;
+    NSArray* screens = [NSScreen screens];
+    NSLog(@"Detected %lu display%s:", screens.count, screens.count > 1 ? "s" : "");
+    for (NSScreen* screen in [NSScreen screens]) {
+        NSNumber* screenID = [screen.deviceDescription objectForKey:@"NSScreenNumber"];
+        CGDirectDisplayID aID = [screenID unsignedIntValue];
+        NSLog(@"- %@ at: %.lf,%.lf size: %.lf x %.lf", screenNameForDisplay(aID),
+                screen.frame.origin.x, screen.frame.origin.y,
+                screen.frame.size.width, screen.frame.size.height);
+
+        if (NSMinX(screen.frame) < x0) {
+            x0 = NSMinX(screen.frame);
+        };
+        if (NSMinY(screen.frame) < y0) {
+            y0 = NSMinY(screen.frame);
+        };
+        if (NSMaxX(screen.frame) > x1) {
+            x1 = NSMaxX(screen.frame);
+        };
+        if (NSMaxY(screen.frame) > y1) {
+            y1 = NSMaxY(screen.frame);
+        };
+    }
+    if ([NSScreen screensHaveSeparateSpaces] && screens.count > 1) {
+        NSLog(@"Fullscreen only possible to cover main screen. Disable 'Displays have separate Spaces' in 'System Preferences -> Mission Control' to span all displays.");
+        return [NSScreen mainScreen].frame;
     }
 
-    rect.size.width = finalWidth;
-
-    return rect;
+    return NSMakeRect(x0, y0, x1-x0, y1-y0);
 }
 
 @end

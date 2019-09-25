@@ -17,11 +17,11 @@
     under the License.
 */
 
-/*jslint node: true */
-
 var fs = require('fs');
 var path = require('path');
 
+var PluginManager = require('cordova-common').PluginManager;
+var projectFile = require('./lib/projectFile');
 var CordovaError = require('cordova-common').CordovaError;
 var ConsoleLogger = require('./lib/ConsoleLogger');
 
@@ -36,7 +36,7 @@ var ConsoleLogger = require('./lib/ConsoleLogger');
  *   logging purposes. If no EventEmitter provided, all events will be logged to
  *   console
  */
-function Api(platform, platformRootDir, events) {
+function Api (platform, platformRootDir, events) {
     // 'platform' property is required as per PlatformApi spec
     this.platform = platform || 'osx';
 
@@ -49,15 +49,15 @@ function Api(platform, platformRootDir, events) {
     var xcodeCordovaProj;
 
     try {
-        xcodeProjDir = fs.readdirSync(this.root).filter( function(e) { return e.match(/\.xcodeproj$/i); })[0];
+        xcodeProjDir = fs.readdirSync(this.root).filter(function (e) { return e.match(/\.xcodeproj$/i); })[0];
         if (!xcodeProjDir) {
             throw new CordovaError('The provided path "' + this.root + '" is not a Cordova iOS project.');
         }
 
-        var cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep)+1, xcodeProjDir.indexOf('.xcodeproj'));
+        var cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep) + 1, xcodeProjDir.indexOf('.xcodeproj'));
         xcodeCordovaProj = path.join(this.root, cordovaProjName);
-    } catch(e) {
-        throw new CordovaError('The provided path "'+this.root+'" is not a Cordova iOS project.');
+    } catch (e) {
+        throw new CordovaError('The provided path "' + this.root + '" is not a Cordova iOS project.');
     }
 
     this.locations = {
@@ -96,13 +96,13 @@ function Api(platform, platformRootDir, events) {
  */
 Api.createPlatform = function (destination, config, options, events) {
     return require('../../../lib/create')
-    .createProject(destination, config.packageName(), config.name(), options, events || ConsoleLogger.get())
-    .then(function () {
-        // after platform is created we return Api instance based on new Api.js location
-        // This is required to correctly resolve paths in the future api calls
-        var PlatformApi = require(path.resolve(destination, 'cordova/Api'));
-        return new PlatformApi('osx', destination, events);
-    });
+        .createProject(destination, config.packageName(), config.name(), options, events || ConsoleLogger.get())
+        .then(function () {
+            // after platform is created we return Api instance based on new Api.js location
+            // This is required to correctly resolve paths in the future api calls
+            var PlatformApi = require(path.resolve(destination, 'cordova/Api'));
+            return new PlatformApi('osx', destination, events);
+        });
 };
 
 /**
@@ -123,11 +123,11 @@ Api.createPlatform = function (destination, config, options, events) {
  */
 Api.updatePlatform = function (destination, options, events) {
     return require('../../../lib/create')
-    .updateProject(destination, options, events || ConsoleLogger.get())
-    .then(function () {
-        var PlatformApi = require(path.resolve(destination, 'cordova/Api'));
-        return new PlatformApi('android', destination, events);
-    });
+        .updateProject(destination, options, events || ConsoleLogger.get())
+        .then(function () {
+            var PlatformApi = require(path.resolve(destination, 'cordova/Api'));
+            return new PlatformApi('android', destination, events);
+        });
 };
 
 /**
@@ -183,8 +183,8 @@ Api.prototype.prepare = function (cordovaProject) {
  *   CordovaError instance.
  */
 Api.prototype.addPlugin = function (plugin, installOptions) {
-    var Plugman = require('./lib/plugman/Plugman');
-    return Plugman.get(this.locations, this.events).addPlugin(plugin, installOptions);
+    var xcodeproj = projectFile.parse(this.locations);
+    return PluginManager.get(this.platform, this.locations, xcodeproj).addPlugin(plugin, installOptions);
 };
 
 /**
@@ -201,8 +201,8 @@ Api.prototype.addPlugin = function (plugin, installOptions) {
  *   CordovaError instance.
  */
 Api.prototype.removePlugin = function (plugin, uninstallOptions) {
-    var Plugman = require('./lib/plugman/Plugman');
-    return Plugman.get(this.locations, this.events).removePlugin(plugin, uninstallOptions);
+    var xcodeproj = projectFile.parse(this.locations);
+    return PluginManager.get(this.platform, this.locations, xcodeproj).removePlugin(plugin, uninstallOptions);
 };
 
 /**
@@ -240,9 +240,9 @@ Api.prototype.removePlugin = function (plugin, uninstallOptions) {
 Api.prototype.build = function (buildOptions) {
     var self = this;
     return require('./lib/check_reqs').run()
-    .then(function () {
-        return require('./lib/build').run.call(self, buildOptions);
-    });
+        .then(function () {
+            return require('./lib/build').run.call(self, buildOptions);
+        });
 };
 
 /**
@@ -257,12 +257,12 @@ Api.prototype.build = function (buildOptions) {
  * @return {Promise} A promise either fulfilled if package was built and ran
  *   successfully, or rejected with CordovaError.
  */
-Api.prototype.run = function(runOptions) {
+Api.prototype.run = function (runOptions) {
     var self = this;
     return require('./lib/check_reqs').run()
-    .then(function () {
-        return require('./lib/run').run.call(self, runOptions);
-    });
+        .then(function () {
+            return require('./lib/run').run.call(self, runOptions);
+        });
 };
 
 /**
@@ -271,12 +271,12 @@ Api.prototype.run = function(runOptions) {
  * @return  {Promise}  Return a promise either fulfilled, or rejected with
  *   CordovaError.
  */
-Api.prototype.clean = function(cleanOptions) {
+Api.prototype.clean = function (cleanOptions) {
     var self = this;
     return require('./lib/check_reqs').run()
-    .then(function () {
-        return require('./lib/clean').run.call(self, cleanOptions);
-    });
+        .then(function () {
+            return require('./lib/clean').run.call(self, cleanOptions);
+        });
 };
 
 /**
@@ -287,7 +287,7 @@ Api.prototype.clean = function(cleanOptions) {
  * @return  {Promise<Requirement[]>}  Promise, resolved with set of Requirement
  *   objects for current platform.
  */
-Api.prototype.requirements = function() {
+Api.prototype.requirements = function () {
     return require('./lib/check_reqs').check_all();
 };
 

@@ -27,11 +27,11 @@ static NSRect savedFrameRect;
 
 /**
  * Makes the window fullscreen by resizing it to the size of all attached displays. This is different from just entering
- * normal OSX fullscreen mode which only overs the main display.
+ * normal OSX fullscreen mode which only covers the main display.
  */
 + (void) makeFullScreen:(NSWindow*) window {
     NSRect fullScreenRect = [NSScreen fullScreenRect];
-    NSLog(@"Full screen resolution: %.1f x %.1f", fullScreenRect.size.width, fullScreenRect.size.height);
+    NSLog(@"Full screen resolution: %.f x %.f", fullScreenRect.size.width, fullScreenRect.size.height);
     [window setStyleMask:window.styleMask & ~NSTitledWindowMask];
     [window setHidesOnDeactivate:YES];
     [window setLevel:NSMainMenuWindowLevel + 1];
@@ -61,7 +61,7 @@ static NSRect savedFrameRect;
 }
 
 + (void) setSizeOfWindow:(NSWindow*) window size:(NSSize) size {
-    NSLog(@"Set window size to %.1f x %.1f", size.width, size.height);
+    NSLog(@"Set window size to %.f x %.f", size.width, size.height);
     NSRect frameRect = window.frame;
     frameRect.size = size;
     [window setFrame:frameRect display:YES];

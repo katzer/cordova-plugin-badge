@@ -33,13 +33,13 @@ var CordovaError = require('cordova-common').CordovaError;
  * Also attaches handler to process' uncaught exceptions, so these exceptions
  *   logged to console similar to regular error events.
  */
-function ConsoleLogger() {
+function ConsoleLogger () {
     EventEmitter.call(this);
 
     var isVerbose = process.argv.indexOf('-d') >= 0 || process.argv.indexOf('--verbose') >= 0;
     // For CordovaError print only the message without stack trace unless we
     // are in a verbose mode.
-    process.on('uncaughtException', function(err){
+    process.on('uncaughtException', function (err) {
         if ((err instanceof CordovaError) && isVerbose) {
             console.error(err.stack);
         } else {
@@ -50,8 +50,7 @@ function ConsoleLogger() {
 
     this.on('results', console.log);
     this.on('verbose', function () {
-        if (isVerbose)
-            console.log.apply(console, arguments);
+        if (isVerbose) { console.log.apply(console, arguments); }
     });
     this.on('info', console.log);
     this.on('log', console.log);

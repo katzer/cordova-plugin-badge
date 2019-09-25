@@ -81,8 +81,8 @@
                 CDV_EXEC_LOG(@"Exec: Retrieved new exec messages by chaining.");
             }
 
-            [_commandQueue enqueueCommandBatch:commandsJSON];
-            [_commandQueue executePending];
+            [self->_commandQueue enqueueCommandBatch:commandsJSON];
+            [self->_commandQueue executePending];
         }
     }];
 }
@@ -168,7 +168,7 @@
     return [_viewController getCommandInstance:pluginName];
 }
 
-- (void)runInBackground:(void (^)())block
+- (void)runInBackground:(void (^)(void))block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }

@@ -44,4 +44,14 @@
 
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)app hasVisibleWindows:(BOOL)visibleWindows
+{
+  if (visibleWindows) {
+    [self.window orderFront:self];
+  } else {
+    [self.window makeKeyAndOrderFront:self];
+  }
+  return YES;
+}
+
 @end

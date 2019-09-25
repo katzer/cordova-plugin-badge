@@ -88,7 +88,8 @@
     WebPreferences* prefs = [self.webView preferences];
     [prefs setAutosaves:YES];
 
-    [self configureWebGL:prefs];
+    [self configureWebViewDelegate];
+    [self configureWebDefaults:prefs];
     [self configureLocalStorage:prefs];
     [self configureWindowSize];
     [self configureHideMousePointer];
@@ -165,10 +166,18 @@
     self.pluginObjects = [[NSMutableDictionary alloc] initWithCapacity:20];
 }
 
+- (void)configureWebViewDelegate {
+    NSString *allowWebViewNavigation = [self.settings objectForKey:@"AllowWebViewNavigation"];
+    if (allowWebViewNavigation == nil) {
+        allowWebViewNavigation = @"true";  // Default to true for backwards compatibility.
+    }
+    self.webViewDelegate.allowWebViewNavigation = [allowWebViewNavigation boolValue];
+}
+
 /**
- * Configures WebGL
+ * Configures the default web preferences
  */
-- (void) configureWebGL:(WebPreferences*) prefs {
+- (void) configureWebDefaults:(WebPreferences*) prefs {
     // initialize items based on settings
     BOOL enableWebGL = [self.settings[@"EnableWebGL"] boolValue];
 
@@ -176,6 +185,17 @@
     if (enableWebGL) {
         [prefs setWebGLEnabled:YES];
     }
+
+    // ensure that acceleration settings are enabled (CB-11002)
+    [prefs setRequestAnimationFrameEnabled:YES];
+    [prefs setAccelerated2dCanvasEnabled:YES];
+    [prefs setAcceleratedDrawingEnabled:YES];
+    [prefs setCanvasUsesAcceleratedDrawing:YES];
+    [prefs setAcceleratedCompositingEnabled:YES];
+
+    // todo: add configuration options for those
+    // [prefs setShowRepaintCounter:YES];
+    // [prefs setShowDebugBorders:YES];
 }
 
 /**
@@ -284,6 +304,12 @@
     id obj = self.pluginObjects[className];
     if (!obj) {
         obj = [(CDVPlugin*) [NSClassFromString(className) alloc] initWithWebView:webView];
+        if (!obj) {
+            NSString* fullClassName = [NSString stringWithFormat:@"%@.%@",
+                                       NSBundle.mainBundle.infoDictionary[@"CFBundleExecutable"],
+                                       className];
+            obj = [(CDVPlugin*) [NSClassFromString(fullClassName) alloc] initWithWebView:webView];
+        }
 
         if (obj != nil) {
             [self registerPlugin:obj withClassName:className];

@@ -19,7 +19,6 @@
        under the License.
 */
 
-var Q = require('q');
 var build = require('./build');
 var path = require('path');
 var Adb = require('./Adb');
@@ -53,13 +52,13 @@ module.exports.list = function (lookHarder) {
 module.exports.resolveTarget = function (target) {
     return this.list(true).then(function (device_list) {
         if (!device_list || !device_list.length) {
-            return Q.reject(new CordovaError('Failed to deploy to device, no devices found.'));
+            return Promise.reject(new CordovaError('Failed to deploy to device, no devices found.'));
         }
         // default device
         target = target || device_list[0];
 
         if (device_list.indexOf(target) < 0) {
-            return Q.reject('ERROR: Unable to find target \'' + target + '\'.');
+            return Promise.reject(new CordovaError('ERROR: Unable to find target \'' + target + '\'.'));
         }
 
         return build.detectArchitecture(target).then(function (arch) {
@@ -74,7 +73,7 @@ module.exports.resolveTarget = function (target) {
  * Returns a promise.
  */
 module.exports.install = function (target, buildResults) {
-    return Q().then(function () {
+    return Promise.resolve().then(function () {
         if (target && typeof target === 'object') {
             return target;
         }
@@ -87,7 +86,7 @@ module.exports.install = function (target, buildResults) {
         events.emit('log', 'Using apk: ' + apk_path);
         events.emit('log', 'Package name: ' + pkgName);
 
-        return Adb.install(resolvedTarget.target, apk_path, {replace: true}).catch(function (error) {
+        return Adb.install(resolvedTarget.target, apk_path, { replace: true }).catch(function (error) {
             // CB-9557 CB-10157 only uninstall and reinstall app if the one that
             // is already installed on device was signed w/different certificate
             if (!/INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES/.test(error.toString())) { throw error; }
@@ -98,7 +97,7 @@ module.exports.install = function (target, buildResults) {
             // This promise is always resolved, even if 'adb uninstall' fails to uninstall app
             // or the app doesn't installed at all, so no error catching needed.
             return Adb.uninstall(resolvedTarget.target, pkgName).then(function () {
-                return Adb.install(resolvedTarget.target, apk_path, {replace: true});
+                return Adb.install(resolvedTarget.target, apk_path, { replace: true });
             });
         }).then(function () {
             // unlock screen

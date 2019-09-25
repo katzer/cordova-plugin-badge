@@ -17,6 +17,7 @@
  under the License.
  */
 
+#import <WebKit/WebKit.h>
 #import "CDVInvokedUrlCommand.h"
 
 @implementation CDVInvokedUrlCommand
@@ -96,7 +97,7 @@
         return defaultValue;
     }
     id ret = _arguments[index];
-    if (ret == [NSNull null]) {
+    if (ret == [NSNull null] || ret == [WebUndefined undefined]) {
         ret = defaultValue;
     }
     if ((aClass != nil) && ![ret isKindOfClass:aClass]) {

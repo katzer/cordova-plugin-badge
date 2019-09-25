@@ -1,0 +1,26 @@
+{
+  "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+  },
+  "parserOptions": {
+      "ecmaVersion": 2018
+  },
+  "plugins": [
+      "jest"
+  ],
+  "extends": [
+      "plugin:jest/recommended",
+      "standard"
+  ],
+  "rules": {
+      "no-var": 2,
+      "camelcase": 0
+  },
+  "globals": {
+      "fixtureFile": true,
+      "fixtureJson": true,
+      "fakeFileSystem": true
+  }
+}

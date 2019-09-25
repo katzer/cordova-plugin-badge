@@ -142,6 +142,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      * Handle database quota exceeded notification.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
             long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
     {
@@ -180,11 +181,13 @@ public class SystemWebChromeClient extends WebChromeClient {
 
     // API level 7 is required for this, see if we could lower this using something else
     @Override
+    @SuppressWarnings("deprecation")
     public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
         parentEngine.getCordovaWebView().showCustomView(view, callback);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onHideCustomView() {
         parentEngine.getCordovaWebView().hideCustomView();
     }
@@ -247,13 +250,34 @@ public class SystemWebChromeClient extends WebChromeClient {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onShowFileChooser(WebView webView, final ValueCallback<Uri[]> filePathsCallback, final WebChromeClient.FileChooserParams fileChooserParams) {
+        // Check if multiple-select is specified
+        Boolean selectMultiple = false;
+        if (fileChooserParams.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE) {
+            selectMultiple = true;
+        }
         Intent intent = fileChooserParams.createIntent();
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, selectMultiple);
         try {
             parentEngine.cordova.startActivityForResult(new CordovaPlugin() {
                 @Override
                 public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-                    Uri[] result = WebChromeClient.FileChooserParams.parseResult(resultCode, intent);
-                    LOG.d(LOG_TAG, "Receive file chooser URL: " + result);
+                    Uri[] result = null;
+                    if (resultCode ==  Activity.RESULT_OK && intent != null) {
+                        if (intent.getClipData() != null) {
+                            // handle multiple-selected files
+                            final int numSelectedFiles = intent.getClipData().getItemCount();
+                            result = new Uri[numSelectedFiles];
+                            for (int i = 0; i < numSelectedFiles; i++) {
+                                result[i] = intent.getClipData().getItemAt(i).getUri();
+                                LOG.d(LOG_TAG, "Receive file chooser URL: " + result[i]);
+                            }
+                        }
+                        else if (intent.getData() != null) {
+                            // handle single-selected file
+                            result = WebChromeClient.FileChooserParams.parseResult(resultCode, intent);
+                            LOG.d(LOG_TAG, "Receive file chooser URL: " + result);
+                        }
+                    }
                     filePathsCallback.onReceiveValue(result);
                 }
             }, intent, FILECHOOSER_RESULTCODE);

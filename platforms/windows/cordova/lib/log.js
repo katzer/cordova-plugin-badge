@@ -18,40 +18,40 @@
 */
 
 // requires
-var path         = require('path');
-var et           = require('elementtree');
+var path = require('path');
+var et = require('elementtree');
 var ConfigParser = require('./ConfigParser.js');
-var nopt         = require('nopt');
+var nopt = require('nopt');
 
-var spawn        = require('cordova-common').superspawn.spawn;
-var execSync     = require('child_process').execSync;
+var spawn = require('cordova-common').superspawn.spawn;
+var execSync = require('child_process').execSync;
 
 // paths
 var platformRoot = path.join(__dirname, '..', '..');
-var projectRoot  = path.join(platformRoot, '..', '..');
-var configPath   = path.join(projectRoot, 'config.xml');
+var projectRoot = path.join(platformRoot, '..', '..');
+var configPath = path.join(projectRoot, 'config.xml');
 
-//constants
+// constants
 var APP_TRACING_LOG = 'Microsoft-Windows-AppHost/ApplicationTracing';
-var ADMIN_LOG       = 'Microsoft-Windows-AppHost/Admin';
-var ONE_MINUTE      = 60 * 1000;
+var ADMIN_LOG = 'Microsoft-Windows-AppHost/Admin';
+var ONE_MINUTE = 60 * 1000;
 
 // variables
 var appTracingInitialState = null;
 var appTracingCurrentState = null;
-var adminInitialState      = null;
-var adminCurrentState      = null;
-var timers                 = [];
-var timeDiff               = 10 * ONE_MINUTE; // show last 10 minutes by default
+var adminInitialState = null;
+var adminCurrentState = null;
+var timers = [];
+var timeDiff = 10 * ONE_MINUTE; // show last 10 minutes by default
 var appName;
 
 /*
  * Gets windows AppHost/ApplicationTracing and AppHost/Admin logs
  * and prints them to console
  */
-module.exports.run = function(args) {
-    var knownOpts  = { 'minutes' : Number, 'dump' : Boolean, 'help' : Boolean };
-    var shortHands = { 'mins' : ['--minutes'], 'h' : ['--help'] };
+module.exports.run = function (args) {
+    var knownOpts = { 'minutes': Number, 'dump': Boolean, 'help': Boolean };
+    var shortHands = { 'mins': ['--minutes'], 'h': ['--help'] };
     var parsedOpts = nopt(knownOpts, shortHands, args, 0);
 
     if (parsedOpts.help) {
@@ -115,13 +115,13 @@ module.exports.run = function(args) {
     });
 
     // Catch uncaught exceptions, print trace, then exit gracefully
-    process.once('uncaughtException', function(e) {
+    process.once('uncaughtException', function (e) {
         console.log(e.stack);
         exitGracefully(1);
     });
 };
 
-module.exports.help = function() {
+module.exports.help = function () {
     console.log();
     console.log('Usage: ' + path.relative(process.cwd(), path.join(platformRoot, 'cordova', 'log [options]')));
     console.log('Continuously prints your app logs to the command line.');
@@ -135,7 +135,7 @@ module.exports.help = function() {
     process.exit(0);
 };
 
-function exitGracefully(exitCode) {
+function exitGracefully (exitCode) {
     if (appTracingInitialState === false && appTracingCurrentState === true) {
         disableChannel(APP_TRACING_LOG);
     }
@@ -147,14 +147,14 @@ function exitGracefully(exitCode) {
     });
     // give async call some time to execute
     console.log('Exiting in 2 seconds. Do not interrupt the process!');
-    setTimeout(function() {
+    setTimeout(function () {
         process.exit(exitCode);
     }, 2000);
 }
 
-function startLogging(channel) {
+function startLogging (channel) {
     var lastPollDate = new Date();
-    timers.push(setInterval(function() {
+    timers.push(setInterval(function () {
         timeDiff = (new Date()).getTime() - lastPollDate.getTime();
         var events = getEvents(channel, timeDiff);
         events.forEach(function (evt) {
@@ -164,12 +164,12 @@ function startLogging(channel) {
     }, 1000));
 }
 
-function dumpLogs(timeDiff) {
+function dumpLogs (timeDiff) {
     console.log('Dumping logs dating back ' + msToHumanReadable(timeDiff));
     var appTracingEvents = getEvents(APP_TRACING_LOG, timeDiff);
     var adminEvents = getEvents(ADMIN_LOG, timeDiff);
     appTracingEvents.concat(adminEvents)
-        .sort(function(evt1, evt2) {
+        .sort(function (evt1, evt2) {
             if (evt1.timeCreated < evt2.timeCreated) {
                 return -1;
             } else if (evt1.timeCreated > evt2.timeCreated) {
@@ -177,25 +177,25 @@ function dumpLogs(timeDiff) {
             }
             return 0;
         })
-        .forEach(function(evt) {
+        .forEach(function (evt) {
             console.log(stringifyEvent(evt));
         });
 }
 
-function getEvents(channel, timeDiff) {
+function getEvents (channel, timeDiff) {
     var command = 'wevtutil';
-    var args    = ['qe', channel, '/q:"*[System [TimeCreated[timediff(@SystemTime)<=' + timeDiff + ']]]"', '/e:root'];
-    command     = command + ' ' + args.join(' ');
-    var events  = execSync(command);
+    var args = ['qe', channel, '/q:"*[System [TimeCreated[timediff(@SystemTime)<=' + timeDiff + ']]]"', '/e:root'];
+    command = command + ' ' + args.join(' ');
+    var events = execSync(command);
     return parseEvents(events.toString());
 }
 
-function getElementValue(et, element, attribute) {
+function getElementValue (et, element, attribute) {
     var result;
 
     var found = et.findall(element);
     if (found.length > 0) {
-        if (!!attribute) {
+        if (attribute) {
             result = found[0].get(attribute);
         } else {
             result = found[0].text;
@@ -205,7 +205,7 @@ function getElementValue(et, element, attribute) {
     return result;
 }
 
-function parseEvents(output) {
+function parseEvents (output) {
     var etree = et.parse(output);
     var events = etree.getroot().findall('./Event');
     var results = [];
@@ -223,28 +223,28 @@ function parseEvents(output) {
         }
 
         var result = {
-            channel:          getElementValue(event, './System/Channel'),
-            timeCreated:      getElementValue(event, './System/TimeCreated', 'SystemTime'),
-            pid:              getElementValue(event, './System/Execution', 'ProcessID'),
-            source:           getElementValue(event, './UserData/WWADevToolBarLog/Source'),
-            documentFile:     getElementValue(event, './UserData/WWADevToolBarLog/DocumentFile') ||
+            channel: getElementValue(event, './System/Channel'),
+            timeCreated: getElementValue(event, './System/TimeCreated', 'SystemTime'),
+            pid: getElementValue(event, './System/Execution', 'ProcessID'),
+            source: getElementValue(event, './UserData/WWADevToolBarLog/Source'),
+            documentFile: getElementValue(event, './UserData/WWADevToolBarLog/DocumentFile') ||
                               getElementValue(event, './UserData/WWAUnhandledApplicationException/DocumentFile') ||
                               getElementValue(event, './UserData/WWATerminateApplication/DocumentFile'),
-            displayName:      getElementValue(event, './UserData/WWADevToolBarLog/DisplayName') ||
+            displayName: getElementValue(event, './UserData/WWADevToolBarLog/DisplayName') ||
                               getElementValue(event, './UserData/WWAUnhandledApplicationException/DisplayName') ||
                               getElementValue(event, './UserData/WWATerminateApplication/DisplayName'),
-            line:             getElementValue(event, './UserData/WWADevToolBarLog/Line'),
-            column:           getElementValue(event, './UserData/WWADevToolBarLog/Column'),
-            sourceFile:       getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceFile'),
-            sourceLine:       getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceLine'),
-            sourceColumn:     getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceColumn'),
-            message:          getElementValue(event, './UserData/WWADevToolBarLog/Message'),
-            appName:          getElementValue(event, './UserData/WWAUnhandledApplicationException/ApplicationName'),
-            errorType:        getElementValue(event, './UserData/WWAUnhandledApplicationException/ErrorType'),
+            line: getElementValue(event, './UserData/WWADevToolBarLog/Line'),
+            column: getElementValue(event, './UserData/WWADevToolBarLog/Column'),
+            sourceFile: getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceFile'),
+            sourceLine: getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceLine'),
+            sourceColumn: getElementValue(event, './UserData/WWAUnhandledApplicationException/SourceColumn'),
+            message: getElementValue(event, './UserData/WWADevToolBarLog/Message'),
+            appName: getElementValue(event, './UserData/WWAUnhandledApplicationException/ApplicationName'),
+            errorType: getElementValue(event, './UserData/WWAUnhandledApplicationException/ErrorType'),
             errorDescription: getElementValue(event, './UserData/WWAUnhandledApplicationException/ErrorDescription') ||
                               getElementValue(event, './UserData/WWATerminateApplication/ErrorDescription'),
-            stackTrace:       getElementValue(event, './UserData/WWAUnhandledApplicationException/StackTrace') ||
-                              getElementValue(event, './UserData/WWATerminateApplication/StackTrace'),
+            stackTrace: getElementValue(event, './UserData/WWAUnhandledApplicationException/StackTrace') ||
+                              getElementValue(event, './UserData/WWATerminateApplication/StackTrace')
         };
 
         // filter out events from other applications
@@ -279,9 +279,9 @@ function parseEvents(output) {
     return results;
 }
 
-function formatField(event, fieldName, fieldShownName, offset) {
-    var whitespace = '', // to align all field values
-        multiLineWhitespace = ' '; // to align multiline fields (i.e. Stack Trace) correctly
+function formatField (event, fieldName, fieldShownName, offset) {
+    var whitespace = ''; // to align all field values
+    var multiLineWhitespace = ' '; // to align multiline fields (i.e. Stack Trace) correctly
     for (var i = 0; i < offset; i++) {
         if (i >= fieldShownName.length) {
             whitespace += ' ';
@@ -296,13 +296,13 @@ function formatField(event, fieldName, fieldShownName, offset) {
     return '';
 }
 
-function stringifyEvent(event) {
+function stringifyEvent (event) {
     if (typeof event === 'undefined') {
         return;
     }
 
-    var result = '',
-        offset = 18;
+    var result = '';
+    var offset = 18;
 
     result += formatField(event, 'channel', 'Channel', offset);
     result += formatField(event, 'timeCreated', 'Time Created', offset);
@@ -324,30 +324,30 @@ function stringifyEvent(event) {
     return result;
 }
 
-function getLogState(channel) {
+function getLogState (channel) {
     return spawn('wevtutil', ['get-log', channel])
-    .then(function(output) {
-        return output.indexOf('enabled: true') != -1;
-    });
+        .then(function (output) {
+            return output.indexOf('enabled: true') !== -1;
+        });
 }
 
-function enableChannel(channel) {
+function enableChannel (channel) {
     console.log('Enabling channel ' + channel);
     return spawn('wevtutil', ['set-log', channel, '/e:false', '/q:true'])
-    .then(function() {
-        return spawn('wevtutil', ['set-log', channel, '/e:true', '/rt:true', '/ms:4194304','/q:true']);
-    }, function() {
-        console.warn('Cannot enable log channel: ' + channel);
-        console.warn('Try running the script with administrator privileges.');
-    });
+        .then(function () {
+            return spawn('wevtutil', ['set-log', channel, '/e:true', '/rt:true', '/ms:4194304', '/q:true']);
+        }, function () {
+            console.warn('Cannot enable log channel: ' + channel);
+            console.warn('Try running the script with administrator privileges.');
+        });
 }
 
-function disableChannel(channel) {
+function disableChannel (channel) {
     console.log('Disabling channel ' + channel);
     spawn('wevtutil', ['set-log', channel, '/e:false', '/q:true']);
 }
 
-function msToHumanReadable(ms) {
+function msToHumanReadable (ms) {
     var m = Math.floor(ms / 60000);
     ms -= m * 60000;
     var s = ms / 1000;
