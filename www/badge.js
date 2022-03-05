@@ -18,7 +18,7 @@
 var exec      = require('cordova/exec'),
     channel   = require('cordova/channel'),
     ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
+    isIOS     = ua.indexOf('applewebkit') > -1 || ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
     isMac     = ua.indexOf('macintosh') > -1,
     isWin     = window.Windows !== undefined,
     isAndroid = !isWin && ua.indexOf('android') > -1,
