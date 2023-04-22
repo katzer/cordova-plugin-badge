@@ -1,5 +1,8 @@
 ## ChangeLog
 
+#### Version 0.8.9 (22.04.2023)
+- Changed gradle compile to implementation
+
 #### Version 0.8.8 (19.11.2018)
 - Upgrade ShortcutBadger to v1.1.22
 
